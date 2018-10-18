@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import styled from 'react-emotion'
 import { withStyles } from '@material-ui/core/styles'
+
+import SimpleBottomNavigation from 'pages/about/components/appbar'
 
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -33,72 +35,97 @@ const appStyles = {
 }
 
 // Emotion: Component to style an icon button
-const StyledIconButton = styled(IconButton)({
-  marginLeft: -12,
-  marginRight: 20,
-})
+// const StyledIconButton = styled(IconButton)({
+//   marginLeft: -12,
+//   marginRight: 20,
+// })
 
-const StyledListItem = styled(ListItem)({
-  width: 250,
-})
+// const StyledListItem = styled(ListItem)({
+//   width: 250,
+// })
+
+// class SimpleBottomNavigation extends Component {
+//   state = {
+//     value: 0,
+//   }
+
+//   handleChange = (event, value) => {
+//     this.setState({ value })
+//     console.log(value)
+//     // this.props.history.push(value)
+//   }
+
+//   render() {
+//     const { classes } = this.props
+//     const { value } = this.state
+
+//     return (
+//       <BottomNavigation
+//         value={value}
+//         onChange={this.handleChange}
+//         showLabels
+//         // className is used to give the div an id
+//         className="bottom nav"
+//       >
+//         <BottomNavigationAction
+//           // Use link component with to attribute to change url
+//           component={Link}
+//           to="/"
+//           label="Home"
+//           value="/"
+//           icon={<RestoreIcon />}
+//         />
+//         <BottomNavigationAction
+//           component={Link}
+//           to="/about"
+//           label="About"
+//           value="/about"
+//           icon={<FavoriteIcon />}
+//         />
+//         <BottomNavigationAction
+//           component={Link}
+//           to="/grid"
+//           label="Grid"
+//           value="/grid"
+//           icon={<LocationOnIcon />}
+//         />
+//       </BottomNavigation>
+//     )
+//   }
+// }
+
+// SimpleBottomNavigation.propTypes = {
+//   classes: PropTypes.object.isRequired,
+// }
 
 // Actual app component
 class App extends Component {
   // Constructor can only be called once to define state
-  constructor(props) {
-    super(props)
+  // constructor(props) {
+  //   super(props)
 
-    // Define initial state
-    this.state = {
-      opened: false,
-      vehicle: {},
-    }
-  }
+  //   // Define initial state
+  //   this.state = {
+  //     opened: false,
+  //   }
+  // }
 
   // Function to change state of variable 'opened'
-  toggleDrawer() {
-    this.setState(old => ({
-      opened: old.opened ? false : true,
-    }))
-  }
-
-  // Pipeline of functions. Result of previous is piped into next function
-  componentDidMount() {
-    this.fetchProfile()
-      .then(res => res.json())
-      .then(person => this.fetchFirstVehicle(person))
-      .then(res => res.json())
-      .then(vehicle => this.setVehicle(vehicle))
-      .catch(err => console.log(err))
-  }
-
-  // Call an API
-  fetchProfile() {
-    return fetch('https://swapi.co/api/people/1')
-  }
-
-  // Retrieve info from JSON
-  fetchFirstVehicle(person) {
-    return fetch(person.vehicles[0])
-  }
-
-  // Change state of variable 'vehicle'
-  setVehicle(vehicle) {
-    this.setState(old => ({
-      ...old,
-      vehicle,
-    }))
-  }
+  // toggleDrawer() {
+  //   this.setState(old => ({
+  //     opened: old.opened ? false : true,
+  //   }))
+  // }
 
   render() {
     // Use curly brackets to retrieve specific items from an object
-    const { opened, vehicle } = this.state
+    // const { opened } = this.state
     const { children, classes, history } = this.props
 
     return (
       // className is used to give the div an id
       <div className="App">
-        <Drawer open={opened} onClose={() => this.toggleDrawer()}>
+        {/* <Drawer open={opened} onClose={() => this.toggleDrawer()}>
           <div tabIndex={0} role="button" onClick={() => this.toggleDrawer()}>
             <div>
               <List>
@@ -123,8 +150,8 @@ class App extends Component {
               </List>
             </div>
           </div>
-        </Drawer>
-        <AppBar position="static">
+        </Drawer> */}
+        {/* <AppBar position="static">
           <Toolbar>
             <StyledIconButton
               className={classes.menuButton}
@@ -143,11 +170,9 @@ class App extends Component {
             </Typography>
             <Button color="inherit">Login</Button>
           </Toolbar>
-        </AppBar>
-        <Content>
-          <p>My nice vehicle: {vehicle.name ? vehicle.name : 'loading...'}</p>
-          {children}
-        </Content>
+        </AppBar> */}
+        <Content>{children}</Content>
+        <SimpleBottomNavigation />
       </div>
     )
   }

@@ -32,22 +32,22 @@ class SimpleBottomNavigation extends Component {
       >
         <BottomNavigationAction
           // Use link component with to attribute to change url
-          component={Link}
-          to="/"
+          //   component={Link}
+          //   to="/"
           label="Home"
           value="/"
           icon={<RestoreIcon />}
         />
         <BottomNavigationAction
-          component={Link}
-          to="/about"
+          //   component={Link}
+          //   to="/about"
           label="About"
           value="/about"
           icon={<FavoriteIcon />}
         />
         <BottomNavigationAction
-          component={Link}
-          to="/grid"
+          //   component={Link}
+          //   to="/grid"
           label="Grid"
           value="/grid"
           icon={<LocationOnIcon />}

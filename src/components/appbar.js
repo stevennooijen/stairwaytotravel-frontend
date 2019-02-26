@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
-import RestoreIcon from '@material-ui/icons/Restore'
+import SearchIcon from '@material-ui/icons/Search'
 import FavoriteIcon from '@material-ui/icons/Favorite'
-import LocationOnIcon from '@material-ui/icons/LocationOn'
+import ExploreIcon from '@material-ui/icons/Explore'
 
 class SimpleBottomNavigation extends Component {
   state = {
@@ -14,12 +14,12 @@ class SimpleBottomNavigation extends Component {
 
   handleChange = (event, value) => {
     this.setState({ value })
-    // console.log(value)
+    // change history programatically when value changes
+    // https://stackoverflow.com/questions/48907932/material-ui-app-bar-w-react-router
     this.props.history.push(value)
   }
 
   render() {
-    const { classes } = this.props
     const { value } = this.state
 
     return (
@@ -31,26 +31,19 @@ class SimpleBottomNavigation extends Component {
         className="bottom nav"
       >
         <BottomNavigationAction
-          // Use link component with to attribute to change url
-          //   component={Link}
-          //   to="/"
-          label="Home"
+          label="Search"
           value="/"
-          icon={<RestoreIcon />}
+          icon={<SearchIcon />}
         />
         <BottomNavigationAction
-          //   component={Link}
-          //   to="/about"
-          label="About"
-          value="/about"
+          label="Explore"
+          value="/explore"
+          icon={<ExploreIcon />}
+        />
+        <BottomNavigationAction
+          label="Bucket List"
+          value="/bucketlist"
           icon={<FavoriteIcon />}
-        />
-        <BottomNavigationAction
-          //   component={Link}
-          //   to="/grid"
-          label="Grid"
-          value="/grid"
-          icon={<LocationOnIcon />}
         />
       </BottomNavigation>
     )

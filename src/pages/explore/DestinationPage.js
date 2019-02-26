@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
+import Destination from './Destination'
+import Button from '@material-ui/core/Button'
 
-// Actual app component
-export default class ApiCall extends Component {
+class DestinationPage extends Component {
   // Constructor can only be called once to define state
   constructor(props) {
     super(props)
-
     // Define initial state
     this.state = {
-      destination: {},
+      // destination_id is determined from the url (match is passed through props)
+      destination_id: props.match.params.name,
+      // destination_data will fill itself with the API data
+      destination_data: {},
       // Possibly do something with a loading variable
       // https://facebook.github.io/react-native/docs/network
       // isLoading: true,
@@ -17,7 +20,7 @@ export default class ApiCall extends Component {
 
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
-    this.fetchProfile()
+    this.fetchProfile(this.state.destination_id)
       .then(response => response.json())
       // .then(responseJson => this.fetchFirstDestination(responseJson))
       .then(destinationJson => this.setdestination(destinationJson))
@@ -25,7 +28,10 @@ export default class ApiCall extends Component {
   }
 
   // Call an API, proxy set through package.json
-  fetchProfile() {
+  fetchProfile(id) {
+    if (id) {
+      return fetch('/api/' + id)
+    }
     return fetch('/api/', {
       // mode: 'no-cors', // 'cors' by default
       // accept: 'application/json',
@@ -37,28 +43,31 @@ export default class ApiCall extends Component {
   //   return fetch(responseJson[0])
   // }
 
-  // Change state of variable 'destination'
-  setdestination(destination) {
+  // Change state of variable 'destination_data'
+  setdestination(destination_data) {
     this.setState(old => ({
       ...old,
-      destination,
+      destination_data,
     }))
   }
 
   render() {
     // Use curly brackets to retrieve specific items from an object
-    const { destination } = this.state
+    // const { destination } = this.state
 
     return (
-      // className is used to give the div an id
-      <div className="destination">
-        <div>
-          <p>
-            My retrieved destination:
-            {destination.name ? destination.name : 'loading...'}
-          </p>
-        </div>
+      <div>
+        <p>destination id = {this.state.destination_id}</p>
+        <Destination name={this.state.destination_data.name} />
+        <Button variant="contained" color="primary">
+          Dislike
+        </Button>
+        <Button variant="contained" color="primary" onClick={this.handleClick}>
+          Like
+        </Button>
       </div>
     )
   }
 }
+
+export default DestinationPage

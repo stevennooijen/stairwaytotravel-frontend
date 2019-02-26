@@ -7,7 +7,7 @@ import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 
 import { Home } from './pages/home'
-import { Explore } from './pages/explore'
+import DestinationPage from './pages/explore/DestinationPage'
 import { Grid } from './pages/bucketlist'
 
 ReactDOM.render(
@@ -17,7 +17,8 @@ ReactDOM.render(
       {/* Start of actual app, App is the top level component */}
       <App>
         <Route exact path="/" component={Home} />
-        <Route path="/explore" component={Explore} />
+        <Route exact path="/explore" component={DestinationPage} />
+        <Route path="/explore/:name" component={DestinationPage} />
         <Route path="/bucketlist" component={Grid} />
       </App>
     </div>

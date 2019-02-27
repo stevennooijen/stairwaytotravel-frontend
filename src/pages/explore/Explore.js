@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Destination from './Destination'
 import Button from '@material-ui/core/Button'
 
-class DestinationPage extends Component {
+class Explore extends Component {
   // Constructor can only be called once to define state
   constructor(props) {
     super(props)
@@ -70,4 +70,4 @@ class DestinationPage extends Component {
   }
 }
 
-export default DestinationPage
+export default Explore

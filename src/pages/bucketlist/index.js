@@ -1,1 +1,1 @@
-export { default as Grid } from './bucketlist'
+export { default as Grid } from './Album'

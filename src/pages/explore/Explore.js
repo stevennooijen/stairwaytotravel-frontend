@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import Destination from './Destination'
-import Button from '@material-ui/core/Button'
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = theme => ({
+  heroUnit: {
+    backgroundColor: theme.palette.background.paper,
+    padding: `${theme.spacing.unit * 8}px 0`,
+  },
+})
 
 class Explore extends Component {
   // Constructor can only be called once to define state
@@ -54,20 +61,24 @@ class Explore extends Component {
   render() {
     // Use curly brackets to retrieve specific items from an object
     // const { destination } = this.state
+    const { classes } = this.props
 
     return (
-      <div>
-        <p>destination id = {this.state.destination_id}</p>
-        <Destination name={this.state.destination_data.name} />
-        <Button variant="contained" color="primary">
-          Dislike
-        </Button>
-        <Button variant="contained" color="primary" onClick={this.handleClick}>
-          Like
-        </Button>
-      </div>
+      <React.Fragment>
+        <div className={classes.heroUnit}>
+          {/* Single line for printing the destination id retrieved from the url */}
+          {/* <p>destination id = {this.state.destination_id}</p> */}
+          <Destination
+            destinationName={
+              this.state.destination_data.name
+                ? this.state.destination_data.name
+                : 'loading...'
+            }
+          />
+        </div>
+      </React.Fragment>
     )
   }
 }
 
-export default Explore
+export default withStyles(styles)(Explore)

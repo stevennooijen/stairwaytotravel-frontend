@@ -1,7 +1,11 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
-Below you will find some information on how to perform common tasks.<br>
-You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+#### TODO
+
+- [x] Connect own domain name `stairway.travel`
+- [x] Connect deployed front-end to backend
+- [ ] Move app to a subdomain like `app.stairway.travel`
+- [ ] Set up homepage on main domain `stairway.travel`
 
 ## Table of Contents
 
@@ -47,7 +51,11 @@ Read instructions below for using assets from JavaScript and HTML.
 You can, however, create more top-level directories.<br>
 They will not be included in the production build so you can use them for things like documentation.
 
-## Available Scripts
+### Code formatting and linting
+
+ESLint and Prettier are applied to the project.
+
+## Developing
 
 In the project directory, you can run:
 
@@ -64,94 +72,72 @@ You will also see any lint errors in the console.
 Launches the test runner in the interactive watch mode.<br>
 See the section about [running tests](#running-tests) for more information.
 
-### `npm run build`
+## Deployment
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To create a `build` directory with a production build of your app, run:
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](#deployment) for more information.
-
-## Code formatting and linting
-
-ESLint and Prettier are applied to the project.
-
-## Changing the Page `<title>`
-
-You can find the source HTML file in the `public` folder of the generated project. You may edit the `<title>` tag in it to change the title from “React App” to anything else.
-
-Note that normally you wouldn’t edit files in the `public` folder very often. For example, [adding a stylesheet](#adding-a-stylesheet) is done without touching the HTML.
-
-If you use a custom server for your app in production and want to modify the title before it gets sent to the browser, you can follow advice in [this section](#generating-dynamic-meta-tags-on-the-server). Alternatively, you can pre-build each page as a static HTML file which then loads the JavaScript bundle, which is covered [here](#pre-rendering-into-static-html-files).
-
-## Adding Bootstrap
-
-You don’t have to use [React Bootstrap](https://react-bootstrap.github.io) together with React but it is a popular library for integrating Bootstrap with React apps. If you need it, you can integrate it with Create React App by following these steps:
-
-Import Bootstrap CSS and optionally Bootstrap theme CSS in the beginning of your `src/index.js` file:
-
-```js
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap/dist/css/bootstrap-theme.css'
-// Put any other imports below so that CSS from your
-// components takes precedence over default styles.
+```
+npm run build
 ```
 
-Import required React Bootstrap components within `src/App.js` file or your custom component files:
+### [Firebase](https://firebase.google.com/)
 
-```js
-import { Navbar, Jumbotron, Button } from 'react-bootstrap'
+To host on Firebase, configure as a single-page app when initializing in the project root directory with `firebase init`. This will create a `firebase.json` file that contains installation specifics for Firebase, like which directory to deploy (in our case the `build` folder)
+
+After createing the build, deploy with:
+
+```bash
+firebase deploy
 ```
 
-Now you are ready to use the imported React Bootstrap components within your component hierarchy defined in the render method. Here is an example [`App.js`](https://gist.githubusercontent.com/gaearon/85d8c067f6af1e56277c82d19fd4da7b/raw/6158dd991b67284e9fc8d70b9d973efe87659d72/App.js) redone using React Bootstrap.
+Check out the [getting started guide](https://firebase.google.com/docs/hosting/quickstart) for more info. Or this [blog](https://www.robinwieruch.de/firebase-deploy-react-js/) with a bit more details.
 
-## Proxying API Requests in Development
+#### Connecting a custom domain
 
-To tell the development server to proxy any unknown requests to your API server in development, add a `proxy` field to your `package.json`, e.g.:
+Check out the [Firebase instructions](https://firebase.google.com/docs/hosting/custom-domain)
+
+### Connecting React with back-end Flask API server
+
+There's two options.
+
+1. Both front- and back-end are hosted on the same domain.
+2. Front- and back-end are hosted on different domains.
+
+See solutions below for both cases.
+
+#### 1, Proxying API Requests in Development
+
+If both front- end back-end are hosted on the same domain, this means that the back-end is likely hosted on an extension of the domain like `example.com/api`. The api can then be called with `fetch("/api/")`, assuming that the base url is the same.
+
+When in local development, front- and backend may be hosted on different ports. To solve this, one can tell the development server to [proxy](https://facebook.github.io/create-react-app/docs/proxying-api-requests-in-development) any unknown requests to your API server on another local port. Do this by adding a `proxy` field to your `package.json`, e.g.:
 
 ```js
   "proxy": "http://localhost:5000",
 ```
 
-This way, when you `fetch('/api/todos')` in development, the development server will recognize that it’s not a static asset, and will proxy your request to `http://localhost:4000/api/todos` as a fallback. The development server will **only** attempt to send requests without `text/html` in its `Accept` header to the proxy.
+This way, when you `fetch('/api/todos')` in development, the development server will proxy your request to `http://localhost:5000/api/todos` as a fallback.
 
-### Configuring the Proxy Manually
+#### 2. Using environment variables to refer to the right domain
 
-> Note: this feature is available with `react-scripts@1.0.0` and higher.
+If front- and back-end are hosted on different domains, you will have to set up CORS on the back-end to allow access for the front-end. Also, you will now need to explicitely refer to that other url in your `fetch(BASE_URL + "/api/`) call.
 
-If the `proxy` option is **not** flexible enough for you, you can specify an object in the following form (in `package.json`).<br>
-You may also specify any configuration value [`http-proxy-middleware`](https://github.com/chimurai/http-proxy-middleware#options) or [`http-proxy`](https://github.com/nodejitsu/node-http-proxy#options) supports.
+As the URL might differ for `development` and `production` build, use `.env` and `.env.production` files to respectively set and overwrite the environment variable of interest. Read about it [here](https://facebook.github.io/create-react-app/docs/adding-custom-environment-variables) in greater detail.
 
-```js
-{
-  // ...
-  "proxy": {
-    "/api": {
-      "target": "<url>",
-      "ws": true
-      // ...
-    }
-  }
-  // ...
-}
+Call these variables using `process.env`:
+
+```html
+<div>
+  <small>
+    You are running this application in <b>{process.env.NODE_ENV}</b>{' '}
+    mode, with the following base url:
+    <b>{process.env.REACT_APP_API_URL}</b>
+  </small>
+</div>
 ```
 
-All requests matching this path will be proxies, no exceptions. This includes requests for `text/html`, which the standard `proxy` option does not proxy.
+## Resources
 
-## Running Tests
+Possibly helpfull tutorials:
 
-Create React App uses [Jest](https://facebook.github.io/jest/) as its test runner. To prepare for this integration, we did a [major revamp](https://facebook.github.io/jest/blog/2016/09/01/jest-15.html) of Jest so if you heard bad things about it years ago, give it another try.
-
-Jest is a Node-based runner. This means that the tests always run in a Node environment and not in a real browser. This lets us enable fast iteration speed and prevent flakiness.
-
-## Deployment
-
-`npm run build` creates a `build` directory with a production build of your app. Set up your favorite HTTP server so that a visitor to your site is served `index.html`, and requests to static paths like `/static/js/main.<hash>.js` are served with the contents of the `/static/js/main.<hash>.js` file.
-
-### [Firebase](https://firebase.google.com/)
-
-Install the Firebase CLI if you haven’t already by running `npm install -g firebase-tools`. Sign up for a [Firebase account](https://console.firebase.google.com/) and create a new project. Run `firebase login` and login with your previous created Firebase account.
-
-Then run the `firebase init` command from your project’s root. You need to choose the **Hosting: Configure and deploy Firebase Hosting sites** and choose the Firebase project you created in the previous step. You will need to agree with `database.rules.json` being created, choose `build` as the public directory, and also agree to **Configure as a single-page app** by replying with `y`.
+- https://medium.com/get-it-working/get-googles-firestore-working-with-react-c78f198d2364
+- https://www.youtube.com/playlist?list=PL4cUxeGkcC9iWstfXntcj8f-dFZ4UtlN3

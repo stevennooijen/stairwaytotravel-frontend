@@ -34,15 +34,12 @@ class Explore extends Component {
       .catch(err => console.log(err))
   }
 
-  // Call an API, proxy set through package.json
+  // Call an API, API_URL is retrieved from .env files
   fetchProfile(id) {
     if (id) {
-      return fetch('/api/' + id)
+      return fetch(process.env.REACT_APP_API_URL + '/api/' + id)
     }
-    return fetch('/api/', {
-      // mode: 'no-cors', // 'cors' by default
-      // accept: 'application/json',
-    })
+    return fetch(process.env.REACT_APP_API_URL + '/api/')
   }
 
   // Retrieve info from JSON

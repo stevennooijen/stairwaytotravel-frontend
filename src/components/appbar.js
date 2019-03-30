@@ -1,11 +1,31 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles'
 
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import SearchIcon from '@material-ui/icons/Search'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import ExploreIcon from '@material-ui/icons/Explore'
+
+// definieer 1 javaobject = statisch ding kan je niks aan veranderen
+// const styles = {
+// is nu ineens een functie die aangeroepen kan worden en in dit stukje code kan je dan theme gebruiken als variabele
+// nu kan je theme. gebruiken in de functie
+const styles = theme => ({
+  stickToBottom: {
+    width: '100%',
+    position: 'fixed',
+    bottom: 0,
+    backgroundColor: 'white',
+    borderTopWidth: 0,
+    // shadowOffset: { width: 10, height: 50 },
+    // boxShadow: '5px 10px',
+    shadowColor: 'black',
+    shadowOpacity: 1.0,
+    elevation: 5,
+  },
+})
 
 class SimpleBottomNavigation extends Component {
   state = {
@@ -21,6 +41,7 @@ class SimpleBottomNavigation extends Component {
 
   render() {
     const { value } = this.state
+    const { classes } = this.props
 
     return (
       <BottomNavigation
@@ -28,7 +49,7 @@ class SimpleBottomNavigation extends Component {
         onChange={this.handleChange}
         showLabels
         // className is used to give the div an id
-        className="bottom nav"
+        className={classes.stickToBottom}
       >
         <BottomNavigationAction
           label="Search"
@@ -50,4 +71,4 @@ class SimpleBottomNavigation extends Component {
   }
 }
 
-export default withRouter(SimpleBottomNavigation)
+export default withRouter(withStyles(styles)(SimpleBottomNavigation))

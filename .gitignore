@@ -12,6 +12,9 @@
 # vs code settings specific to this project
 .vscode
 
+# firebase hosting folder
+.firebase/
+
 # misc
 .DS_Store
 .env.local

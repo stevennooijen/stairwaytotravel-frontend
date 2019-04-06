@@ -2,10 +2,21 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 #### TODO
 
+Functionality:
+
 - [x] Connect own domain name `stairway.travel`
 - [x] Connect deployed front-end to backend
+- [x] Save search tab query values and use them in Explore tab with session storage
+- [x] Make sure Explore tab selection button default to whatever is stored in session storage
 - [ ] Move app to a subdomain like `app.stairway.travel`
 - [ ] Set up homepage on main domain `stairway.travel`
+
+UI:
+
+- [ ] Make line between navbar and app. Use divider?
+- [ ] Add Select options for activities on the search screen, use Chips?
+- [ ] Build photo carousel on destination card, check out material ui steppers
+- [ ] Extend destination card with more information
 
 ## Table of Contents
 

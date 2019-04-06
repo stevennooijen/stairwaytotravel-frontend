@@ -24,18 +24,13 @@ const styles = theme => ({
 
 class Home extends React.Component {
   state = {
-    continent: '',
-    // labelWidth: 0,
+    // Check if previous search result still in sessionStorage, if not set as empty
+    continent: sessionStorage.getItem('continent') || '',
   }
 
-  // componentDidMount() {
-  //   this.setState({
-  //     labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth,
-  //   })
-  // }
-
-  handleChange = name => event => {
-    this.setState({ [name]: event.target.value })
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value })
+    sessionStorage.setItem([event.target.name], event.target.value)
   }
 
   render() {
@@ -51,28 +46,26 @@ class Home extends React.Component {
           To get started, choose which continent you want to go to and click{' '}
           <code>search!</code>.
         </p>
-
         <FormControl className={classes.formControl}>
           <InputLabel htmlFor="continent-native-simple">Continent</InputLabel>
           <Select
             native
             value={this.state.continent}
-            onChange={this.handleChange('continent')}
+            onChange={this.handleChange}
             inputProps={{
               name: 'continent',
               id: 'continent-native-simple',
             }}
           >
             <option value="" />
-            <option value={10}>Europe</option>
-            <option value={20}>Asia</option>
-            <option value={30}>Africa</option>
-            <option value={40}>North-America</option>
-            <option value={50}>South-America</option>
-            <option value={60}>Oceania</option>
+            <option value="EU">Europe</option>
+            <option value="AS">Asia</option>
+            <option value="AF">Africa</option>
+            <option value="NA">North-America</option>
+            <option value="SA">South-America</option>
+            <option value="OC">Oceania</option>
           </Select>
         </FormControl>
-
         <Button
           component={Link}
           to="/explore"
@@ -80,6 +73,18 @@ class Home extends React.Component {
           color="primary"
         >
           Search!
+        </Button>
+        <br />
+        <Button
+          component={Link}
+          to="/explore"
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            sessionStorage.clear()
+          }}
+        >
+          Search random!
         </Button>
       </div>
     )

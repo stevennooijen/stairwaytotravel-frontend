@@ -8,13 +8,19 @@ Functionality:
 - [x] Connect deployed front-end to backend
 - [x] Save search tab query values and use them in Explore tab with session storage
 - [x] Make sure Explore tab selection button default to whatever is stored in session storage
+- [ ] Add user interaction like/dislike functionality
+  - [ ] Fetch a new destination `onClick`
+  - [ ] Add liked/disliked destination to `sessionStorage`
+  - [ ] Add motion animation to throw away a card after like/dislike
+  - [ ] Do a POST request to save the interaction to database / storage bucket
 - [ ] Move app to a subdomain like `app.stairway.travel`
 - [ ] Set up homepage on main domain `stairway.travel`
 
 UI:
 
-- [ ] Make line between navbar and app. Use divider?
 - [ ] Add Select options for activities on the search screen, use Chips?
+- [ ] Make line between navbar and app. Use divider?
+- [x] Make sure Navbar updates based on url and upon browser refresh
 - [ ] Build photo carousel on destination card, check out material ui steppers
 - [ ] Extend destination card with more information
 

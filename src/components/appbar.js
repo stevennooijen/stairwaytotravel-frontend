@@ -29,7 +29,16 @@ const styles = theme => ({
 
 class SimpleBottomNavigation extends Component {
   state = {
-    value: 0,
+    value: this.props.location.pathname,
+  }
+
+  // Update state in case the url changes due to a link from /home
+  componentWillReceiveProps(newProps) {
+    const { pathname } = newProps.location
+
+    this.setState({
+      value: pathname,
+    })
   }
 
   handleChange = (event, value) => {

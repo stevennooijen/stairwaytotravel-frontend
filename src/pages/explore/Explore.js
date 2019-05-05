@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import Destination from './Destination'
 import { withStyles } from '@material-ui/core/styles'
+
+import DestinationCard from 'components/destination'
 
 const styles = theme => ({
   heroUnit: {
@@ -83,12 +84,13 @@ class Explore extends Component {
         <div className={classes.heroUnit}>
           {/* Single line for printing the destination id retrieved from the url */}
           {/* <p>destination id = {this.state.destination_id}</p> */}
-          <Destination
-            destinationName={
+          <DestinationCard
+            title={
               this.state.destination_data.name
                 ? this.state.destination_data.name
                 : 'loading...'
             }
+            image={require('../../assets/beach.jpg')}
           />
         </div>
       </React.Fragment>

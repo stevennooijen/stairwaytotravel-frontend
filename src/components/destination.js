@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 import IconButton from '@material-ui/core/IconButton'
 import FavoriteIcon from '@material-ui/icons/Favorite'
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 
 // import CardHeader from '@material-ui/core/CardHeader'
 
@@ -34,14 +35,26 @@ const styles = theme => ({
 })
 
 class DestinationCard extends Component {
-  // handleChange = (event, value) => {
-  //     this.setState({ value })
-  //     // change history programatically when value changes
-  //     // https://stackoverflow.com/questions/48907932/material-ui-app-bar-w-react-router
-  //     this.props.history.push(value)
-  //   }
+  // Constructor can only be called once to define state
+  constructor(props) {
+    super(props)
+
+    // Define initial state
+    this.state = {
+      favorite: false,
+    }
+  }
+
+  // Function to do something when Favorite is clicked
+  handleFavorite() {
+    this.setState(old => ({
+      favorite: old.favorite ? false : true,
+    }))
+  }
+
   render() {
     const { classes } = this.props
+    const { favorite } = this.state
 
     return (
       <Card className={classes.card}>
@@ -59,11 +72,13 @@ class DestinationCard extends Component {
           <IconButton
             aria-label="Add to favorites"
             color="primary"
+            // Set what needs to happen when Favorite is clicked
+            onClick={() => this.handleFavorite()}
             // onClick={() => {
             //   sessionStorage.setItem('liked', '1')
             // }}
           >
-            <FavoriteIcon />
+            {favorite ? <FavoriteIcon /> : <FavoriteBorder />}
           </IconButton>
         </CardActions>
         <CardMedia

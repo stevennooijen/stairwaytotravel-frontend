@@ -50,6 +50,7 @@ class DestinationCard extends Component {
     this.setState(old => ({
       favorite: old.favorite ? false : true,
     }))
+    sessionStorage.setItem('liked', '1')
   }
 
   render() {
@@ -74,9 +75,6 @@ class DestinationCard extends Component {
             color="primary"
             // Set what needs to happen when Favorite is clicked
             onClick={() => this.handleFavorite()}
-            // onClick={() => {
-            //   sessionStorage.setItem('liked', '1')
-            // }}
           >
             {favorite ? <FavoriteIcon /> : <FavoriteBorder />}
           </IconButton>

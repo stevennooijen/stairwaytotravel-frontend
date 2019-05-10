@@ -22,30 +22,25 @@ const styles = theme => ({
   },
 })
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-
 class Album extends React.Component {
   render() {
-    const { classes } = this.props
+    const { classes, cards } = this.props
 
     return (
-      <React.Fragment>
-        <main>
-          <div className={classNames(classes.layout, classes.cardGrid)}>
-            {/* End hero unit */}
-            <Grid container spacing={40}>
-              {cards.map(card => (
-                <Grid item key={card} sm={6} md={4} lg={3}>
-                  <DestinationCard
-                    title="Test Title"
-                    image={require('../../assets/pool.jpg')}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </div>
-        </main>
-      </React.Fragment>
+      // <React.Fragment>
+      <main>
+        <div className={classNames(classes.layout, classes.cardGrid)}>
+          {/* End hero unit */}
+          <Grid container spacing={40}>
+            {cards.map(card => (
+              <Grid item key={card} sm={6} md={4} lg={3}>
+                <DestinationCard title={card.title} image={card.image} />
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+      </main>
+      // </React.Fragment>
     )
   }
 }

@@ -23,6 +23,7 @@ UI:
 - [x] Make sure Navbar updates based on url and upon browser refresh
 - [ ] Build photo carousel on destination card, check out material ui steppers
 - [ ] Extend destination card with more information
+- [ ] Alternative/Option: Replace Grid of Cards with GridList and GridListTiles. For now choose Card as easier
 
 ## Table of Contents
 
@@ -158,3 +159,4 @@ Possibly helpfull tutorials:
 
 - https://medium.com/get-it-working/get-googles-firestore-working-with-react-c78f198d2364
 - https://www.youtube.com/playlist?list=PL4cUxeGkcC9iWstfXntcj8f-dFZ4UtlN3
+- Usefull tutorial series? https://www.youtube.com/watch?v=nF9q_fRV-1A

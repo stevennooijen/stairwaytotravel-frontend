@@ -11,6 +11,8 @@ Functionality:
 - [ ] Add user interaction like/dislike functionality
   - [ ] Fetch a new destination `onClick`
   - [ ] Add liked/disliked destination to `sessionStorage`
+    - Maintaining a list: https://hackernoon.com/how-to-take-advantage-of-local-storage-in-your-react-projects-a895f2b2d3f2
+    - https://www.taniarascia.com/how-to-use-local-storage-with-javascript/
   - [ ] Add motion animation to throw away a card after like/dislike
   - [ ] Do a POST request to save the interaction to database / storage bucket
 - [ ] Move app to a subdomain like `app.stairway.travel`

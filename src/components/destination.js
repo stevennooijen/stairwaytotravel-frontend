@@ -11,20 +11,9 @@ import IconButton from '@material-ui/core/IconButton'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 
-// import CardHeader from '@material-ui/core/CardHeader'
-
-// TODO: How does this work?
-// import { minWidth } from '@material-ui/core'
-// import { sizing } from '@material-ui/core'
-
 const styles = theme => ({
   card: {
     height: '100%',
-    // TODO: How does this work?
-    // minWidth: '400',
-    // width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9
@@ -45,17 +34,9 @@ class DestinationCard extends Component {
     }
   }
 
-  // Function to do something when Favorite is clicked
-  handleFavorite() {
-    this.setState(old => ({
-      favorite: old.favorite ? false : true,
-    }))
-    sessionStorage.setItem('liked', '1')
-  }
-
   render() {
-    const { classes } = this.props
-    const { favorite } = this.state
+    // Properties and actions to do with DestinationCard are provided through props
+    const { classes, id, toggleLike, liked } = this.props
 
     return (
       <Card className={classes.card}>
@@ -74,9 +55,11 @@ class DestinationCard extends Component {
             aria-label="Add to favorites"
             color="primary"
             // Set what needs to happen when Favorite is clicked
-            onClick={() => this.handleFavorite()}
+            // Function is provided through props from higher order component
+            onClick={() => toggleLike(id)}
           >
-            {favorite ? <FavoriteIcon /> : <FavoriteBorder />}
+            {/* Whether the item is already liked is also retrieved from higher order component through props */}
+            {liked ? <FavoriteIcon /> : <FavoriteBorder />}
           </IconButton>
         </CardActions>
         <CardMedia
@@ -88,7 +71,6 @@ class DestinationCard extends Component {
           <Typography gutterBottom variant="title" component="h2">
             {this.props.title}
           </Typography>
-          {/* // TODO: why does entire sizing change if this is removed? how to set to minwidth? */}
           <Typography>
             This is a media card. You can use this section to describe the
             content.

@@ -4,8 +4,6 @@ import classNames from 'classnames'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 
-import DestinationCard from 'components/destination'
-
 const styles = theme => ({
   layout: {
     width: 'auto',
@@ -24,23 +22,17 @@ const styles = theme => ({
 
 class Album extends React.Component {
   render() {
-    const { classes, cards } = this.props
+    const { classes } = this.props
 
     return (
-      // <React.Fragment>
       <main>
         <div className={classNames(classes.layout, classes.cardGrid)}>
-          {/* End hero unit */}
           <Grid container spacing={40}>
-            {cards.map(card => (
-              <Grid item key={card} sm={6} md={4} lg={3}>
-                <DestinationCard title={card.title} image={card.image} />
-              </Grid>
-            ))}
+            {/* Album passes along children components as provided through props */}
+            {this.props.children}
           </Grid>
         </div>
       </main>
-      // </React.Fragment>
     )
   }
 }

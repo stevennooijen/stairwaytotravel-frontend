@@ -71,10 +71,7 @@ class DestinationCard extends Component {
           <Typography gutterBottom variant="title" component="h2">
             {this.props.title}
           </Typography>
-          <Typography>
-            This is a media card. You can use this section to describe the
-            content.
-          </Typography>
+          <Typography>{this.props.text}</Typography>
         </CardContent>
       </Card>
     )

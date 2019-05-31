@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
-
-// import ReactDOM from 'react-dom'
 import { withStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
+
+import SearchStepper from './SearchStepper'
 
 const styles = theme => ({
   root: {
@@ -86,6 +86,7 @@ class Home extends React.Component {
         >
           Search random!
         </Button>
+        <SearchStepper />
       </div>
     )
   }

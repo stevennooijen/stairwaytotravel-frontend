@@ -1,7 +1,7 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 
-import Album from 'components/album'
+import Album from 'components/Album'
 import DestinationCard from 'components/destination'
 // import ExampleList from 'assets/Constants'
 

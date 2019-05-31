@@ -1,14 +1,10 @@
 import React from 'react'
-
 import Grid from '@material-ui/core/Grid'
 
-import Album from 'components/album'
+import Album from 'components/Album'
 import DestinationCard from 'components/destination'
+import WarningCard from 'components/WarningCard'
 // import ExampleList from 'assets/Constants'
-
-// 1) Move this list to sessionStorage, and read from there
-// 2) Make sure interactivity with like button stores like/dislike in sessionStorage (same list? Or seperate like list?)
-// 3) Add logic for fetching multiple destinations based on user id
 
 class Bucketlist extends React.Component {
   _isMounted = false
@@ -18,35 +14,26 @@ class Bucketlist extends React.Component {
 
     this.state = {
       continent: sessionStorage.getItem('continent'),
-      // For testing purposes, could use ExampleList from Constants
-      // destinationList: ExampleList,
+      // For testing purposes, could use ExampleList from Constants. destinationList: ExampleList,
+      // Initialize empty if for when nothing in sessionStorage
       destinationList: [],
+      likeCount: 0,
     }
   }
 
-  // Pipeline of functions. Result of previous is piped into next function
+  // Initialize destinations and likes if something in sessionStorage
   componentDidMount() {
     this._isMounted = true
-    this.fetchDestinations()
-      .then(response => response.json())
-      // save contents of response into state
-      .then(data => this.setState({ destinationList: data.Destinations }))
-      .catch(err => console.log(err))
+    const itemList = JSON.parse(sessionStorage.getItem('destinationList'))
+    this.setState({
+      destinationList: itemList,
+    })
+    this.calculateLikes(itemList)
   }
 
-  // Call an API, API_URL is retrieved from .env files
-  fetchDestinations() {
-    // return search as requested by sessionStorage (=Search tab)
-    if (this.state.continent) {
-      return fetch(
-        process.env.REACT_APP_API_URL +
-          '/api/explore/?continent=' +
-          sessionStorage.getItem('continent'),
-      )
-      // return random destination
-    } else {
-      return fetch(process.env.REACT_APP_API_URL + '/api/explore')
-    }
+  calculateLikes(destinations) {
+    const likesCount = destinations.filter(item => item.liked === true).length
+    this.setState({ likeCount: likesCount })
   }
 
   toggleLike(id) {
@@ -70,27 +57,49 @@ class Bucketlist extends React.Component {
 
     // Hier: Apart lijstje van likes wegschijven naar session/localStorage
     // Bij like data kopieren van de een naar de lijst met likes. en een update naar de backend
+    sessionStorage.setItem('destinationList', JSON.stringify(newList))
+
+    // update likes count for warning message if likesCount = 0
+    this.calculateLikes(newList)
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
   }
 
   render() {
     return (
-      <Album>
-        {this.state.destinationList.map(card => (
-          // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
-          // State blijft zodoende in de Bucketlist component op 'hoog' niveau
-          <Grid item key={card.id} xs={12} sm={6} md={4} lg={3}>
-            <DestinationCard
-              id={card.id}
-              title={card.name}
-              // image={card.image}
-              image={require('../../assets/beach.jpg')}
-              text={card.country_name}
-              liked={card.liked}
-              toggleLike={id => this.toggleLike(id)}
-            />
-          </Grid>
-        ))}
-      </Album>
+      <main>
+        {this.state.likeCount > 0 ? (
+          // Show liked destinations if likeCount > 0
+          <Album>
+            {this.state.destinationList.map(
+              card =>
+                // only show cards when they are liked
+                card.liked ? (
+                  // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
+                  // State blijft zodoende in de Bucketlist component op 'hoog' niveau
+                  <Grid item key={card.id} xs={12} sm={6} md={4} lg={3}>
+                    <DestinationCard
+                      id={card.id}
+                      title={card.name}
+                      // image={card.image}
+                      image={require('../../assets/beach.jpg')}
+                      text={card.country_name}
+                      liked={card.liked}
+                      toggleLike={id => this.toggleLike(id)}
+                    />
+                  </Grid>
+                ) : null,
+            )}
+          </Album>
+        ) : (
+          // Provide warning if no liked destinations
+          <Album>
+            <WarningCard />
+          </Album>
+        )}
+      </main>
     )
   }
 }

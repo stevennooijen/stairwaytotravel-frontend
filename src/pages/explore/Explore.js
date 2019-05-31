@@ -1,101 +1,94 @@
-import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import React from 'react'
+import Grid from '@material-ui/core/Grid'
 
+import Album from 'components/album'
 import DestinationCard from 'components/destination'
+// import ExampleList from 'assets/Constants'
 
-const styles = theme => ({
-  heroUnit: {
-    backgroundColor: theme.palette.background.paper,
-    padding: `${theme.spacing.unit * 8}px 0`,
-  },
-})
+class Explore extends React.Component {
+  // _isMounted = false
 
-class Explore extends Component {
-  // introduce a class field that holds the lifecycle state of the component to prevent setState when unmounted
-  _isMounted = false
-
-  // Constructor can only be called once to define state
   constructor(props) {
     super(props)
-    // Define initial state
+
     this.state = {
-      // destination_id is determined from the url (match is passed through props)
-      destination_id: props.match.params.name,
-      // destination_data will fill itself with the API data
-      destination_data: {},
-      // retrieve sessionStorage data from Search tab
       continent: sessionStorage.getItem('continent'),
-      // Possibly do something with a loading variable
-      // https://facebook.github.io/react-native/docs/network
-      // isLoading: true,
+      // For testing purposes, could use ExampleList from Constants
+      // destinationList: ExampleList,
+      destinationList: [],
     }
   }
 
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
-    this._isMounted = true
-    this.fetchProfile(this.state.destination_id)
+    // this._isMounted = true
+    this.fetchDestinations()
       .then(response => response.json())
-      // .then(responseJson => this.fetchFirstDestination(responseJson))
-      .then(destinationJson => this.setdestination(destinationJson))
+      // save contents of response into state
+      .then(data => this.setState({ destinationList: data.Destinations }))
       .catch(err => console.log(err))
   }
 
   // Call an API, API_URL is retrieved from .env files
-  fetchProfile(id) {
-    // return requested specific destination
-    if (id) {
-      return fetch(process.env.REACT_APP_API_URL + '/api/' + id)
-      // return search as requested by sessionStorage (=Search tab)
-    } else if (this.state.continent) {
+  fetchDestinations() {
+    // return search as requested by sessionStorage (=Search tab)
+    if (this.state.continent) {
       return fetch(
         process.env.REACT_APP_API_URL +
-          '/api/?continent=' +
+          '/api/explore/?continent=' +
           sessionStorage.getItem('continent'),
       )
       // return random destination
     } else {
-      return fetch(process.env.REACT_APP_API_URL + '/api/')
+      return fetch(process.env.REACT_APP_API_URL + '/api/explore')
     }
   }
 
-  // Change state of variable 'destination_data'
-  setdestination(destination_data) {
-    // abort the request when your component unmounts to prevent this.setState() on an unmounted component.
-    if (this._isMounted) {
-      this.setState(old => ({
-        ...old,
-        destination_data,
-      }))
-    }
-  }
+  toggleLike(id) {
+    const newList = this.state.destinationList.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          liked: !item.liked,
+        }
+      } else {
+        return item
+      }
+    })
 
-  componentWillUnmount() {
-    this._isMounted = false
+    this.setState({
+      destinationList: newList,
+    })
+
+    // hier: api call naar backend. dat wanneer je de pagina refresht en vraagt wat de gelikedte kaarten zijn dat alles weer teurg komt.
+    // beetje state in de front-end en dan veel state in de backend!
+
+    // Hier: Apart lijstje van likes wegschijven naar session/localStorage
+    // Bij like data kopieren van de een naar de lijst met likes. en een update naar de backend
+    sessionStorage.setItem('destinationList', JSON.stringify(newList))
   }
 
   render() {
-    // Use curly brackets to retrieve specific items from an object
-    // const { destination } = this.state
-    const { classes } = this.props
-
     return (
-      <React.Fragment>
-        <div className={classes.heroUnit}>
-          {/* Single line for printing the destination id retrieved from the url */}
-          {/* <p>destination id = {this.state.destination_id}</p> */}
-          <DestinationCard
-            title={
-              this.state.destination_data.name
-                ? this.state.destination_data.name
-                : 'loading...'
-            }
-            image={require('../../assets/beach.jpg')}
-          />
-        </div>
-      </React.Fragment>
+      <Album>
+        {this.state.destinationList.map(card => (
+          // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
+          // State blijft zodoende in de Bucketlist component op 'hoog' niveau
+          <Grid item key={card.id} xs={12} sm={6} md={4} lg={3}>
+            <DestinationCard
+              id={card.id}
+              title={card.name}
+              // image={card.image}
+              image={require('../../assets/beach.jpg')}
+              text={card.country_name}
+              liked={card.liked}
+              toggleLike={id => this.toggleLike(id)}
+            />
+          </Grid>
+        ))}
+      </Album>
     )
   }
 }
 
-export default withStyles(styles)(Explore)
+export default Explore

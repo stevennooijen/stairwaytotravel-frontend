@@ -8,15 +8,16 @@ Functionality:
 - [x] Connect deployed front-end to backend
 - [x] Save search tab query values and use them in Explore tab with session storage
 - [x] Make sure Explore tab selection button default to whatever is stored in session storage
-- [ ] Add user interaction like/dislike functionality
+- [x] Add user interaction like/dislike functionality
   - [ ] Fetch a new destination `onClick`
-  - [ ] Add liked/disliked destination to `sessionStorage`
+  - [x] Add liked/disliked destination to `sessionStorage`
     - Maintaining a list: https://hackernoon.com/how-to-take-advantage-of-local-storage-in-your-react-projects-a895f2b2d3f2
     - https://www.taniarascia.com/how-to-use-local-storage-with-javascript/
   - [ ] Add motion animation to throw away a card after like/dislike
   - [ ] Do a POST request to save the interaction to database / storage bucket
 - [ ] Move app to a subdomain like `app.stairway.travel`
 - [ ] Set up homepage on main domain `stairway.travel`
+- [ ] Add logic for fetching multiple destinations based on user id (if logging in on user is enabled)
 
 UI:
 

@@ -9,6 +9,11 @@ import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
+import ContinentStep from './ContinentStep'
+import BudgetStep from './BudgetStep'
+import ActivityStep from './ActivityStep'
+import RedirectButton from '../../../components/RedirectButton'
+
 const styles = theme => ({
   root: {
     width: '90%',
@@ -20,10 +25,10 @@ const styles = theme => ({
   completed: {
     display: 'inline-block',
   },
-  instructions: {
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
-  },
+  // instructions: {
+  //   marginTop: theme.spacing.unit,
+  //   marginBottom: theme.spacing.unit,
+  // },
   actionsContainer: {
     marginBottom: theme.spacing.unit * 2,
   },
@@ -33,17 +38,21 @@ const styles = theme => ({
 })
 
 function getSteps() {
-  return ['Select campaign settings', 'Create an ad group', 'Create an ad']
+  return [
+    'Which region do you like?',
+    'What is your budget?',
+    'What do you want to do?',
+  ]
 }
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return 'Step 1: Select campaign settings...'
+      return <ContinentStep />
     case 1:
-      return 'Step 2: What is an ad group anyways?'
+      return <BudgetStep />
     case 2:
-      return 'Step 3: This is the bit I really care about!'
+      return <ActivityStep />
     default:
       return 'Unknown step'
   }
@@ -74,17 +83,19 @@ class SearchStepper extends React.Component {
   }
 
   allStepsCompleted() {
-    return this.completedSteps() === totalSteps()
+    // return this.completedSteps() === totalSteps()
+    return this.state.activeStep === totalSteps()
   }
 
   // anonymous function to preserve the context of the class
-  handleNext = () => {
+  handleSkip = () => {
     const newActiveStep =
-      this.isLastStep() && !this.allStepsCompleted()
-        ? // It's the last step, but not all steps have been completed,
-          // find the first step that has been completed
-          steps.findIndex((step, i) => !(i in this.state.completed))
-        : this.state.activeStep + 1
+      // this.isLastStep() && !this.allStepsCompleted()
+      // ? // It's the last step, but not all steps have been completed,
+      // find the first step that has been completed
+      // steps.findIndex((step, i) => !(i in this.state.completed))
+      // :
+      this.state.activeStep + 1
     this.setState({ activeStep: newActiveStep })
   }
 
@@ -101,12 +112,16 @@ class SearchStepper extends React.Component {
     const newCompleted = this.state.completed
     newCompleted[this.state.activeStep] = true
     this.setState({ completed: newCompleted })
-    this.handleNext()
+    this.handleSkip()
   }
 
+  // Note: handle reset also throws away selection thusfar.
   handleReset = () => {
     this.setState({ activeStep: 0 })
     this.setState({ completed: {} })
+    sessionStorage.removeItem('budget')
+    sessionStorage.removeItem('activityList')
+    sessionStorage.removeItem('continent')
   }
 
   render() {
@@ -131,9 +146,9 @@ class SearchStepper extends React.Component {
               </StepButton>
               <StepContent>
                 {/* content of step is retrieved */}
-                <Typography className={classes.instructions}>
-                  {getStepContent(index)}
-                </Typography>
+                {/* <Typography className={classes.instructions}> */}
+                {getStepContent(index)}
+                {/* </Typography> */}
                 {/* box for buttons */}
                 <div className={classes.actionsContainer}>
                   <Button
@@ -143,14 +158,23 @@ class SearchStepper extends React.Component {
                   >
                     Back
                   </Button>
+                  {/* don't show next button if in last step */}
+                  {/* {this.state.activeStep < steps.length - 1 && ( */}
                   <Button
-                    variant="contained"
+                    // variant="contained"
                     color="primary"
-                    onClick={this.handleNext}
+                    // onClick={this.handleSkip}
+                    onClick={
+                      this.handleSkip
+                      // this.state.activeStep < steps.length - 1
+                      //   ? this.handleSkip
+                      //   : this.handleComplete
+                    }
                     className={classes.button}
                   >
-                    Next
+                    Skip
                   </Button>
+                  {/* )} */}
                   {/* if finished show text */}
                   {this.state.activeStep !== steps.length &&
                     (this.state.completed[this.state.activeStep] ? (
@@ -161,15 +185,18 @@ class SearchStepper extends React.Component {
                         Step {this.state.activeStep + 1} already completed
                       </Typography>
                     ) : (
-                      // if not finished, allow to complete
+                      // if not finished, show save or finish button
                       <Button
                         variant="contained"
                         color="primary"
                         onClick={this.handleComplete}
+                        className={classes.button}
                       >
-                        {this.completedSteps() === totalSteps() - 1
+                        {/* show save or finish */}
+                        {/* {this.completedSteps() === totalSteps() - 1
                           ? 'Finish'
-                          : 'Complete Step'}
+                          : 'Save'} */}
+                        Save
                       </Button>
                     ))}
                 </div>
@@ -182,14 +209,15 @@ class SearchStepper extends React.Component {
         <div>
           {this.allStepsCompleted() ? (
             <div>
-              {/* <Typography className={classes.instructions}>
-                All steps completed - you&apos;re finished
-              </Typography>
-              <Button onClick={this.handleReset}>Reset</Button> */}
               <Paper square elevation={0} className={classes.resetContainer}>
                 <Typography>
-                  All steps completed - you&apos;re finished
+                  All steps completed - you&apos;re ready to explore!
                 </Typography>
+                <RedirectButton
+                  to_url="/explore"
+                  text="Explore"
+                  variant="contained"
+                />
                 <Button onClick={this.handleReset} className={classes.button}>
                   Reset
                 </Button>

@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^3.1.0",
+    "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.1",
+    "@material-ui/lab": "^4.0.0-alpha.14",
     "emotion": "^9.2.10",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-emotion": "^9.2.10",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.5"
+    "react-scripts": "1.1.5",
+    "react-select": "^3.0.3"
   },
   "devDependencies": {
     "eslint-plugin-prettier": "^2.6.2",

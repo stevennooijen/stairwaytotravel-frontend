@@ -2,23 +2,14 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
 
-import SearchStepper from './SearchStepper'
+import SearchStepper from './stepper/SearchStepper'
+import Typography from '@material-ui/core/Typography'
+// import Container from '@material-ui/core/Container'
 
 const styles = theme => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    margin: theme.spacing.unit * 3,
   },
 })
 
@@ -37,57 +28,33 @@ class Home extends React.Component {
     const { classes } = this.props
 
     return (
-      // export default () => (
-      <div>
-        <header className="App-header">
-          <h1 className="App-title">Welcome to stairway.travel</h1>
-        </header>
-        <p className="App-intro">
-          To get started, choose which continent you want to go to and click{' '}
-          <code>search!</code>.
-        </p>
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="continent-native-simple">Continent</InputLabel>
-          <Select
-            native
-            value={this.state.continent}
-            onChange={this.handleChange}
-            inputProps={{
-              name: 'continent',
-              id: 'continent-native-simple',
+      <React.Fragment>
+        {/* // <Container maxWidth="sm"> */}
+        <div className={classes.root}>
+          <Typography gutterBottom variant="title" component="h1">
+            Welcome to stairway.travel
+          </Typography>
+          <Typography>
+            To get started, choose which continent you want to go to and click{' '}
+            <code>search!</code>.
+          </Typography>
+          <Button
+            component={Link}
+            to="/explore"
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              sessionStorage.clear()
             }}
           >
-            <option value="" />
-            <option value="EU">Europe</option>
-            <option value="AS">Asia</option>
-            <option value="AF">Africa</option>
-            <option value="NA">North-America</option>
-            <option value="SA">South-America</option>
-            <option value="OC">Oceania</option>
-          </Select>
-        </FormControl>
-        <Button
-          component={Link}
-          to="/explore"
-          variant="contained"
-          color="primary"
-        >
-          Search!
-        </Button>
-        <br />
-        <Button
-          component={Link}
-          to="/explore"
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            sessionStorage.clear()
-          }}
-        >
-          Search random!
-        </Button>
+            Search random!
+          </Button>
+        </div>
+        {/* </Container> */}
+        {/* <Container maxWidth="sm"> */}
         <SearchStepper />
-      </div>
+        {/* </Container> */}
+      </React.Fragment>
     )
   }
 }

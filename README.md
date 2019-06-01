@@ -15,18 +15,24 @@ Functionality:
     - https://www.taniarascia.com/how-to-use-local-storage-with-javascript/
   - [ ] Add motion animation to throw away a card after like/dislike
   - [ ] Do a POST request to save the interaction to database / storage bucket
+- [ ] Think about when to save the preferences from the Stepper. Upon clicking save? Or at selection?
+- [ ] Show more destinations in Explore when scrolling down (add another 6 on each scroll down)
 - [ ] Move app to a subdomain like `app.stairway.travel`
 - [ ] Set up homepage on main domain `stairway.travel`
 - [ ] Add logic for fetching multiple destinations based on user id (if logging in on user is enabled)
 
 UI:
 
-- [ ] Add Select options for activities on the search screen, use Chips?
+- [ ] Create a nice home tab (possibly by using Containers)
+- [x] Add Select options for activities on the search screen, use Chips?
+  - [ ] Add real activities instead of default destinations list
 - [ ] Make line between navbar and app. Use divider?
 - [x] Make sure Navbar updates based on url and upon browser refresh
-- [ ] Build photo carousel on destination card, check out material ui steppers
+- [ ] Build photo carousel on destination card, check out material ui mobile steppers - Text with Carousel effect
 - [ ] Extend destination card with more information
 - [ ] Alternative/Option: Replace Grid of Cards with GridList and GridListTiles. For now choose Card as easier
+- [ ] Add Floating Action Button on bucketlist to go to map view of liked destinations
+- [ ] Use Material UI Badges on wishlist to indicate nr of likes in the bucket
 
 ## Table of Contents
 

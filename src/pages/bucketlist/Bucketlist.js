@@ -16,8 +16,8 @@ class Bucketlist extends React.Component {
       continent: sessionStorage.getItem('continent'),
       // For testing purposes, could use ExampleList from Constants. destinationList: ExampleList,
       // Initialize empty if for when nothing in sessionStorage
-      destinationList: [],
-      likeCount: 0,
+      destinationList: undefined,
+      likesCount: 0,
     }
   }
 
@@ -32,8 +32,13 @@ class Bucketlist extends React.Component {
   }
 
   calculateLikes(destinations) {
-    const likesCount = destinations.filter(item => item.liked === true).length
-    this.setState({ likeCount: likesCount })
+    if (destinations) {
+      this.setState({
+        likesCount: destinations.filter(item => item.liked === true).length,
+      })
+    } else {
+      this.setState({ likesCount: 0 })
+    }
   }
 
   toggleLike(id) {
@@ -70,8 +75,8 @@ class Bucketlist extends React.Component {
   render() {
     return (
       <main>
-        {this.state.likeCount > 0 ? (
-          // Show liked destinations if likeCount > 0
+        {this.state.likesCount > 0 ? (
+          // Show liked destinations if likesCount > 0
           <Album>
             {this.state.destinationList.map(
               card =>

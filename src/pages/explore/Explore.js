@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import Album from 'components/Album'
 import DestinationCard from 'components/destination'
 // import ExampleList from 'assets/Constants'
+import GetFlickrImage from 'components/GetFlickrImage'
 
 class Explore extends React.Component {
   // _isMounted = false
@@ -16,6 +17,7 @@ class Explore extends React.Component {
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
       destinationList: [],
+      selectedImage: undefined,
     }
   }
 
@@ -26,6 +28,15 @@ class Explore extends React.Component {
       .then(response => response.json())
       // save contents of response into state
       .then(data => this.setState({ destinationList: data.Destinations }))
+      .catch(err => console.log(err))
+
+    // Resolve Promise and save output of fetch into state
+    GetFlickrImage('cat')
+      .then(image_url =>
+        this.setState({
+          selectedImage: image_url,
+        }),
+      )
       .catch(err => console.log(err))
   }
 
@@ -69,6 +80,8 @@ class Explore extends React.Component {
   }
 
   render() {
+    const { selectedImage } = this.state
+
     return (
       <Album>
         {this.state.destinationList.map(card => (
@@ -79,7 +92,8 @@ class Explore extends React.Component {
               id={card.id}
               title={card.name}
               // image={card.image}
-              image={require('../../assets/beach.jpg')}
+              image={selectedImage}
+              // image={require('../../assets/beach.jpg')}
               text={card.country_name}
               liked={card.liked}
               toggleLike={id => this.toggleLike(id)}

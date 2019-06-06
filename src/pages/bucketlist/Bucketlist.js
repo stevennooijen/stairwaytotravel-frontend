@@ -88,8 +88,8 @@ class Bucketlist extends React.Component {
                     <DestinationCard
                       id={card.id}
                       title={card.name}
-                      // image={card.image}
-                      image={require('../../assets/beach.jpg')}
+                      image={card.image}
+                      // image={require('../../assets/beach.jpg')}
                       text={card.country_name}
                       liked={card.liked}
                       toggleLike={id => this.toggleLike(id)}

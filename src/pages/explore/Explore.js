@@ -17,26 +17,37 @@ class Explore extends React.Component {
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
       destinationList: [],
-      selectedImage: undefined,
     }
   }
 
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
     // this._isMounted = true
+
+    // First fetch the list of recommended destinations
     this.fetchDestinations()
       .then(response => response.json())
-      // save contents of response into state
-      .then(data => this.setState({ destinationList: data.Destinations }))
-      .catch(err => console.log(err))
+      // Second, add flickr images to each destination
+      .then(data => {
+        const destinationData = data.Destinations
 
-    // Resolve Promise and save output of fetch into state
-    GetFlickrImage('cat')
-      .then(image_url =>
-        this.setState({
-          selectedImage: image_url,
-        }),
-      )
+        // for each destination, create a promise that needs to be resolved and save in item.image
+        const promises = destinationData.map(item => {
+          return GetFlickrImage(item.name).then(image_url => {
+            return {
+              ...item,
+              image: image_url,
+            }
+          })
+        })
+
+        // Await on all promises
+        return Promise.all(promises)
+      })
+      // When all results have arrived, put them into the component's state
+      .then(data => {
+        this.setState({ destinationList: data })
+      })
       .catch(err => console.log(err))
   }
 
@@ -80,8 +91,6 @@ class Explore extends React.Component {
   }
 
   render() {
-    const { selectedImage } = this.state
-
     return (
       <Album>
         {this.state.destinationList.map(card => (
@@ -91,8 +100,7 @@ class Explore extends React.Component {
             <DestinationCard
               id={card.id}
               title={card.name}
-              // image={card.image}
-              image={selectedImage}
+              image={card.image}
               // image={require('../../assets/beach.jpg')}
               text={card.country_name}
               liked={card.liked}

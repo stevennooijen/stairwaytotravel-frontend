@@ -1,14 +1,8 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import styled from 'react-emotion'
 import { withStyles } from '@material-ui/core/styles'
 
 import SimpleBottomNavigation from 'components/appbar'
-
-// Emotion: Component to style main div
-const Content = styled('div')({
-  padding: '0 15px',
-})
 
 const appStyles = {
   root: {
@@ -30,7 +24,7 @@ class App extends Component {
     return (
       // className is used to give the div an id
       <div className="App">
-        <Content>{children}</Content>
+        {children}
         <SimpleBottomNavigation />
       </div>
     )

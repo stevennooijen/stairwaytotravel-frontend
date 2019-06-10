@@ -3,13 +3,22 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
+import { withStyles } from '@material-ui/core/styles'
 
 import RedirectButton from './RedirectButton'
 
+const styles = theme => ({
+  card: {
+    margin: '0 15px',
+  },
+})
+
 class WarningCard extends Component {
   render() {
+    const { classes } = this.props
+
     return (
-      <Card>
+      <Card className={classes.card}>
         <CardContent>
           <Typography gutterBottom variant="h6" component="h2">
             Huh? No wishes?
@@ -29,4 +38,4 @@ class WarningCard extends Component {
   }
 }
 
-export default WarningCard
+export default withStyles(styles)(WarningCard)

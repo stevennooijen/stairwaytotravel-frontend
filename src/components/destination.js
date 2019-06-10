@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
+import CardHeader from '@material-ui/core/CardHeader'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
@@ -40,37 +40,35 @@ class DestinationCard extends Component {
 
     return (
       <Card className={classes.card}>
-        {/* <CardHeader
+        <CardHeader
+          title={this.props.title}
+          // Change title font for this one component: https://material-ui.com/components/typography/#typography
+          titleTypographyProps={{
+            variant: 'title',
+            component: 'h6',
+          }}
           action={
-            <IconButton>
-              <FavoriteIcon />
+            <IconButton
+              aria-label="Add to favorites"
+              color="primary"
+              // Set what needs to happen when Favorite is clicked
+              // Function is provided through props from higher order component
+              onClick={() => toggleLike(id)}
+            >
+              {/* Whether the item is already liked is also retrieved from higher order component through props */}
+              {liked ? <FavoriteIcon /> : <FavoriteBorder />}
             </IconButton>
           }
-          title="Shrimp and Chorizo Paella"
-          // TODO: How to change font?
-          titleTypographyProps={{ variant: 'h2' }}
-        /> */}
-        <CardActions>
-          <IconButton
-            aria-label="Add to favorites"
-            color="primary"
-            // Set what needs to happen when Favorite is clicked
-            // Function is provided through props from higher order component
-            onClick={() => toggleLike(id)}
-          >
-            {/* Whether the item is already liked is also retrieved from higher order component through props */}
-            {liked ? <FavoriteIcon /> : <FavoriteBorder />}
-          </IconButton>
-        </CardActions>
+        />
         <CardMedia
           className={classes.cardMedia}
           image={this.props.image}
           title={this.props.title}
         />
         <CardContent className={classes.cardContent}>
-          <Typography gutterBottom variant="title" component="h2">
+          {/* <Typography gutterBottom variant="title" component="h2">
             {this.props.title}
-          </Typography>
+          </Typography> */}
           <Typography>{this.props.text}</Typography>
         </CardContent>
       </Card>

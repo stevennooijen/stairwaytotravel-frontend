@@ -8,7 +8,7 @@ const imageURL = item => {
   // make sure to return something if Flickr didn't return something
   if (item) {
     return (
-      'http://farm' +
+      'https://farm' +
       item.farm +
       '.staticflickr.com/' +
       item.server +

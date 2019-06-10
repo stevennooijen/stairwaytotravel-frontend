@@ -31,9 +31,13 @@ UI:
 - [x] Make sure Navbar updates based on url and upon browser refresh
 - [ ] Build photo carousel on destination card, check out material ui mobile steppers - Text with Carousel effect
 - [ ] Extend destination card with more information
+- [ ] Make nicer destination card:
+  - http://www.webdesigndev.com/material-design-cards/.
+  - https://freefrontend.com/css-material-design-cards/
 - [ ] Alternative/Option: Replace Grid of Cards with GridList and GridListTiles. For now choose Card as easier
 - [ ] Add Floating Action Button on bucketlist to go to map view of liked destinations
 - [ ] Use Material UI Badges on wishlist to indicate nr of likes in the bucket
+- [ ] Use Material UI CardActionArea to make the card clickable for the destination page.
 
 ## Table of Contents
 

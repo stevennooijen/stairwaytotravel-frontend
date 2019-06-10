@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   root: {
-    margin: theme.spacing.unit * 3,
+    margin: theme.spacing(3),
   },
 })
 
@@ -31,7 +31,13 @@ class Home extends React.Component {
       <React.Fragment>
         {/* // <Container maxWidth="sm"> */}
         <div className={classes.root}>
-          <Typography gutterBottom variant="title" component="h1">
+          <Typography
+            component="h1"
+            variant="h4"
+            align="center"
+            color="textPrimary"
+            gutterBottom
+          >
             Welcome to stairway.travel
           </Typography>
           <Typography>

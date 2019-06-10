@@ -44,8 +44,8 @@ class DestinationCard extends Component {
           title={this.props.title}
           // Change title font for this one component: https://material-ui.com/components/typography/#typography
           titleTypographyProps={{
-            variant: 'title',
-            component: 'h6',
+            variant: 'h6',
+            component: 'h2',
           }}
           action={
             <IconButton
@@ -66,10 +66,9 @@ class DestinationCard extends Component {
           title={this.props.title}
         />
         <CardContent className={classes.cardContent}>
-          {/* <Typography gutterBottom variant="title" component="h2">
-            {this.props.title}
-          </Typography> */}
-          <Typography>{this.props.text}</Typography>
+          <Typography color="textSecondary" variant="body1" component="p">
+            {this.props.text}
+          </Typography>
         </CardContent>
       </Card>
     )

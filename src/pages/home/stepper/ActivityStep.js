@@ -110,7 +110,7 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     // height: 250,
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   input: {
     display: 'flex',
@@ -125,11 +125,7 @@ const styles = theme => ({
     overflow: 'hidden',
   },
   chip: {
-    // margin: theme.spacing(0.5, 0.25),
-    marginTop: theme.spacing.unit * 0.5,
-    marginBottom: theme.spacing.unit * 0.5,
-    marginLeft: theme.spacing.unit * 0.25,
-    marginRight: theme.spacing.unit * 0.25,
+    margin: theme.spacing(0.5, 0.25),
   },
   chipFocused: {
     backgroundColor: emphasize(
@@ -140,11 +136,7 @@ const styles = theme => ({
     ),
   },
   noOptionsMessage: {
-    // padding: theme.spacing(1, 2),
-    paddingTop: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
+    padding: theme.spacing(1, 2),
   },
   singleValue: {
     fontSize: 16,
@@ -158,7 +150,7 @@ const styles = theme => ({
   paper: {
     position: 'absolute',
     zIndex: 1,
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(1),
     left: 0,
     right: 0,
   },

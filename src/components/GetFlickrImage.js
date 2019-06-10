@@ -5,17 +5,21 @@ const api_base =
 
 // assemble image URL from fetched photos.search result
 const imageURL = item => {
-  return (
-    'http://farm' +
-    item.farm +
-    '.staticflickr.com/' +
-    item.server +
-    '/' +
-    item.id +
-    '_' +
-    item.secret +
-    '.jpg'
-  )
+  // make sure to return something if Flickr didn't return something
+  if (item) {
+    return (
+      'http://farm' +
+      item.farm +
+      '.staticflickr.com/' +
+      item.server +
+      '/' +
+      item.id +
+      '_' +
+      item.secret +
+      '.jpg'
+    )
+  } else
+    return 'https://i5.walmartimages.com/asr/149cba03-f389-471b-bf4e-a00235d08b58_1.08ec992f931fa4be05c41bc664fdc6b1.jpeg'
 }
 
 // Create JavaScript Promise by returning the call to `fetch()`

@@ -23,32 +23,38 @@ class Explore extends React.Component {
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
     // this._isMounted = true
+    const itemList = JSON.parse(sessionStorage.getItem('destinationList'))
 
-    // First fetch the list of recommended destinations
-    this.fetchDestinations()
-      .then(response => response.json())
-      // Second, add flickr images to each destination
-      .then(data => {
-        const destinationData = data.Destinations
+    if (itemList === null) {
+      // First fetch the list of recommended destinations
+      this.fetchDestinations()
+        .then(response => response.json())
+        // Second, add flickr images to each destination
+        .then(data => {
+          const destinationData = data.Destinations
 
-        // for each destination, create a promise that needs to be resolved and save in item.image
-        const promises = destinationData.map(item => {
-          return GetFlickrImage(item.name).then(image_url => {
-            return {
-              ...item,
-              image: image_url,
-            }
+          // for each destination, create a promise that needs to be resolved and save in item.image
+          const promises = destinationData.map(item => {
+            // query based on destination name + country_name + (possibly activity filter?) + (geolocation?)
+            return GetFlickrImage(item.name).then(image_url => {
+              return {
+                ...item,
+                image: image_url,
+              }
+            })
           })
-        })
 
-        // Await on all promises
-        return Promise.all(promises)
-      })
-      // When all results have arrived, put them into the component's state
-      .then(data => {
-        this.setState({ destinationList: data })
-      })
-      .catch(err => console.log(err))
+          // Await on all promises
+          return Promise.all(promises)
+        })
+        // When all results have arrived, put them into the component's state
+        .then(data => {
+          this.setState({ destinationList: data })
+        })
+        .catch(err => console.log(err))
+    } else {
+      this.setState({ destinationList: itemList })
+    }
   }
 
   // Call an API, API_URL is retrieved from .env files

@@ -20,6 +20,7 @@ Functionality:
 - [ ] Move app to a subdomain like `app.stairway.travel`
 - [ ] Set up homepage on main domain `stairway.travel`
 - [ ] Add logic for fetching multiple destinations based on user id (if logging in on user is enabled)
+- [ ] Fix fetching of images over array. Hey, sorry gisteren geen tijd meer gehad om te antwoorden. Je laatste versie is inderdaad een oplossing. Normaal zou je met state werken, dus een setState call per keer dat je een image binnen hebt gekregen. Maar nu verzamel je ze eerst en doe je dan een setState call, dat kan ook
 
 UI:
 

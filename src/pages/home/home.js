@@ -1,15 +1,21 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
 
 import SearchStepper from './stepper/SearchStepper'
 import Typography from '@material-ui/core/Typography'
-// import Container from '@material-ui/core/Container'
+import Container from '@material-ui/core/Container'
+
+import HeroUnit from './HeroUnit'
 
 const styles = theme => ({
-  root: {
-    margin: theme.spacing(3),
+  stepper: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+    backgroundColor: theme.palette.background.paper,
+  },
+  footer: {
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing(6),
   },
 })
 
@@ -29,37 +35,27 @@ class Home extends React.Component {
 
     return (
       <React.Fragment>
-        {/* // <Container maxWidth="sm"> */}
-        <div className={classes.root}>
+        {/* Hero unit */}
+        <HeroUnit />
+        {/* Stepper section */}
+        <Container className={classes.stepper} maxWidth="md" ref="stepper">
+          <SearchStepper />
+        </Container>
+        {/* Footer */}
+        <footer className={classes.footer}>
+          {/* <Typography variant="h6" align="center" gutterBottom>
+            Footer
+          </Typography> */}
           <Typography
-            component="h1"
-            variant="h4"
+            variant="subtitle1"
             align="center"
-            color="textPrimary"
-            gutterBottom
+            color="textSecondary"
+            component="p"
           >
-            Welcome to stairway.travel
+            © 2019 Stairway.travel
           </Typography>
-          <Typography>
-            To get started, choose which continent you want to go to and click{' '}
-            <code>search!</code>.
-          </Typography>
-          <Button
-            component={Link}
-            to="/explore"
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              sessionStorage.clear()
-            }}
-          >
-            Search random!
-          </Button>
-        </div>
-        {/* </Container> */}
-        {/* <Container maxWidth="sm"> */}
-        <SearchStepper />
-        {/* </Container> */}
+        </footer>
+        {/* End footer */}
       </React.Fragment>
     )
   }

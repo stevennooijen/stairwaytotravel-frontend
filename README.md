@@ -24,7 +24,9 @@ Functionality:
 
 UI:
 
-- [ ] Create a nice home tab (possibly by using Containers)
+- [x] Create a nice home tab (possibly by using Containers)
+  - [x] Based on [onepirate example](https://material-ui.com/premium-themes/onepirate/)
+  - [ ] Fix the jumbotron image for wide screens
 - [x] Add Select options for activities on the search screen, use Chips?
   - [ ] Add real activities instead of default destinations list
 - [ ] Make line between navbar and app. Use divider?

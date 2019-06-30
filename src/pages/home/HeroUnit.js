@@ -8,7 +8,24 @@ import Typography from '@material-ui/core/Typography'
 import HeroUnitLayout from './HeroUnitLayout'
 // import RedirectButton from '../../components/RedirectButton'
 
-const backgroundImage = require('../../assets/stairways/beach.jpeg')
+const backgroundImageList = [
+  'beach-blur-boardwalk-132037.jpg',
+  'city.jpg',
+  'forest.jpg',
+  'haiku-stairs.jpg',
+  'mountain.jpg',
+  // net iets minder mooi:
+  // beautiful-boat-calm-398458.jpg,
+]
+
+function getRandomFromList(items) {
+  return items[Math.floor(Math.random() * items.length)]
+}
+
+// randomly select a background image
+const backgroundImage = require('../../assets/stairways/wide/carousel/' +
+  getRandomFromList(backgroundImageList))
+
 //   'https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400&q=80'
 const logoImage = require('../../assets/logos/logo-white.png')
 

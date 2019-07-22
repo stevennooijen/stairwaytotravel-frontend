@@ -37,13 +37,8 @@ const styles = theme => ({
     width: '100%',
     position: 'fixed',
     bottom: 0,
-    backgroundColor: 'white',
-    borderTopWidth: 0,
-    // shadowOffset: { width: 10, height: 50 },
-    // boxShadow: '5px 10px',
-    shadowColor: 'black',
-    shadowOpacity: 1.0,
-    elevation: 5,
+    // backgroundColor: 'white',
+    borderTop: '1px solid #e8e8e8',
   },
 })
 

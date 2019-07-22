@@ -37,7 +37,8 @@ const styles = theme => ({
     width: '100%',
     position: 'fixed',
     bottom: 0,
-    // backgroundColor: 'white',
+    // posssibly, set through theme: theme.palette.background.default
+    // backgroundColor: '#fcfcfc',
     borderTop: '1px solid #e8e8e8',
   },
 })

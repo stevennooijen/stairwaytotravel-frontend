@@ -40,32 +40,47 @@ class Explore extends React.Component {
       // First fetch the list of recommended destinations
       this.fetchDestinations()
         .then(response => response.json())
-        // Second, add flickr images to each destination
+        // Then save this to State to start rendering the cards
         .then(data => {
-          const destinationData = data.Destinations
+          const destinationList = data.Destinations
+          this.setState(oldState => ({
+            ...oldState,
+            destinationList,
+          }))
 
-          // for each destination, create a promise that needs to be resolved and save in item.image
-          const promises = destinationData.map(item => {
-            // query based on destination name + country_name + (possibly activity filter?) + (geolocation?)
-            return GetFlickrImage(item.name).then(image_url => {
-              return {
-                ...item,
-                image: image_url,
-              }
-            })
-          })
-
-          // Await on all promises
-          return Promise.all(promises)
+          return destinationList
         })
-        // When all results have arrived, put them into the component's state
-        .then(data => {
-          this.setState({ destinationList: data })
+        // Then for each destination create promise to fetch an image and set State if resolved
+        .then(destinationList => {
+          destinationList.forEach(item => {
+            this.fetchImage(item.name)
+          })
         })
         .catch(err => console.log(err))
     } else {
       this.setState({ destinationList: itemList })
     }
+  }
+
+  // Query based on destination name + country_name + (possibly activity filter?) + (geolocation?)
+  fetchImage(destinationName) {
+    // Create promise and setState when resolved through the callback `.then()`
+    GetFlickrImage(destinationName).then(imageUrl => {
+      this.setState(oldState => ({
+        // Posssibly improve this by using a Map type (like a dict) instead of looping over an array
+        // You could then access each item directly: destionationList[i]
+        destinationList: oldState.destinationList.map(item => {
+          if (item.name === destinationName) {
+            return {
+              ...item,
+              image: imageUrl,
+            }
+          } else {
+            return item
+          }
+        }),
+      }))
+    })
   }
 
   // Call an API, API_URL is retrieved from .env files

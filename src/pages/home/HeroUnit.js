@@ -59,10 +59,13 @@ const styles = theme => ({
 })
 
 function ProductHero(props) {
-  const { classes } = props
+  const { classes, scrollTo } = props
 
   return (
-    <HeroUnitLayout backgroundClassName={classes.background}>
+    <HeroUnitLayout
+      backgroundClassName={classes.background}
+      scrollTo={scrollTo}
+    >
       {/* Increase the network loading priority of the background image. */}
       <img style={{ display: 'none' }} src={backgroundImage} alt="" />
       {/* load logo. Keep it in a box to constrain width */}
@@ -101,12 +104,7 @@ function ProductHero(props) {
         color="inherit"
         variant="outlined"
         size="large"
-        // create scroller: https://stackoverflow.com/questions/54245395/how-can-i-scroll-to-a-div-onclick-using-react
-        // create scroller: https://stackoverflow.com/questions/41692785/scroll-page-to-the-nested-react-component-on-a-button-click
-        // create scroller: https://stackoverflow.com/questions/49831378/react-scroll-to-component
-        // onClick={this.refs.stepper.scrollIntoView()}
-        // component="a"
-        // href="/premium-themes/onepirate/sign-up/"
+        onClick={scrollTo}
       >
         Specify wishes
       </Button>

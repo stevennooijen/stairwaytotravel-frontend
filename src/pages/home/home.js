@@ -20,14 +20,27 @@ const styles = theme => ({
 })
 
 class Home extends React.Component {
-  state = {
-    // Check if previous search result still in sessionStorage, if not set as empty
-    continent: sessionStorage.getItem('continent') || '',
+  constructor(props) {
+    super(props)
+    this.stepperRef = React.createRef()
   }
+
+  // state = {
+  // Check if previous search result still in sessionStorage, if not set as empty
+  // continent: sessionStorage.getItem('continent') || '',
+  // }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value })
     sessionStorage.setItem([event.target.name], event.target.value)
+  }
+
+  // scrolling function
+  scrollToStepper = () => {
+    this.stepperRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
   }
 
   render() {
@@ -35,10 +48,14 @@ class Home extends React.Component {
 
     return (
       <React.Fragment>
-        {/* Hero unit */}
-        <HeroUnit />
-        {/* Stepper section */}
-        <Container className={classes.stepper} maxWidth="md" ref="stepper">
+        {/* Hero unit. Pass along scroller as action for buttons */}
+        <HeroUnit scrollTo={this.scrollToStepper} />
+        {/* Stepper section, with reference for scrolling to */}
+        <Container
+          className={classes.stepper}
+          maxWidth="md"
+          ref={this.stepperRef}
+        >
           <SearchStepper />
         </Container>
         {/* Footer */}

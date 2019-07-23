@@ -53,7 +53,7 @@ const styles = theme => ({
 })
 
 function HeroUnitLayout(props) {
-  const { backgroundClassName, children, classes } = props
+  const { backgroundClassName, children, classes, scrollTo } = props
 
   return (
     <section className={classes.root}>
@@ -69,6 +69,7 @@ function HeroUnitLayout(props) {
           height="16"
           width="12"
           alt="arrow down"
+          onClick={scrollTo}
         />
       </Container>
     </section>

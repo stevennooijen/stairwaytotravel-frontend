@@ -40,6 +40,8 @@ const styles = theme => ({
     // posssibly, set through theme: theme.palette.background.default
     // backgroundColor: '#fcfcfc',
     borderTop: '1px solid #e8e8e8',
+    // elevation required for nabar on mobile to pop up above browser navbar
+    elevation: 5,
   },
 })
 

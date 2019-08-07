@@ -10,6 +10,8 @@ const theme = createMuiTheme({
       // donkerblauw
       main: 'rgb(0, 56, 89)',
     },
+    // for divider lines like on the nav bar and footer
+    divider: '#e8e8e8',
   },
   // typography: {
   //   h2: {

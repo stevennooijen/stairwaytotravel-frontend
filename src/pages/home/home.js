@@ -2,9 +2,9 @@ import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 
 import SearchStepper from './stepper/SearchStepper'
-import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 
+import Footer from '../../components/Footer'
 import HeroUnit from './HeroUnit'
 
 const styles = theme => ({
@@ -12,10 +12,6 @@ const styles = theme => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
     backgroundColor: theme.palette.background.paper,
-  },
-  footer: {
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(6),
   },
 })
 
@@ -59,20 +55,7 @@ class Home extends React.Component {
           <SearchStepper />
         </Container>
         {/* Footer */}
-        <footer className={classes.footer}>
-          {/* <Typography variant="h6" align="center" gutterBottom>
-            Footer
-          </Typography> */}
-          <Typography
-            variant="subtitle1"
-            align="center"
-            color="textSecondary"
-            component="p"
-          >
-            © 2019 Stairway.travel
-          </Typography>
-        </footer>
-        {/* End footer */}
+        <Footer />
       </React.Fragment>
     )
   }

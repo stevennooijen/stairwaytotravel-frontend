@@ -39,7 +39,7 @@ const styles = theme => ({
     bottom: 0,
     // posssibly, set through theme: theme.palette.background.default
     // backgroundColor: '#fcfcfc',
-    borderTop: '1px solid #e8e8e8',
+    borderTop: `1px solid ${theme.palette.divider}`,
     // elevation required for nabar on mobile to pop up above browser navbar
     elevation: 5,
   },

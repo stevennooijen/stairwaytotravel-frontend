@@ -1,23 +1,23 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
+// import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 // import HeroUnitLayout from '../../home/HeroUnitLayout'
 import HeroUnitLayout from './HeroUnitLayout'
 // import RedirectButton from '../../components/RedirectButton'
 
-const backgroundImageList = [
-  'beach-blur-boardwalk-132037.jpg',
-  'city.jpg',
-  'forest.jpg',
-  'haiku-stairs.jpg',
-  'mountain.jpg',
-  // net iets minder mooi:
-  // beautiful-boat-calm-398458.jpg,
-]
+// const backgroundImageList = [
+//   'beach-blur-boardwalk-132037.jpg',
+//   'city.jpg',
+//   'forest.jpg',
+//   'haiku-stairs.jpg',
+//   'mountain.jpg',
+// net iets minder mooi:
+// beautiful-boat-calm-398458.jpg,
+// ]
 
 // function getRandomFromList(items) {
 //   return items[Math.floor(Math.random() * items.length)]

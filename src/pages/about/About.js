@@ -7,7 +7,7 @@ import ProductValues from './modules/Values'
 import ProductHowItWorks from './modules/HowItWorks'
 import AboutCompany from './modules/AboutCompany'
 import Jumbotron from './modules/Jumbotron'
-import DividerBlock from './modules/DividerBlock'
+// import DividerBlock from './modules/DividerBlock'
 import ParralaxBlock from './modules/ParralaxBlock'
 import CallToAction from './modules/CallToAction'
 

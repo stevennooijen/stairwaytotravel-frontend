@@ -10,6 +10,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-emotion": "^9.2.10",
+    "react-parallax": "^2.2.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5",
     "react-select": "^3.0.3"

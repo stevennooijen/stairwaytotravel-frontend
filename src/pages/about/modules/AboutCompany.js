@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
+import Card from '@material-ui/core/Card'
+import Link from '@material-ui/core/Link'
 
 const styles = theme => ({
   root: {
@@ -13,10 +15,11 @@ const styles = theme => ({
   cardWrapper: {
     display: 'flex',
     justifyContent: 'center',
+    padding: theme.spacing(2),
   },
   card: {
     maxWidth: 400,
-    padding: theme.spacing(2, 3),
+    padding: theme.spacing(3, 3),
     backgroundColor: theme.palette.background.default,
     [theme.breakpoints.down('sm')]: {
       textAlign: 'center',
@@ -45,7 +48,7 @@ class AboutCompany extends React.Component {
       <Container className={classes.root} component="section">
         <Grid container>
           <Grid item xs={12} md={6} className={classes.cardWrapper}>
-            <div className={classes.card}>
+            <Card className={classes.card}>
               <Typography variant="h4" paragraph>
                 Company profile
               </Typography>
@@ -65,10 +68,10 @@ class AboutCompany extends React.Component {
                 If you have any questions, suggestions or feedback, feel free to
                 contact us!
               </Typography>
-            </div>
+            </Card>
           </Grid>
           <Grid item xs={12} md={6} className={classes.cardWrapper}>
-            <div className={classes.card}>
+            <Card className={classes.card}>
               <div className={classes.imageContainer}>
                 <img
                   src={require('../../../assets/img/me-sailing copy 4.jpg')}
@@ -77,9 +80,12 @@ class AboutCompany extends React.Component {
                 />
               </div>
               <Typography className={classes.imageSubtitle} variant="subtitle1">
-                Steven Nooijen - Founder - Bio
+                Steven Nooijen - Founder -{' '}
+                <Link href="https://www.linkedin.com/in/stevennooijen/">
+                  Linkedin
+                </Link>
               </Typography>
-            </div>
+            </Card>
           </Grid>
         </Grid>
       </Container>

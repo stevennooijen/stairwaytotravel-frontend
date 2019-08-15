@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-// import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Snackbar from '@material-ui/core/Snackbar'
+import Card from '@material-ui/core/Card'
 
 const styles = theme => ({
   root: {
@@ -17,17 +17,18 @@ const styles = theme => ({
     alignItems: 'center',
     backgroundColor: theme.palette.background.default,
   },
-  // cardWrapper: {
-  //   zIndex: 1,
-  // },
+  cardWrapper: {
+    padding: theme.spacing(8),
+  },
   card: {
+    // set width and padding equal to width of AboutCompany cards
+    width: 400,
     display: 'flex',
     justifyContent: 'center',
-    // backgroundColor: theme.palette.warning.main,
-    padding: theme.spacing(8, 3),
+    padding: theme.spacing(3, 3),
   },
   cardContent: {
-    maxWidth: 400,
+    margin: theme.spacing(2),
   },
   textField: {
     width: '100%',
@@ -82,29 +83,31 @@ class CallToAction extends React.Component {
     const { classes } = this.props
 
     return (
-      <Container className={classes.root} component="section">
-        <div className={classes.card}>
-          <form onSubmit={this.handleSubmit} className={classes.cardContent}>
-            <Typography variant="h2" component="h2" gutterBottom>
-              Stay in touch
-            </Typography>
-            <Typography variant="h5">
-              Follow the developments and be notified of significant changes.
-            </Typography>
-            <TextField
-              // noBorder
-              className={classes.textField}
-              placeholder="Your email"
-            />
-            <Button
-              type="submit"
-              color="primary"
-              variant="contained"
-              className={classes.button}
-            >
-              Keep me updated
-            </Button>
-          </form>
+      <Container className={classes.root} component="section" maxWidth={false}>
+        <div className={classes.cardWrapper}>
+          <Card className={classes.card}>
+            <form onSubmit={this.handleSubmit} className={classes.cardContent}>
+              <Typography variant="h2" component="h2" gutterBottom>
+                Stay in touch
+              </Typography>
+              <Typography variant="h5">
+                Follow the developments and be notified of significant changes.
+              </Typography>
+              <TextField
+                // noBorder
+                className={classes.textField}
+                placeholder="Your email"
+              />
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                className={classes.button}
+              >
+                Keep me updated
+              </Button>
+            </form>
+          </Card>
         </div>
         {/* Snackbar message when pressing button */}
         <Snackbar

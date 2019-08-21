@@ -3,16 +3,11 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
-// import Button from '../components/Button'
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-// import Typography from '../components/Typography'
 
 import SearchIcon from '@material-ui/icons/Search'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import ExploreIcon from '@material-ui/icons/Explore'
-
-import { Link } from 'react-router-dom'
 
 const styles = theme => ({
   root: {
@@ -112,19 +107,6 @@ function ProductHowItWorks(props) {
             </Grid>
           </Grid>
         </div>
-        <Button
-          component={Link}
-          to="/explore"
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            sessionStorage.clear()
-          }}
-          size="large"
-          className={classes.button}
-        >
-          Search random!
-        </Button>
       </Container>
     </section>
   )

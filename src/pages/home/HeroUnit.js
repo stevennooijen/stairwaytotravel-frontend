@@ -40,9 +40,10 @@ const styles = theme => ({
   },
   h5: {
     marginBottom: theme.spacing(4),
-    marginTop: theme.spacing(4),
-    [theme.breakpoints.up('sm')]: {
-      marginTop: theme.spacing(10),
+    marginTop: theme.spacing(10),
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: theme.spacing(8),
+      marginRight: theme.spacing(8),
     },
   },
   more: {
@@ -88,8 +89,8 @@ function ProductHero(props) {
       <Button
         component={Link}
         to="/explore"
-        variant="contained"
-        color="primary"
+        variant="outlined"
+        color="inherit"
         onClick={() => {
           sessionStorage.clear()
         }}
@@ -98,11 +99,11 @@ function ProductHero(props) {
         Search random!
       </Button>
       <Typography variant="body2" color="inherit" className={classes.more}>
-        Or...
+        OR...
       </Typography>
       <Button
-        color="inherit"
-        variant="outlined"
+        color="primary"
+        variant="contained"
         size="large"
         onClick={scrollTo}
       >

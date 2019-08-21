@@ -1,35 +1,13 @@
 import React from 'react'
-// import { Link } from 'react-router-dom'
-
 import PropTypes from 'prop-types'
+
 import { withStyles } from '@material-ui/core/styles'
-// import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-// import HeroUnitLayout from '../../home/HeroUnitLayout'
+
 import HeroUnitLayout from './HeroUnitLayout'
-// import RedirectButton from '../../components/RedirectButton'
-
-// const backgroundImageList = [
-//   'beach-blur-boardwalk-132037.jpg',
-//   'city.jpg',
-//   'forest.jpg',
-//   'haiku-stairs.jpg',
-//   'mountain.jpg',
-// net iets minder mooi:
-// beautiful-boat-calm-398458.jpg,
-// ]
-
-// function getRandomFromList(items) {
-//   return items[Math.floor(Math.random() * items.length)]
-// }
-
-// randomly select a background image
-// const backgroundImage = require('../../assets/stairways/wide/carousel/' +
-//   getRandomFromList(backgroundImageList))
 
 const backgroundImage = require('../../../assets/stairways/wide/carousel/haiku-stairs.jpg')
 
-//   'https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400&q=80'
 const logoImage = require('../../../assets/logos/logo-white.png')
 
 const styles = theme => ({
@@ -43,9 +21,10 @@ const styles = theme => ({
   },
   h5: {
     marginBottom: theme.spacing(4),
-    marginTop: theme.spacing(4),
-    [theme.breakpoints.up('sm')]: {
-      marginTop: theme.spacing(10),
+    marginTop: theme.spacing(10),
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: theme.spacing(8),
+      marginRight: theme.spacing(8),
     },
   },
   more: {
@@ -88,29 +67,6 @@ function ProductHero(props) {
       >
         Create your personalized and unique travel itinerary
       </Typography>
-      {/* <Button
-        component={Link}
-        to="/explore"
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          sessionStorage.clear()
-        }}
-        size="large"
-      >
-        Search random!
-      </Button>
-      <Typography variant="body2" color="inherit" className={classes.more}>
-        Or...
-      </Typography>
-      <Button
-        color="inherit"
-        variant="outlined"
-        size="large"
-        onClick={scrollTo}
-      >
-        Specify wishes
-      </Button> */}
     </HeroUnitLayout>
   )
 }

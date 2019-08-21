@@ -12,6 +12,18 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     height: '500px',
+    // for the text and color of the buttons inside the container
+    color: theme.palette.common.white,
+  },
+  // the overlay shades the parralax in the background
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    backgroundColor: theme.palette.common.black,
+    opacity: 0.3,
   },
   insideStyles: {
     display: 'flex',
@@ -19,6 +31,8 @@ const styles = theme => ({
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
+    // this causes the text between buttons to lay on top of the overlay
+    zIndex: 1,
   },
   text: {
     // keep distance between buttons
@@ -36,36 +50,37 @@ function ParallaxBlock(props) {
         bgImage={props.imageUrl}
         // TODO: in future add alt texts to each image
         // bgImageAlt={props.imageAlt}
-        strength={200}
+        strength={400}
       >
+        <div className={classes.overlay} />
         <div className={classes.container}>
           <div className={classes.insideStyles}>
             <Button
-              color="inherit"
+              component={Link}
+              to="/explore"
               variant="outlined"
+              color="inherit"
+              onClick={() => {
+                sessionStorage.clear()
+              }}
               size="large"
-              //   onClick={scrollTo}
             >
-              Specify wishes
+              Explore random!
             </Button>
             <Typography
               variant="body2"
               color="inherit"
               className={classes.text}
             >
-              Or...
+              OR...
             </Typography>
             <Button
-              component={Link}
-              to="/explore"
-              variant="contained"
               color="primary"
-              onClick={() => {
-                sessionStorage.clear()
-              }}
+              variant="contained"
               size="large"
+              //   onClick={scrollTo}
             >
-              Search random!
+              Specify wishes
             </Button>
           </div>
         </div>

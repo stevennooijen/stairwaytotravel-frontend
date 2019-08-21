@@ -40,16 +40,18 @@ class About extends React.Component {
         {/* // section: values: personalized. unique. unbiased. */}
         <ProductValues />
         {/* <DividerBlock /> */}
-        <ParralaxBlock imageUrl={backgroundImageList[4]} imageAlt="someText" />
+        <ParralaxBlock imageUrl={backgroundImageList[2]} imageAlt="someText" />
         {/* // section: how it works. 3 part explanation. NOT: pics of the app.. makes it hard */}
         <ProductHowItWorks />
         {/* <DividerBlock /> */}
-        <ParralaxBlock imageUrl={backgroundImageList[2]} imageAlt="someText" />
+        <ParralaxBlock imageUrl={backgroundImageList[1]} imageAlt="someText" />
         {/* // section: About. how we came up with the idea and who's behind it. Pic of myself. */}
         <AboutCompany />
         {/* // jumbotron with question to start exploring. */}
         <CallToAction />
         {/* <ProductSmokingHero /> */}
+        {/* <DividerBlock /> */}
+        <ParralaxBlock imageUrl={backgroundImageList[4]} imageAlt="someText" />
         <Footer />
       </React.Fragment>
     )

@@ -48,8 +48,7 @@ function ParallaxBlock(props) {
       {/* -----basic config-----*/}
       <Parallax
         bgImage={props.imageUrl}
-        // TODO: in future add alt texts to each image
-        // bgImageAlt={props.imageAlt}
+        bgImageAlt={props.imageAlt}
         strength={400}
       >
         <div className={classes.overlay} />

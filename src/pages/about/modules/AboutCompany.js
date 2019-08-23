@@ -75,8 +75,8 @@ class AboutCompany extends React.Component {
             <Card className={classes.card}>
               <div className={classes.imageContainer}>
                 <img
-                  src={require('../../../assets/img/me-sailing copy 4.jpg')}
-                  alt="call to action"
+                  src={require('../../../assets/img/used/me-sailing-compressed.jpg')}
+                  alt="Founder Steven Nooijen"
                   className={classes.image}
                 />
               </div>

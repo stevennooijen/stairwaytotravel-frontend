@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 
 import HeroUnitLayout from './HeroUnitLayout'
 
-const backgroundImage = require('../../../assets/stairways/wide/carousel/haiku-stairs.jpg')
+const backgroundImage = require('../../../assets/img/used/haiku-stairs.jpg')
 
 const logoImage = require('../../../assets/logos/logo-white.png')
 
@@ -49,7 +49,11 @@ function ProductHero(props) {
       scrollTo={scrollTo}
     >
       {/* Increase the network loading priority of the background image. */}
-      <img style={{ display: 'none' }} src={backgroundImage} alt="" />
+      <img
+        style={{ display: 'none' }}
+        src={backgroundImage}
+        alt="A traveller walking over the Haiku Stairs"
+      />
       {/* load logo. Keep it in a box to constrain width */}
       <div className={classes.logoDiv}>
         <img

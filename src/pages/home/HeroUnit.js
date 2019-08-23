@@ -6,27 +6,9 @@ import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import HeroUnitLayout from './HeroUnitLayout'
-// import RedirectButton from '../../components/RedirectButton'
 
-const backgroundImageList = [
-  'beach-blur-boardwalk-132037.jpg',
-  'city.jpg',
-  'forest.jpg',
-  'haiku-stairs.jpg',
-  'mountain.jpg',
-  // net iets minder mooi:
-  // beautiful-boat-calm-398458.jpg,
-]
+const backgroundImage = require('../../assets/img/used/beach-blur-boardwalk.jpg')
 
-function getRandomFromList(items) {
-  return items[Math.floor(Math.random() * items.length)]
-}
-
-// randomly select a background image
-const backgroundImage = require('../../assets/stairways/wide/carousel/' +
-  getRandomFromList(backgroundImageList))
-
-//   'https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400&q=80'
 const logoImage = require('../../assets/logos/logo-white.png')
 
 const styles = theme => ({
@@ -68,7 +50,11 @@ function ProductHero(props) {
       scrollTo={scrollTo}
     >
       {/* Increase the network loading priority of the background image. */}
-      <img style={{ display: 'none' }} src={backgroundImage} alt="" />
+      <img
+        style={{ display: 'none' }}
+        src={backgroundImage}
+        alt="A boardwalk leading to a lake with a sunset view"
+      />
       {/* load logo. Keep it in a box to constrain width */}
       <div className={classes.logoDiv}>
         <img

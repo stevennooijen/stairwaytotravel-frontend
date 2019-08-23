@@ -13,15 +13,9 @@ import CallToAction from './modules/CallToAction'
 
 // Require() only takes static url variables, so a dynamic (!) imageFolder variable is not allowed
 // https://stackoverflow.com/questions/44991669/react-native-require-with-dynamic-string
-const backgroundImageList = [
-  'beach-blur-boardwalk-132037.jpg',
-  'city.jpg',
-  'forest.jpg',
-  'haiku-stairs.jpg',
-  'mountain.jpg',
-  // net iets minder mooi:
-  // beautiful-boat-calm-398458.jpg,
-].map(img => require('../../assets/stairways/wide/carousel/' + img))
+const backgroundImageList = ['forest.jpg', 'city.jpg', 'mountain.jpg'].map(
+  img => require('../../assets/img/used/' + img),
+)
 
 class About extends React.Component {
   constructor(props) {
@@ -34,24 +28,23 @@ class About extends React.Component {
     return (
       // Inspired from https://material-ui.com/premium-themes/onepirate/
       <React.Fragment>
-        {/* // jumbotron image with text "Find your ideal holiday destination" */}
-        {/* <ProductHero /> */}
         <Jumbotron />
-        {/* // section: values: personalized. unique. unbiased. */}
         <ProductValues />
-        {/* <DividerBlock /> */}
-        <ParralaxBlock imageUrl={backgroundImageList[2]} imageAlt="someText" />
-        {/* // section: how it works. 3 part explanation. NOT: pics of the app.. makes it hard */}
+        <ParralaxBlock
+          imageUrl={backgroundImageList[0]}
+          imageAlt="A stairway in a forest pointing to the sky"
+        />
         <ProductHowItWorks />
-        {/* <DividerBlock /> */}
-        <ParralaxBlock imageUrl={backgroundImageList[1]} imageAlt="someText" />
-        {/* // section: About. how we came up with the idea and who's behind it. Pic of myself. */}
+        <ParralaxBlock
+          imageUrl={backgroundImageList[1]}
+          imageAlt="A stairway going down into a city neighbourhood at sunset hour"
+        />
         <AboutCompany />
-        {/* // jumbotron with question to start exploring. */}
         <CallToAction />
-        {/* <ProductSmokingHero /> */}
-        {/* <DividerBlock /> */}
-        <ParralaxBlock imageUrl={backgroundImageList[4]} imageAlt="someText" />
+        <ParralaxBlock
+          imageUrl={backgroundImageList[2]}
+          imageAlt="A snowy stairway leading up a mountain"
+        />
         <Footer />
       </React.Fragment>
     )

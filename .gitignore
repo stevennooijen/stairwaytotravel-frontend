@@ -26,6 +26,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# stairway background pictures
-/src/assets/stairways
-/src/assets
+# not used image folder
+/src/assets/img/not-used

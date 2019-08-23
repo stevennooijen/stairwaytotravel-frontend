@@ -1,47 +1,6 @@
+# Stairway.travel React front-end
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
-
-#### TODO
-
-Functionality:
-
-- [x] Connect own domain name `stairway.travel`
-- [x] Connect deployed front-end to backend
-- [x] Save search tab query values and use them in Explore tab with session storage
-- [x] Make sure Explore tab selection button default to whatever is stored in session storage
-- [x] Add user interaction like/dislike functionality
-  - [ ] Fetch a new destination `onClick`
-  - [x] Add liked/disliked destination to `sessionStorage`
-    - Maintaining a list: https://hackernoon.com/how-to-take-advantage-of-local-storage-in-your-react-projects-a895f2b2d3f2
-    - https://www.taniarascia.com/how-to-use-local-storage-with-javascript/
-  - [ ] Add motion animation to throw away a card after like/dislike
-  - [ ] Do a POST request to save the interaction to database / storage bucket
-- [ ] Think about when to save the preferences from the Stepper. Upon clicking save? Or at selection?
-- [ ] Show more destinations in Explore when scrolling down (add another 6 on each scroll down)
-- [ ] Move app to a subdomain like `app.stairway.travel`
-- [ ] Set up homepage on main domain `stairway.travel`
-- [ ] Add logic for fetching multiple destinations based on user id (if logging in on user is enabled)
-- [ ] Fix fetching of images over array. Hey, sorry gisteren geen tijd meer gehad om te antwoorden. Je laatste versie is inderdaad een oplossing. Normaal zou je met state werken, dus een setState call per keer dat je een image binnen hebt gekregen. Maar nu verzamel je ze eerst en doe je dan een setState call, dat kan ook
-
-UI:
-
-- [x] Create a nice home tab (possibly by using Containers)
-  - [x] Based on [onepirate example](https://material-ui.com/premium-themes/onepirate/)
-  - [ ] Fix the jumbotron image for wide screens
-- [x] Add Select options for activities on the search screen, use Chips?
-  - [ ] Add real activities instead of default destinations list
-- [ ] Make line between navbar and app. Use divider?
-- [x] Make sure Navbar updates based on url and upon browser refresh
-- [ ] Build photo carousel on destination card, check out material ui mobile steppers - Text with Carousel effect
-- [ ] Extend destination card with more information
-- [ ] Make nicer destination card:
-  - http://www.webdesigndev.com/material-design-cards/.
-  - https://freefrontend.com/css-material-design-cards/
-- [ ] Alternative/Option: Replace Grid of Cards with GridList and GridListTiles. For now choose Card as easier
-- [ ] Add Floating Action Button on bucketlist to go to map view of liked destinations
-- [ ] Use Material UI Badges on wishlist to indicate nr of likes in the bucket
-- [ ] Use Material UI CardActionArea to make the card clickable for the destination page.
-
-## Table of Contents
 
 ## Folder Structure
 
@@ -168,11 +127,3 @@ Call these variables using `process.env`:
   </small>
 </div>
 ```
-
-## Resources
-
-Possibly helpfull tutorials:
-
-- https://medium.com/get-it-working/get-googles-firestore-working-with-react-c78f198d2364
-- https://www.youtube.com/playlist?list=PL4cUxeGkcC9iWstfXntcj8f-dFZ4UtlN3
-- Usefull tutorial series? https://www.youtube.com/watch?v=nF9q_fRV-1A

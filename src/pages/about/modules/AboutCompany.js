@@ -37,6 +37,7 @@ const styles = theme => ({
   },
   imageSubtitle: {
     textAlign: 'center',
+    marginTop: theme.spacing(1),
   },
 })
 
@@ -49,12 +50,12 @@ class AboutCompany extends React.Component {
         <Grid container>
           <Grid item xs={12} md={6} className={classes.cardWrapper}>
             <Card className={classes.card}>
-              <Typography variant="h4" paragraph>
-                Company profile
+              <Typography variant="h2" paragraph>
+                About us
               </Typography>
               <Typography paragraph>
-                Stairway to Travel offers personalized travel recommendations
-                that help you shape unique itineraries.
+                Stairway.travel offers personalized travel recommendations that
+                help you shape unique itineraries.
               </Typography>
               <Typography paragraph>
                 We believe that travel research should be inspiring, fun and

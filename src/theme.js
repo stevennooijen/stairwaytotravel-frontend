@@ -13,27 +13,23 @@ const theme = createMuiTheme({
     // for divider lines like on the nav bar and footer
     divider: '#e8e8e8',
   },
-  // typography: {
-  //   h2: {
-  //     fontFamily: 'Arial',
-  //   },
-  // },
-  // props: {
-  //   MuiTypography: {
-  //     variantMapping: {
-  //       h1: 'h2',
-  //       h2: 'h2',
-  //       h3: 'h2',
-  //       h4: 'h2',
-  //       h5: 'h2',
-  //       h6: 'h2',
-  //       subtitle1: 'h2',
-  //       subtitle2: 'h2',
-  //       body1: 'span',
-  //       body2: 'span',
-  //     },
-  //   },
-  // },
+  typography: {
+    h2: {
+      fontSize: 48,
+    },
+    h3: {
+      fontSize: 32,
+      fontWeight: 100,
+    },
+    h4: {
+      fontSize: 32,
+      fontWeight: 100,
+    },
+    h6: {
+      fontSize: 20,
+      fontWeight: 400,
+    },
+  },
 })
 
 export default theme

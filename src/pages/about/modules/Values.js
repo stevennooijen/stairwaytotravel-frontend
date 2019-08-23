@@ -3,12 +3,11 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
-// import Typography from '../components/Typography'
 import Typography from '@material-ui/core/Typography'
 
-import SearchIcon from '@material-ui/icons/Search'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import ExploreIcon from '@material-ui/icons/Explore'
+import PersonalizedIcon from '@material-ui/icons/SentimentSatisfiedAlt'
+import UniqueIcon from '@material-ui/icons/TouchApp'
+import UnbiasedIcon from '@material-ui/icons/Visibility'
 
 const styles = theme => ({
   root: {
@@ -30,12 +29,13 @@ const styles = theme => ({
     alignItems: 'center',
     padding: theme.spacing(0, 5),
   },
-  //   image: {
-  //     height: 55,
-  //   },
   title: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(8),
+  },
+  image: {
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(4),
+    color: theme.palette.secondary.main,
   },
 })
 
@@ -46,48 +46,42 @@ function ProductValues(props) {
     <section className={classes.root}>
       <Container className={classes.container}>
         <Typography
-          variant="h4"
+          variant="h2"
           marked="center"
           className={classes.title}
           component="h2"
         >
-          Our Mission
+          Our mission
         </Typography>
         <Grid container spacing={5}>
           <Grid item xs={12} md={4}>
             <div className={classes.item}>
-              <SearchIcon fontSize="large" />
-              <Typography variant="h6" className={classes.title}>
-                Personalized
-              </Typography>
-              <Typography variant="h5">
-                We listen to you, and you only. Customer first is important to
-                us.
-              </Typography>
-            </div>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <div className={classes.item}>
-              <ExploreIcon fontSize="large" />
-
-              <Typography variant="h6" className={classes.title}>
-                Unique
-              </Typography>
-              <Typography variant="h5">
-                We don't recommend the obvious, but help you find ssomething
-                special
+              <Typography variant="h3">Personalized</Typography>
+              <PersonalizedIcon fontSize="large" className={classes.image} />
+              <Typography>
+                We turn the travel industry upside down and ask you what
+                <b> you </b>
+                want to do instead of pushing our own offers.
               </Typography>
             </div>
           </Grid>
           <Grid item xs={12} md={4}>
             <div className={classes.item}>
-              <FavoriteIcon fontSize="large" />
-              <Typography variant="h6" className={classes.title}>
-                Unbiased
+              <Typography variant="h3">Unique</Typography>
+              <UniqueIcon fontSize="large" className={classes.image} />
+              <Typography>
+                We don't recommend the obvious, but help you find something
+                special.
               </Typography>
-              <Typography variant="h5">
-                We are here for you. Recommendations for travellers by
-                travellers
+            </div>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <div className={classes.item}>
+              <Typography variant="h3">Unbiased</Typography>
+              <UnbiasedIcon fontSize="large" className={classes.image} />
+              <Typography>
+                We believe in transparancy and want to provide unbiased advice.
+                There is no hidden agenda.
               </Typography>
             </div>
           </Grid>

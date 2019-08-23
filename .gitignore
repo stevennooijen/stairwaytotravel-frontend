@@ -28,3 +28,4 @@ yarn-error.log*
 
 # stairway background pictures
 /src/assets/stairways
+/src/assets

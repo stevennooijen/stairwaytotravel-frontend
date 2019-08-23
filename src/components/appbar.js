@@ -14,11 +14,16 @@ import PropTypes from 'prop-types'
 
 // Taken from hidden app-bar example: https://material-ui.com/components/app-bar/
 function HideOnScroll(props) {
-  const { children } = props
+  const { children, pathname } = props
   const trigger = useScrollTrigger()
 
   return (
-    <Slide appear={false} direction="up" in={!trigger}>
+    <Slide
+      appear={false}
+      direction="up"
+      // make sure appbar doesn't display when just opening the site
+      in={pathname === '/' && window.pageYOffset === 0 ? false : !trigger}
+    >
       {children}
     </Slide>
   )
@@ -73,7 +78,7 @@ class SimpleBottomNavigation extends Component {
 
     return (
       // Add transition on the navbar
-      <HideOnScroll>
+      <HideOnScroll pathname={this.state.value}>
         <BottomNavigation
           value={value}
           onChange={this.handleChange}

@@ -65,7 +65,7 @@ function ParallaxBlock(props) {
               }}
               size="large"
             >
-              Explore random!
+              Explore random
             </Button>
             <Typography
               variant="body2"
@@ -75,6 +75,8 @@ function ParallaxBlock(props) {
               OR...
             </Typography>
             <Button
+              component={Link}
+              to="/"
               color="primary"
               variant="contained"
               size="large"

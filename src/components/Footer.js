@@ -43,18 +43,13 @@ class Footer extends React.Component {
       <Container component="footer" maxWidth={false} className={classes.footer}>
         <ul>
           <li>
-            <Typography variant="subtitle1" color="textSecondary" component="p">
+            <Link href="/" variant="subtitle1" color="textSecondary">
               © 2019 Stairway.travel
-            </Typography>
+            </Link>
           </li>
           <li>
             <Link href="/about" variant="subtitle1">
               About
-            </Link>
-          </li>
-          <li>
-            <Link href="/how-it-works" variant="subtitle1">
-              How it works
             </Link>
           </li>
           <li>

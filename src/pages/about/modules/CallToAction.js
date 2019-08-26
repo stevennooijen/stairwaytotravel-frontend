@@ -17,15 +17,12 @@ const styles = theme => ({
     alignItems: 'center',
     backgroundColor: theme.palette.background.default,
   },
-  cardWrapper: {
-    padding: theme.spacing(8),
-  },
   card: {
-    // set width and padding equal to width of AboutCompany cards
-    width: 400,
+    // set width and margin equal to width of AboutCompany cards
+    maxWidth: 400,
     display: 'flex',
     justifyContent: 'center',
-    padding: theme.spacing(3, 3),
+    margin: theme.spacing(10, 2),
   },
   cardContent: {
     margin: theme.spacing(2),
@@ -84,36 +81,36 @@ class CallToAction extends React.Component {
 
     return (
       <Container className={classes.root} component="section" maxWidth={false}>
-        <div className={classes.cardWrapper}>
-          <Card className={classes.card}>
-            <form onSubmit={this.handleSubmit} className={classes.cardContent}>
-              <Typography variant="h2" component="h2" gutterBottom>
-                Stay in touch
-              </Typography>
-              <Typography variant="h5">
-                Follow the developments and be notified of significant changes.
-              </Typography>
-              <TextField
-                // noBorder
-                className={classes.textField}
-                placeholder="Your email"
-              />
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                className={classes.button}
-              >
-                Keep me updated
-              </Button>
-            </form>
-          </Card>
-        </div>
+        {/* <div className={classes.cardWrapper}> */}
+        <Card className={classes.card}>
+          <form onSubmit={this.handleSubmit} className={classes.cardContent}>
+            <Typography variant="h2" component="h2" gutterBottom>
+              Stay in touch
+            </Typography>
+            <Typography variant="h5">
+              Follow the developments and be notified of significant changes.
+            </Typography>
+            <TextField
+              // noBorder
+              className={classes.textField}
+              placeholder="Your email"
+            />
+            <Button
+              type="submit"
+              color="primary"
+              variant="contained"
+              className={classes.button}
+            >
+              Keep me updated
+            </Button>
+          </form>
+        </Card>
+        {/* </div> */}
         {/* Snackbar message when pressing button */}
         <Snackbar
           open={this.state.open}
           onClose={this.handleClose}
-          message="We will send you our best offers, once a week."
+          message="Thank you! We will keep you updated."
         />
       </Container>
     )

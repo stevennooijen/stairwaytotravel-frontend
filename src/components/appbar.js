@@ -16,13 +16,16 @@ import PropTypes from 'prop-types'
 function HideOnScroll(props) {
   const { children, pathname } = props
   const trigger = useScrollTrigger()
+  const pages = ['/', '/about']
 
   return (
     <Slide
       appear={false}
       direction="up"
-      // make sure appbar doesn't display when just opening the site
-      in={pathname === '/' && window.pageYOffset === 0 ? false : !trigger}
+      // make sure appbar doesn't display when on top of certain pages
+      in={
+        pages.includes(pathname) && window.pageYOffset === 0 ? false : !trigger
+      }
     >
       {children}
     </Slide>

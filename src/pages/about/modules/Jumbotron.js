@@ -69,7 +69,7 @@ function ProductHero(props) {
         variant="h5"
         className={classes.h5}
       >
-        Create your personalized and unique travel itinerary
+        Create your personalized travel itinerary
       </Typography>
     </HeroUnitLayout>
   )

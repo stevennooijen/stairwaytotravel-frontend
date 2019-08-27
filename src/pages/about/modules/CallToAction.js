@@ -61,10 +61,19 @@ const styles = theme => ({
 class CallToAction extends React.Component {
   state = {
     open: false,
+    textFieldValue: '',
+  }
+
+  handleTextFieldChange = event => {
+    this.setState({
+      textFieldValue: event.target.value,
+    })
   }
 
   handleSubmit = event => {
     event.preventDefault()
+    console.log(this.state.textFieldValue)
+
     this.setState({
       open: true,
     })
@@ -94,6 +103,8 @@ class CallToAction extends React.Component {
               // noBorder
               className={classes.textField}
               placeholder="Your email"
+              value={this.state.textFieldValue}
+              onChange={this.handleTextFieldChange}
             />
             <Button
               type="submit"

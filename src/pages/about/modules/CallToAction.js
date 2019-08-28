@@ -72,7 +72,18 @@ class CallToAction extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault()
-    console.log(this.state.textFieldValue)
+    // Call signup endpoint that then calls the Mailchimp server
+    fetch(
+      process.env.REACT_APP_API_URL +
+        '/signup/?email=' +
+        this.state.textFieldValue,
+      {
+        method: 'POST',
+      },
+    )
+    // TODO: maybe return error message if POST not succesfull?
+    // .then(response => response.json())
+    // .catch(err => console.log(err))
 
     this.setState({
       open: true,
@@ -90,7 +101,6 @@ class CallToAction extends React.Component {
 
     return (
       <Container className={classes.root} component="section" maxWidth={false}>
-        {/* <div className={classes.cardWrapper}> */}
         <Card className={classes.card}>
           <form onSubmit={this.handleSubmit} className={classes.cardContent}>
             <Typography variant="h2" component="h2" gutterBottom>
@@ -116,7 +126,6 @@ class CallToAction extends React.Component {
             </Button>
           </form>
         </Card>
-        {/* </div> */}
         {/* Snackbar message when pressing button */}
         <Snackbar
           open={this.state.open}

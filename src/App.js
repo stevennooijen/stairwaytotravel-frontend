@@ -4,6 +4,11 @@ import { withStyles } from '@material-ui/core/styles'
 
 import SimpleBottomNavigation from 'components/appbar'
 
+import ReactGA from 'react-ga'
+
+ReactGA.initialize('UA-147513609-1')
+ReactGA.pageview(window.location.pathname + window.location.search)
+
 const appStyles = {
   root: {
     flexGrow: 1,

@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Snackbar from '@material-ui/core/Snackbar'
 import Card from '@material-ui/core/Card'
+import ReactGA from 'react-ga'
 
 const styles = theme => ({
   root: {
@@ -87,6 +88,14 @@ class CallToAction extends React.Component {
 
     this.setState({
       open: true,
+    })
+
+    // send google analytics event for the click
+    ReactGA.event({
+      category: 'Acquisition',
+      action: 'Signup',
+      label: 'Signup for email updates',
+      value: 5,
     })
   }
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 
-import SimpleBottomNavigation from 'components/appbar'
+// import SimpleBottomNavigation from 'components/appbar'
 
 import ReactGA from 'react-ga'
 
@@ -30,7 +30,7 @@ class App extends Component {
       // className is used to give the div an id
       <div className="App">
         {children}
-        <SimpleBottomNavigation />
+        {/* <SimpleBottomNavigation /> */}
       </div>
     )
   }

@@ -51,7 +51,7 @@ function ProductValues(props) {
           className={classes.title}
           component="h2"
         >
-          Our mission
+          Our values
         </Typography>
         <Grid container spacing={5}>
           <Grid item xs={12} md={4}>
@@ -71,7 +71,7 @@ function ProductValues(props) {
               <UniqueIcon fontSize="large" className={classes.image} />
               <Typography>
                 We don't recommend the obvious, but help you find something
-                special.
+                truly special.
               </Typography>
             </div>
           </Grid>

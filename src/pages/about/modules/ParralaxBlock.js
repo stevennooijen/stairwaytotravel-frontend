@@ -3,8 +3,8 @@ import { Parallax } from 'react-parallax'
 import { withStyles } from '@material-ui/core/styles'
 
 import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import { Link } from 'react-router-dom'
+// import Typography from '@material-ui/core/Typography'
+// import { Link } from 'react-router-dom'
 
 const styles = theme => ({
   container: {
@@ -41,7 +41,7 @@ const styles = theme => ({
 })
 
 function ParallaxBlock(props) {
-  const { classes } = props
+  const { classes, scrollTo, buttonText } = props
 
   return (
     <div>
@@ -54,7 +54,7 @@ function ParallaxBlock(props) {
         <div className={classes.overlay} />
         <div className={classes.container}>
           <div className={classes.insideStyles}>
-            <Button
+            {/* <Button
               component={Link}
               to="/explore"
               variant="outlined"
@@ -72,16 +72,16 @@ function ParallaxBlock(props) {
               className={classes.text}
             >
               OR...
-            </Typography>
+            </Typography> */}
             <Button
-              component={Link}
-              to="/"
+              // component={Link}
+              // to="/"
               color="primary"
               variant="contained"
               size="large"
-              //   onClick={scrollTo}
+              onClick={scrollTo}
             >
-              Specify wishes
+              {buttonText}
             </Button>
           </div>
         </div>

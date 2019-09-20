@@ -10,9 +10,9 @@ import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 
 import { Home } from './pages/home'
-import { Explore } from './pages/explore'
-import { Bucketlist } from './pages/bucketlist'
-import { About } from './pages/about'
+// import { Explore } from './pages/explore'
+// import { Bucketlist } from './pages/bucketlist'
+// import { About } from './pages/about'
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
@@ -22,10 +22,10 @@ ReactDOM.render(
         {/* Start of actual app, App is the top level component */}
         <App>
           <Route exact path="/" render={() => <Home />} />
-          <Route exact path="/explore" render={() => <Explore />} />
-          <Route path="/explore/:name" render={() => <Explore />} />
-          <Route path="/bucketlist" render={() => <Bucketlist />} />
-          <Route path="/about" render={() => <About />} />
+          {/* <Route exact path="/explore" render={() => <Explore />} /> */}
+          {/* <Route path="/explore/:name" render={() => <Explore />} /> */}
+          {/* <Route path="/bucketlist" render={() => <Bucketlist />} /> */}
+          {/* <Route path="/about" render={() => <About />} /> */}
         </App>
       </div>
     </Router>

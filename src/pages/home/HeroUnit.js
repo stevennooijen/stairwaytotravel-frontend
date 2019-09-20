@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
+// import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import HeroUnitLayout from './HeroUnitLayout'
 
@@ -72,7 +72,7 @@ function ProductHero(props) {
       >
         Create your personalized travel itinerary
       </Typography>
-      <Button
+      {/* <Button
         component={Link}
         to="/explore"
         variant="outlined"
@@ -83,18 +83,18 @@ function ProductHero(props) {
         size="large"
       >
         Search random!
-      </Button>
-      <Typography variant="body2" color="inherit" className={classes.more}>
-        OR...
-      </Typography>
-      <Button
+      </Button> */}
+      {/* <Typography variant="body2" color="inherit" className={classes.more}>
+        Signup to stay in touch and be notified of significant changes.
+      </Typography> */}
+      {/* <Button
         color="primary"
         variant="contained"
         size="large"
         onClick={scrollTo}
       >
         Specify wishes
-      </Button>
+      </Button> */}
     </HeroUnitLayout>
   )
 }

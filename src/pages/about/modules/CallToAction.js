@@ -88,6 +88,7 @@ class CallToAction extends React.Component {
 
     this.setState({
       open: true,
+      textFieldValue: '',
     })
 
     // send google analytics event for the click
@@ -137,6 +138,7 @@ class CallToAction extends React.Component {
         </Card>
         {/* Snackbar message when pressing button */}
         <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           open={this.state.open}
           onClose={this.handleClose}
           message="Thank you! We will keep you updated."

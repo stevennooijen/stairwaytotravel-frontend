@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "stairwaytotravel"
+    "staging": "stairwaytotravel-release",
+    "production": "stairwaytotravel"
   }
 }

@@ -58,7 +58,7 @@ function ProductHero(props) {
       <div className={classes.logoDiv}>
         <img
           src={logoImage}
-          alt="Logo Stairway.travel"
+          alt="Logo Stairway to Travel"
           className={classes.logo}
         />
       </div>

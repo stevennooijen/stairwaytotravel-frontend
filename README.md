@@ -1,4 +1,4 @@
-# Stairway.travel React front-end
+# Stairway to Travel React front-end
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
@@ -79,8 +79,8 @@ To host on Firebase, configure as a single-page app when initializing in the pro
 
 We have set up two projects to deploy to, which are defined in `.firebaserc`. Their project aliases are:
 
-- `staging`: releases to Firebase project `stairwaytotravel-release`
-- `production`: releases to Firebase project `stairwaytotravel`
+- `staging`: releases to Firebase project [`stairwaytotravel-release`](https://stairwaytotravel-release.web.app/)
+- `production`: releases to Firebase project [`stairwaytotravel`](https://stairwaytotravel.com/)
 
 Before deploying make sure the right usage profile is set up using:
 

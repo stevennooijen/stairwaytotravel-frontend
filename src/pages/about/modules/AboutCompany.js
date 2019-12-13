@@ -54,8 +54,8 @@ class AboutCompany extends React.Component {
                 About us
               </Typography>
               <Typography paragraph>
-                Stairway.travel offers personalized travel recommendations that
-                help you shape unique itineraries.
+                Stairway to Travel offers personalized travel recommendations
+                that help you shape unique itineraries.
               </Typography>
               <Typography paragraph>
                 We believe that travel research should be inspiring, fun and

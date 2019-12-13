@@ -44,12 +44,12 @@ class Footer extends React.Component {
         <ul>
           <li>
             <Typography variant="subtitle1" color="textSecondary">
-              © 2019 Stairway.travel
+              © 2019 Stairway to Travel
             </Typography>
           </li>
           <li>
             <Link
-              href="mailto:steven.nooijen@gmail.com?subject=Question about Stairway.travel: ..."
+              href="mailto:steven.nooijen@gmail.com?subject=Question about Stairway to Travel: ..."
               variant="subtitle1"
             >
               Contact

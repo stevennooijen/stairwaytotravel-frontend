@@ -13,6 +13,7 @@ import { Home } from './pages/home'
 import { Explore } from './pages/explore'
 import { Bucketlist } from './pages/bucketlist'
 import { About } from './pages/about'
+import { Mapview } from './pages/mapview'
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
@@ -26,6 +27,7 @@ ReactDOM.render(
           <Route path="/explore/:name" render={() => <Explore />} />
           <Route path="/bucketlist" render={() => <Bucketlist />} />
           <Route path="/about" render={() => <About />} />
+          <Route path="/mapview" render={() => <Mapview />} />
         </App>
       </div>
     </Router>

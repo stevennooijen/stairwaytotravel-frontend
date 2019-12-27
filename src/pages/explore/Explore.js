@@ -2,7 +2,7 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 
 import Album from 'components/Album'
-import DestinationCard from 'components/destination'
+import DestinationCard from 'components/DestinationCard'
 // import ExampleList from 'assets/Constants'
 import GetFlickrImage from 'components/GetFlickrImage'
 import CircularProgress from '@material-ui/core/CircularProgress'

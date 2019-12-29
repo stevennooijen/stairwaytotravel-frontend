@@ -15,26 +15,31 @@ import { Bucketlist } from './pages/bucketlist'
 import { About } from './pages/about'
 import { Mapview } from './pages/mapview'
 
-ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    {/* Router is not a standard requirement but is added to create links/urls/rounting */}
-    <Router>
-      <div>
-        {/* Start of actual app, App is the top level component */}
-        <App>
-          <Route exact path="/" render={() => <Home />} />
-          <Route exact path="/explore" render={() => <Explore />} />
-          <Route path="/explore/:name" render={() => <Explore />} />
-          <Route path="/bucketlist" render={() => <Bucketlist />} />
-          <Route path="/about" render={() => <About />} />
-          <Route path="/mapview" render={() => <Mapview />} />
-        </App>
-      </div>
-    </Router>
-    ,
-  </MuiThemeProvider>,
+class Root extends React.Component {
+  render() {
+    return (
+      <MuiThemeProvider theme={theme}>
+        {/* Router is not a standard requirement but is added to create links/urls/rounting */}
+        <Router>
+          <div>
+            {/* Start of actual app, App is the top level component */}
+            <App>
+              <Route exact path="/" render={() => <Home />} />
+              <Route exact path="/explore" render={() => <Explore />} />
+              <Route path="/explore/:name" render={() => <Explore />} />
+              <Route path="/bucketlist" render={() => <Bucketlist />} />
+              <Route path="/about" render={() => <About />} />
+              <Route path="/mapview" render={() => <Mapview />} />
+            </App>
+          </div>
+        </Router>
+        ,
+      </MuiThemeProvider>
+    )
+  }
+}
 
-  // Links it all to index.html
-  document.getElementById('root'),
-)
+// Links it all to index.html
+ReactDOM.render(<Root />, document.getElementById('root'))
+
 registerServiceWorker()

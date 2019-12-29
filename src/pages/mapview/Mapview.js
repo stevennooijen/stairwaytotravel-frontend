@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
-import GoogleMap from './GoogleMap'
-import DestinationPin from './DestinationPin'
+import GoogleMap from './components/GoogleMap'
+import DestinationPin from './components/DestinationPin'
 import SearchBox from './components/SearchBox'
 
 const LOS_ANGELES_CENTER = [34.0522, -118.2437]
@@ -22,7 +22,8 @@ class Mapview extends Component {
 
     this.state = {
       places: [],
-      // for the searbox
+      bounds: [],
+      // for the searchbox
       mapApiLoaded: false,
       mapInstance: null,
       mapApi: null,
@@ -64,10 +65,11 @@ class Mapview extends Component {
   _onBoundsChange = (center, zoom, bounds, marginBounds) => {
     // this.props.onCenterChange(center)
     // this.props.onZoomChange(zoom)
-    console.log('center', center)
-    console.log('zoom', zoom)
+    // console.log('center', center)
+    // console.log('zoom', zoom)
     console.log('bounds', bounds)
-    console.log('marginBounds', marginBounds)
+    this.setState({ bounds: bounds })
+    // console.log('marginBounds', marginBounds)
   }
 
   render() {

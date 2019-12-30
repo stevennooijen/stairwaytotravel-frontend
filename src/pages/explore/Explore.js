@@ -9,6 +9,8 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import { withStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
+import AppBar from './components/AppBar'
+
 const styles = theme => ({
   loaderContainer: {
     marginTop: theme.spacing(8),
@@ -128,6 +130,7 @@ class Explore extends React.Component {
 
     return (
       <main>
+        <AppBar />
         {/* check if destinations are loaded, if not display progress */}
         {this.state.destinationList && this.state.destinationList.length ? (
           <Album>

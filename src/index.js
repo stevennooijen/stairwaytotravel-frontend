@@ -16,6 +16,22 @@ import { About } from './pages/about'
 import { Mapview } from './pages/mapview'
 
 class Root extends React.Component {
+  constructor(props) {
+    super(props)
+
+    // define at root level as it is used in multiple lower level components
+    this.state = {
+      placename: '',
+    }
+  }
+
+  addPlace = place => {
+    // this.setState({ placename: place })
+    this.setState({ placename: place.target.value })
+    // TODO: remove, is inserted for demo purposes
+    console.log(this.state.placename)
+  }
+
   render() {
     return (
       <MuiThemeProvider theme={theme}>
@@ -24,12 +40,33 @@ class Root extends React.Component {
           <div>
             {/* Start of actual app, App is the top level component */}
             <App>
-              <Route exact path="/" render={() => <Home />} />
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <Home
+                    {...props}
+                    // pass on global state to this component
+                    placename={this.state.placename}
+                    addPlace={this.addPlace}
+                  />
+                )}
+              />
               <Route exact path="/explore" render={() => <Explore />} />
               <Route path="/explore/:name" render={() => <Explore />} />
               <Route path="/bucketlist" render={() => <Bucketlist />} />
               <Route path="/about" render={() => <About />} />
-              <Route path="/mapview" render={() => <Mapview />} />
+              <Route
+                path="/mapview"
+                render={props => (
+                  <Mapview
+                    {...props}
+                    // pass on global state to this component
+                    placename={this.state.placename}
+                    addPlace={this.addPlace}
+                  />
+                )}
+              />
             </App>
           </div>
         </Router>

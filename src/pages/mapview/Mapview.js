@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react'
 
 import GoogleMap from './components/GoogleMap'
 import DestinationPin from './components/DestinationPin'
-import SearchBox from './components/SearchBox'
+import SearchBox from '../../components/SearchBox'
+import SimpleSelect from '../../components/SearchBox2'
 
 const LOS_ANGELES_CENTER = [34.0522, -118.2437]
 
@@ -38,10 +39,6 @@ class Mapview extends Component {
     })
   }
 
-  addPlace = place => {
-    this.setState({ places: place })
-  }
-
   componentDidMount() {
     fetch('places.json')
       .then(response => response.json())
@@ -74,16 +71,20 @@ class Mapview extends Component {
 
   render() {
     const { places, mapApiLoaded, mapInstance, mapApi } = this.state
+    const { placename, addPlace } = this.props
 
     return (
       <Fragment>
-        {mapApiLoaded && (
+        {/* TODO: replace, is insterted for DEMO purposes */}
+        <SimpleSelect value={placename} onChange={addPlace} />
+        {/* {mapApiLoaded && (
           <SearchBox
             map={mapInstance}
             mapApi={mapApi}
-            addplace={this.addPlace}
+            addplace={addPlace}
+            placename={placename}
           />
-        )}
+        )} */}
         <GoogleMap
           defaultZoom={10}
           defaultCenter={LOS_ANGELES_CENTER}

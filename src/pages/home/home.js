@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container'
 
 import Footer from '../../components/Footer'
 import HeroUnit from './HeroUnit'
+import SimpleSelect from '../../components/SearchBox2'
 
 const styles = theme => ({
   stepper: {
@@ -40,10 +41,12 @@ class Home extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, addPlace, placename } = this.props
 
     return (
       <React.Fragment>
+        {/* TODO: replace, is insterted for DEMO purposes */}
+        <SimpleSelect value={placename} onChange={addPlace} />
         {/* Hero unit. Pass along scroller as action for buttons */}
         <HeroUnit scrollTo={this.scrollToStepper} />
         {/* Stepper section, with reference for scrolling to */}

@@ -30,6 +30,7 @@ class Explore extends React.Component {
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
       destinationList: [],
+      showMap: true,
     }
   }
 
@@ -125,12 +126,19 @@ class Explore extends React.Component {
     sessionStorage.setItem('destinationList', JSON.stringify(newList))
   }
 
+  toggleShowMap() {
+    this.setState({ showMap: !this.state.showMap })
+  }
+
   render() {
     const { classes } = this.props
 
     return (
       <main>
-        <ExploreBar />
+        <ExploreBar
+          showMap={this.state.showMap}
+          toggleShowMap={() => this.toggleShowMap()}
+        />
         {/* check if destinations are loaded, if not display progress */}
         {this.state.destinationList && this.state.destinationList.length ? (
           <Album>

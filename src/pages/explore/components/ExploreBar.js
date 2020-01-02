@@ -7,6 +7,7 @@ import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
 import MapIcon from '@material-ui/icons/Map'
 import PropTypes from 'prop-types'
+import ViewStreamIcon from '@material-ui/icons/ViewStream'
 
 const styles = theme => ({
   root: {
@@ -101,7 +102,7 @@ class ExploreBar extends React.PureComponent {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, showMap, toggleShowMap } = this.props
     // const menuId = 'primary-search-account-menu'
 
     return (
@@ -141,10 +142,10 @@ class ExploreBar extends React.PureComponent {
                 // aria-controls={menuId}
                 aria-haspopup="true"
                 //   TODO: add action for mapview
-                //   onClick={handleProfileMenuOpen}
+                onClick={toggleShowMap}
                 color="inherit"
               >
-                <MapIcon />
+                {showMap ? <MapIcon /> : <ViewStreamIcon />}
               </IconButton>
             </div>
           </Toolbar>

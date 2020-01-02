@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 import SimpleBottomNavigation from 'components/appbar'
 
@@ -29,6 +30,7 @@ class App extends Component {
     return (
       // className is used to give the div an id
       <div className="App">
+        <CssBaseline />
         {children}
         <SimpleBottomNavigation />
       </div>

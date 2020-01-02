@@ -1,22 +1,24 @@
 import React from 'react'
-import { fade, makeStyles } from '@material-ui/core/styles'
+import { withStyles, fade } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
 import MapIcon from '@material-ui/icons/Map'
-
 import PropTypes from 'prop-types'
 
-import CssBaseline from '@material-ui/core/CssBaseline'
-import useScrollTrigger from '@material-ui/core/useScrollTrigger'
-import Container from '@material-ui/core/Container'
-import Slide from '@material-ui/core/Slide'
-
-const useStyles = makeStyles(theme => ({
-  grow: {
+const styles = theme => ({
+  root: {
     flexGrow: 1,
+  },
+  show: {
+    transform: 'translateY(0)',
+    transition: 'transform .5s',
+  },
+  hide: {
+    transform: 'translateY(-110%)',
+    transition: 'transform .5s',
   },
   search: {
     position: 'relative',
@@ -52,78 +54,110 @@ const useStyles = makeStyles(theme => ({
   sectionDesktop: {
     display: 'flex',
   },
-}))
+})
 
-function HideOnScroll(props) {
-  const { children, window } = props
-  // Note that you normally won't need to set the window ref as useScrollTrigger
-  // will default to window.
-  // This is only being set here because the demo is in an iframe.
-  const trigger = useScrollTrigger({ target: window ? window() : undefined })
+class ExploreBar extends React.PureComponent {
+  constructor(props) {
+    super(props)
 
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  )
-}
+    this.state = {
+      shouldShow: null,
+    }
 
-HideOnScroll.propTypes = {
-  children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-}
+    this.lastScroll = null
 
-export default function PrimarySearchAppBar(props) {
-  const classes = useStyles()
+    this.handleScroll = this.handleScroll.bind(this)
+    // Alternatively, you can throttle scroll events to avoid
+    // updating the state too often. Here using lodash.
+    // this.handleScroll = _.throttle(this.handleScroll.bind(this), 100);
+  }
 
-  const menuId = 'primary-search-account-menu'
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll, { passive: true })
+  }
 
-  return (
-    <React.Fragment>
-      <CssBaseline />
-      <HideOnScroll {...props}>
-        <div className={classes.grow}>
-          <AppBar position="static">
-            <Toolbar>
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
-                <InputBase
-                  placeholder="Search…"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  inputProps={{ 'aria-label': 'search' }}
-                />
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll)
+  }
+
+  handleScroll(evt) {
+    const lastScroll = window.scrollY
+
+    if (lastScroll === this.lastScroll) {
+      return
+    }
+
+    const shouldShow =
+      this.lastScroll !== null ? lastScroll < this.lastScroll : null
+
+    if (shouldShow !== this.state.shouldShow) {
+      this.setState((prevState, props) => ({
+        ...prevState,
+        shouldShow,
+      }))
+    }
+
+    this.lastScroll = lastScroll
+  }
+
+  render() {
+    const { classes } = this.props
+    // const menuId = 'primary-search-account-menu'
+
+    return (
+      // {/* Could split AppBar and Toolbar in separate components */}
+      // {/* AppBar would then just facilitate for the scroll logic */}
+      <div className={classes.grow}>
+        <AppBar
+          position="fixed"
+          //   color="default"
+          className={`${classes.root} ${
+            this.state.shouldShow === null
+              ? ''
+              : this.state.shouldShow
+                ? classes.show
+                : classes.hide
+          }`}
+        >
+          <Toolbar>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
               </div>
-              <div className={classes.grow} />
-              <div className={classes.sectionDesktop}>
-                <IconButton
-                  edge="end"
-                  aria-label="account of current user"
-                  aria-controls={menuId}
-                  aria-haspopup="true"
-                  //   TODO: add action for mapview
-                  //   onClick={handleProfileMenuOpen}
-                  color="inherit"
-                >
-                  <MapIcon />
-                </IconButton>
-              </div>
-            </Toolbar>
-          </AppBar>
-        </div>
-      </HideOnScroll>
-      <Container>
-        {/* Children components are passed along through props */}
-        {props.children}
-      </Container>
-    </React.Fragment>
-  )
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </div>
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                // aria-controls={menuId}
+                aria-haspopup="true"
+                //   TODO: add action for mapview
+                //   onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <MapIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+        {/* Render 2nd toolbar to make sure content doesn't disappear behind the first */}
+        <Toolbar />
+      </div>
+    )
+  }
 }
+
+ExploreBar.propTypes = {
+  classes: PropTypes.object.isRequired,
+}
+
+export default withStyles(styles)(ExploreBar)

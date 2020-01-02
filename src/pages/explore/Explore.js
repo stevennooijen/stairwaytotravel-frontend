@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
 import ExploreBar from './components/ExploreBar'
+import { Mapview } from '../../components/mapview'
 
 const styles = theme => ({
   loaderContainer: {
@@ -30,7 +31,8 @@ class Explore extends React.Component {
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
       destinationList: [],
-      showMap: true,
+
+      showMap: false,
     }
   }
 
@@ -139,31 +141,38 @@ class Explore extends React.Component {
           showMap={this.state.showMap}
           toggleShowMap={() => this.toggleShowMap()}
         />
-        {/* check if destinations are loaded, if not display progress */}
-        {this.state.destinationList && this.state.destinationList.length ? (
-          <Album>
-            {this.state.destinationList.map(card => (
-              // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
-              // State blijft zodoende in de Bucketlist component op 'hoog' niveau
-              <Grid item key={card.id} xs={12} sm={6} md={4} lg={3}>
-                <DestinationCard
-                  id={card.id}
-                  title={card.name}
-                  image={card.image}
-                  // image={require('../../assets/beach.jpg')}
-                  text={card.country_name}
-                  liked={card.liked}
-                  toggleLike={id => this.toggleLike(id)}
-                />
-              </Grid>
-            ))}
-          </Album>
+        {/* Show map or show stream */}
+        {this.state.showMap ? (
+          <Mapview />
         ) : (
-          //  show Indeterminate progress indicator while waiting for destinations to load
-          <Container className={classes.loaderContainer}>
-            {/* <LinearProgress /> */}
-            <CircularProgress />
-          </Container>
+          <React.Fragment>
+            {/* check if destinations are loaded, if not display progress */}
+            {this.state.destinationList && this.state.destinationList.length ? (
+              <Album>
+                {this.state.destinationList.map(card => (
+                  // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
+                  // State blijft zodoende in de Bucketlist component op 'hoog' niveau
+                  <Grid item key={card.id} xs={12} sm={6} md={4} lg={3}>
+                    <DestinationCard
+                      id={card.id}
+                      title={card.name}
+                      image={card.image}
+                      // image={require('../../assets/beach.jpg')}
+                      text={card.country_name}
+                      liked={card.liked}
+                      toggleLike={id => this.toggleLike(id)}
+                    />
+                  </Grid>
+                ))}
+              </Album>
+            ) : (
+              //  show Indeterminate progress indicator while waiting for destinations to load
+              <Container className={classes.loaderContainer}>
+                {/* <LinearProgress /> */}
+                <CircularProgress />
+              </Container>
+            )}
+          </React.Fragment>
         )}
       </main>
     )

@@ -145,7 +145,7 @@ class ExploreBar extends React.PureComponent {
                 onClick={toggleShowMap}
                 color="inherit"
               >
-                {showMap ? <MapIcon /> : <ViewStreamIcon />}
+                {showMap ? <ViewStreamIcon /> : <MapIcon />}
               </IconButton>
             </div>
           </Toolbar>

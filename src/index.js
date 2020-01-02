@@ -13,7 +13,6 @@ import { Home } from './pages/home'
 import { Explore } from './pages/explore'
 import { Bucketlist } from './pages/bucketlist'
 import { About } from './pages/about'
-import { Mapview } from './pages/mapview'
 
 class Root extends React.Component {
   constructor(props) {
@@ -56,17 +55,6 @@ class Root extends React.Component {
               <Route path="/explore/:name" render={() => <Explore />} />
               <Route path="/bucketlist" render={() => <Bucketlist />} />
               <Route path="/about" render={() => <About />} />
-              <Route
-                path="/mapview"
-                render={props => (
-                  <Mapview
-                    {...props}
-                    // pass on global state to this component
-                    placename={this.state.placename}
-                    addPlace={this.addPlace}
-                  />
-                )}
-              />
             </App>
           </div>
         </Router>

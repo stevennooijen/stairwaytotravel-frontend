@@ -41,12 +41,12 @@ class Home extends React.Component {
   }
 
   render() {
-    const { classes, addPlace, placename } = this.props
+    const { classes, placeQuery, savePlaceQuery } = this.props
 
     return (
       <React.Fragment>
         {/* TODO: replace, is insterted for DEMO purposes */}
-        <SimpleSelect value={placename} onChange={addPlace} />
+        <SimpleSelect value={placeQuery} onChange={savePlaceQuery} />
         {/* Hero unit. Pass along scroller as action for buttons */}
         <HeroUnit scrollTo={this.scrollToStepper} />
         {/* Stepper section, with reference for scrolling to */}

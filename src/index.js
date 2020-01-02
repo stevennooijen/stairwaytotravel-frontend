@@ -20,15 +20,15 @@ class Root extends React.Component {
 
     // define at root level as it is used in multiple lower level components
     this.state = {
-      placename: '',
+      placeQuery: '',
     }
   }
 
-  addPlace = place => {
-    // this.setState({ placename: place })
-    this.setState({ placename: place.target.value })
+  savePlaceQuery = place => {
+    // this.setState({ placeQuery: place })
+    this.setState({ placeQuery: place.target.value })
     // TODO: remove, is inserted for demo purposes
-    console.log(this.state.placename)
+    console.log(this.state.placeQuery)
   }
 
   render() {
@@ -46,12 +46,23 @@ class Root extends React.Component {
                   <Home
                     {...props}
                     // pass on global state to this component
-                    placename={this.state.placename}
-                    addPlace={this.addPlace}
+                    placeQuery={this.state.placeQuery}
+                    savePlaceQuery={this.savePlaceQuery}
                   />
                 )}
               />
-              <Route exact path="/explore" render={() => <Explore />} />
+              <Route
+                exact
+                path="/explore"
+                render={props => (
+                  <Explore
+                    {...props}
+                    // pass on global state to this component
+                    placeQuery={this.state.placeQuery}
+                    savePlaceQuery={this.savePlaceQuery}
+                  />
+                )}
+              />
               <Route path="/explore/:name" render={() => <Explore />} />
               <Route path="/bucketlist" render={() => <Bucketlist />} />
               <Route path="/about" render={() => <About />} />

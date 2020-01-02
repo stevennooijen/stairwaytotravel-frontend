@@ -11,6 +11,7 @@ import Container from '@material-ui/core/Container'
 
 import ExploreBar from './components/ExploreBar'
 import { Mapview } from '../../components/mapview'
+import SimpleSelect from '../../components/SearchBox2'
 
 const styles = theme => ({
   loaderContainer: {
@@ -133,14 +134,16 @@ class Explore extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, placeQuery, savePlaceQuery } = this.props
 
     return (
       <main>
         <ExploreBar
           showMap={this.state.showMap}
           toggleShowMap={() => this.toggleShowMap()}
+          // value={placename} onChange={addPlace}
         />
+        <SimpleSelect value={placeQuery} onChange={savePlaceQuery} />
         {/* Show map or show stream */}
         {this.state.showMap ? (
           <Mapview />

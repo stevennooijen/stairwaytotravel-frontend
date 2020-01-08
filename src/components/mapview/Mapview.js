@@ -2,10 +2,17 @@ import React, { Component, Fragment } from 'react'
 
 import GoogleMap from './components/GoogleMap'
 import DestinationPin from './components/DestinationPin'
-import SearchBox from '../../components/SearchBox'
-import SimpleSelect from '../../components/SearchBox2'
+// import SearchBox from '../../components/SearchBox'
+// import SimpleSelect from '../../components/SearchBox2'
+// import { fitBounds } from 'google-map-react/utils'
 
 const LOS_ANGELES_CENTER = [34.0522, -118.2437]
+
+function createMapOptions() {
+  return {
+    gestureHandling: 'greedy', // Will capture all touch events on the map towards map panning
+  }
+}
 
 // to replace lodash.isEmpty import
 function isEmpty(value) {
@@ -60,7 +67,7 @@ class Mapview extends Component {
     })
   }
 
-  _onBoundsChange = (center, zoom, bounds, marginBounds) => {
+  _onChange = (center, zoom, bounds, marginBounds) => {
     // this.props.onCenterChange(center)
     // this.props.onZoomChange(zoom)
     // console.log('center', center)
@@ -72,7 +79,15 @@ class Mapview extends Component {
 
   render() {
     const { places, mapApiLoaded, mapInstance, mapApi } = this.state
-    const { placeQuery, savePlaceQuery } = this.props
+    const {
+      placeQuery,
+      savePlaceQuery,
+      // mapApiLoaded,
+      // mapInstance,
+      // mapApi,
+      // apiHasLoaded,
+    } = this.props
+    // const { center, zoom } = {(placeQuery === undefined) ? LOS_ANGELES_CENTER, 10 :fitBounds(placeQuery.geometry.viewport)}
 
     return (
       <Fragment>
@@ -87,15 +102,20 @@ class Mapview extends Component {
           />
         )} */}
         <GoogleMap
+          options={createMapOptions}
+          // TODO: how to re-use the same map component that was preloaded on Home page?
+          // map={mapInstance}
+          // maps={mapApi}
           defaultZoom={10}
-          defaultCenter={LOS_ANGELES_CENTER}
-          // center={
-          //   (placeQuery === '') | (placeQuery === undefined)
-          //     ? LOS_ANGELES_CENTER
-          //     : placeQuery.geometry.viewport.getCenter()
-          // }
-          // onChildClick={this.onChildClickCallback}
-          // onBoundsChange={this._onBoundsChange}
+          center={
+            (placeQuery === '') | (placeQuery === undefined)
+              ? LOS_ANGELES_CENTER
+              : placeQuery.geometry.viewport.getCenter().toJSON()
+          }
+          // TODO: how to extract zoom from geometry viewport? Prerably use map.fitbounds()
+          // zoom={zoom}
+          onChildClick={this.onChildClickCallback}
+          onChange={this._onChange}
           bootstrapURLKeys={{
             key: process.env.REACT_APP_MAP_KEY,
             libraries: ['places', 'geometry'],

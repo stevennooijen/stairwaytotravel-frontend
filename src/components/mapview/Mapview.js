@@ -40,6 +40,7 @@ class Mapview extends Component {
   }
 
   componentDidMount() {
+    console.log('mount map')
     fetch('places.json')
       .then(response => response.json())
       .then(data => {
@@ -71,25 +72,30 @@ class Mapview extends Component {
 
   render() {
     const { places, mapApiLoaded, mapInstance, mapApi } = this.state
-    const { placename, addPlace } = this.props
+    const { placeQuery, savePlaceQuery } = this.props
 
     return (
       <Fragment>
         {/* TODO: replace, is insterted for DEMO purposes */}
-        <SimpleSelect value={placename} onChange={addPlace} />
+        {/* <SimpleSelect value={placename} onChange={addPlace} /> */}
         {/* {mapApiLoaded && (
           <SearchBox
             map={mapInstance}
             mapApi={mapApi}
-            addplace={addPlace}
-            placename={placename}
+            addplace={savePlaceQuery}
+            placename={placeQuery}
           />
         )} */}
         <GoogleMap
           defaultZoom={10}
           defaultCenter={LOS_ANGELES_CENTER}
-          onChildClick={this.onChildClickCallback}
-          onBoundsChange={this._onBoundsChange}
+          // center={
+          //   (placeQuery === '') | (placeQuery === undefined)
+          //     ? LOS_ANGELES_CENTER
+          //     : placeQuery.geometry.viewport.getCenter()
+          // }
+          // onChildClick={this.onChildClickCallback}
+          // onBoundsChange={this._onBoundsChange}
           bootstrapURLKeys={{
             key: process.env.REACT_APP_MAP_KEY,
             libraries: ['places', 'geometry'],

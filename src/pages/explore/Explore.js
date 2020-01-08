@@ -134,19 +134,38 @@ class Explore extends React.Component {
   }
 
   render() {
-    const { classes, placeQuery, savePlaceQuery } = this.props
+    const {
+      classes,
+      placeQuery,
+      savePlaceQuery,
+      mapApiLoaded,
+      mapInstance,
+      mapApi,
+    } = this.props
 
     return (
       <main>
         <ExploreBar
           showMap={this.state.showMap}
           toggleShowMap={() => this.toggleShowMap()}
+          placeQuery={placeQuery}
+          savePlaceQuery={savePlaceQuery}
+          mapApiLoaded={mapApiLoaded}
+          mapInstance={mapInstance}
+          mapApi={mapApi}
           // value={placename} onChange={addPlace}
         />
-        <SimpleSelect value={placeQuery} onChange={savePlaceQuery} />
+        {/* <SimpleSelect value={placeQuery} onChange={savePlaceQuery} /> */}
         {/* Show map or show stream */}
         {this.state.showMap ? (
-          <Mapview />
+          <Mapview
+            // pass on global state to this component
+            placeQuery={placeQuery}
+            savePlaceQuery={savePlaceQuery}
+            mapApiLoaded={mapApiLoaded}
+            mapInstance={mapInstance}
+            mapApi={mapApi}
+          />
         ) : (
           <React.Fragment>
             {/* check if destinations are loaded, if not display progress */}

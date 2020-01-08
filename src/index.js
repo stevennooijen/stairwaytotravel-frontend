@@ -14,6 +14,8 @@ import { Explore } from './pages/explore'
 import { Bucketlist } from './pages/bucketlist'
 import { About } from './pages/about'
 
+import GoogleMapReact from 'google-map-react'
+
 class Root extends React.Component {
   constructor(props) {
     super(props)
@@ -21,19 +23,47 @@ class Root extends React.Component {
     // define at root level as it is used in multiple lower level components
     this.state = {
       placeQuery: '',
+
+      // for the searchbox
+      mapApiLoaded: false,
+      mapInstance: null,
+      mapApi: null,
     }
   }
 
+  apiHasLoaded = (map, maps) => {
+    this.setState({
+      mapApiLoaded: true,
+      mapInstance: map,
+      mapApi: maps,
+    })
+  }
+
   savePlaceQuery = place => {
-    // this.setState({ placeQuery: place })
-    this.setState({ placeQuery: place.target.value })
+    this.setState({ placeQuery: place })
+    // this.setState({ placeQuery: place.target.value })
     // TODO: remove, is inserted for demo purposes
-    console.log(this.state.placeQuery)
+    console.log('global state', this.state.placeQuery)
+    console.log('global location', this.state.placeQuery.geometry.location)
+    // console.log('this', this.state.placeQuery.formatted_address)
   }
 
   render() {
+    const { placeQuery, mapApiLoaded, mapInstance, mapApi } = this.state
+
     return (
       <MuiThemeProvider theme={theme}>
+        {/* Load maps API first with some random center and zoom */}
+        <GoogleMapReact
+          defaultCenter={[34.0522, -118.2437]}
+          defaultZoom={10}
+          bootstrapURLKeys={{
+            key: process.env.REACT_APP_MAP_KEY,
+            libraries: ['places', 'geometry'],
+          }}
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={({ map, maps }) => this.apiHasLoaded(map, maps)}
+        />
         {/* Router is not a standard requirement but is added to create links/urls/rounting */}
         <Router>
           <div>
@@ -46,8 +76,11 @@ class Root extends React.Component {
                   <Home
                     {...props}
                     // pass on global state to this component
-                    placeQuery={this.state.placeQuery}
+                    placeQuery={placeQuery}
                     savePlaceQuery={this.savePlaceQuery}
+                    mapApiLoaded={mapApiLoaded}
+                    mapInstance={mapInstance}
+                    mapApi={mapApi}
                   />
                 )}
               />
@@ -58,8 +91,11 @@ class Root extends React.Component {
                   <Explore
                     {...props}
                     // pass on global state to this component
-                    placeQuery={this.state.placeQuery}
+                    placeQuery={placeQuery}
                     savePlaceQuery={this.savePlaceQuery}
+                    mapApiLoaded={mapApiLoaded}
+                    mapInstance={mapInstance}
+                    mapApi={mapApi}
                   />
                 )}
               />

@@ -6,7 +6,13 @@ import Container from '@material-ui/core/Container'
 
 import Footer from '../../components/Footer'
 import HeroUnit from './HeroUnit'
-import SimpleSelect from '../../components/SearchBox2'
+// import SimpleSelect from '../../components/SearchBox2'
+import SearchBox from '../../components/SearchBox'
+
+// import GoogleMapReact from 'google-map-react'
+// const { googleMapLoader } = GoogleMapReact
+// import { bootstrapURLKeys } from './bootstrapURLKeys';
+// import GoogleMapReact from 'google-map-react'
 
 const styles = theme => ({
   stepper: {
@@ -15,6 +21,16 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
   },
 })
+
+// const bootstrapURLKeys = {
+//   key: process.env.REACT_APP_MAP_KEY,
+//   libraries: ['places', 'geometry'],
+// }
+// const bootstrapURLKeys = {
+//   // ...yourKeys,
+//   key: process.env.REACT_APP_MAP_KEY,
+//   libraries: ['places'].join(','),
+// }
 
 class Home extends React.Component {
   constructor(props) {
@@ -41,12 +57,27 @@ class Home extends React.Component {
   }
 
   render() {
-    const { classes, placeQuery, savePlaceQuery } = this.props
+    const {
+      classes,
+      placeQuery,
+      savePlaceQuery,
+      mapApiLoaded,
+      mapInstance,
+      mapApi,
+    } = this.props
+    // const { places, mapApiLoaded, mapInstance, mapApi } = this.state
 
     return (
       <React.Fragment>
-        {/* TODO: replace, is insterted for DEMO purposes */}
-        <SimpleSelect value={placeQuery} onChange={savePlaceQuery} />
+        {mapApiLoaded && (
+          // <p>test</p>
+          <SearchBox
+            map={mapInstance}
+            mapApi={mapApi}
+            addplace={savePlaceQuery}
+            placename={placeQuery}
+          />
+        )}
         {/* Hero unit. Pass along scroller as action for buttons */}
         <HeroUnit scrollTo={this.scrollToStepper} />
         {/* Stepper section, with reference for scrolling to */}

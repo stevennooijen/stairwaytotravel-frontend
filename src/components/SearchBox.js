@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+// import TextField from '@material-ui/core/TextField'
+import { withStyles, fade } from '@material-ui/core/styles'
+import InputBase from '@material-ui/core/InputBase'
+import SearchIcon from '@material-ui/icons/Search'
 
 const styles = theme => ({
   wrapper: {
@@ -10,6 +12,37 @@ const styles = theme => ({
     width: '100%',
     padding: '20px',
   },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+  },
+  searchIcon: {
+    width: theme.spacing(7),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 7),
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: 200,
+    },
+  },
 })
 
 class SearchBox extends Component {
@@ -18,14 +51,22 @@ class SearchBox extends Component {
     this.clearSearchBox = this.clearSearchBox.bind(this)
   }
 
-  componentDidMount({ map, mapApi } = this.props) {
+  componentDidMount({ map, mapApi, placename } = this.props) {
     this.searchBox = new mapApi.places.SearchBox(this.searchInput)
+    // Prepopulate search field if there is a placename already
+    if (placename !== '' && placename !== undefined) {
+      this.searchInput.value = placename.formatted_address
+    }
+    // this.onPlacesChanged(map, mapApi)(this.props.placename.place)
+    // add listener for place changes
     this.searchBox.addListener('places_changed', this.onPlacesChanged)
     this.searchBox.bindTo('bounds', map)
+    console.log('mount')
   }
 
   componentWillUnmount({ mapApi } = this.props) {
     mapApi.event.clearInstanceListeners(this.searchInput)
+    console.log('willunmount')
   }
 
   onPlacesChanged = ({ map, addplace } = this.props) => {
@@ -39,31 +80,51 @@ class SearchBox extends Component {
       map.setZoom(17)
     }
 
-    addplace(selected)
+    addplace(place)
     this.searchInput.blur()
+    console.log('plaseschanged')
   }
 
   clearSearchBox() {
     this.searchInput.value = ''
+    console.log('clearbox')
   }
 
   render() {
     const { classes } = this.props
 
     return (
-      <div className={classes.wrapper}>
-        <TextField
-          id="standard-basic"
-          label="Where"
-          // <input
+      <div className={classes.search}>
+        <div className={classes.searchIcon}>
+          <SearchIcon />
+        </div>
+        <InputBase
+          placeholder="Try &quot;Netherlands&quot;"
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput,
+          }}
+          // inputProps={{ 'aria-label': 'search' }}
           inputRef={ref => {
             this.searchInput = ref
           }}
           type="text"
           onFocus={this.clearSearchBox}
-          placeholder="Enter a location"
         />
       </div>
+      // <div className={classes.wrapper}>
+      //   <TextField
+      //     id="standard-basic"
+      //     label="Where"
+      //     // <input
+      //     inputRef={ref => {
+      //       this.searchInput = ref
+      //     }}
+      //     type="text"
+      //     onFocus={this.clearSearchBox}
+      //     placeholder="Enter a location"
+      //   />
+      // </div>
     )
   }
 }

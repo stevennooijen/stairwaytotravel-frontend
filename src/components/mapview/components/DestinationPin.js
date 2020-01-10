@@ -1,22 +1,32 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { useTheme } from '@material-ui/core/styles'
+
+import NatureIcon from '@material-ui/icons/Nature'
 
 import DestinationWindow from './DestinationWindow'
 
 const DestinationPin = props => {
+  const theme = useTheme()
+
   const markerStyle = {
-    border: '1px solid white',
+    border: `1px solid ${theme.palette.divider}`,
     borderRadius: '50%',
-    height: 10,
-    width: 10,
-    backgroundColor: props.show ? 'red' : 'blue',
-    cursor: 'pointer',
+    // or set width & height to '1.8rem'
+    height: 30,
+    width: 30,
+    padding: 5,
+    // Changes when active
+    backgroundColor: props.show
+      ? `${theme.palette.secondary.main}`
+      : `${theme.palette.background.paper}`,
+    color: props.show ? 'white' : 'black',
     zIndex: 10,
   }
 
   return (
     <Fragment>
-      <div style={markerStyle} />
+      <NatureIcon style={markerStyle} />
       {props.show && <DestinationWindow place={props.place} />}
     </Fragment>
   )

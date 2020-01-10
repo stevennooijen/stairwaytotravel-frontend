@@ -79,14 +79,14 @@ class Bucketlist extends React.Component {
           // Show liked destinations if likesCount > 0
           <Album>
             {this.state.destinationList.map(
-              card =>
+              place =>
                 // only show cards when they are liked
-                card.liked ? (
+                place.liked ? (
                   // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
                   // State blijft zodoende in de Bucketlist component op 'hoog' niveau
-                  <Grid item key={card.id} xs={12} sm={6} md={4} lg={3}>
+                  <Grid item key={place.id} xs={12} sm={6} md={4} lg={3}>
                     <DestinationCard
-                      card={card}
+                      place={place}
                       toggleLike={id => this.toggleLike(id)}
                     />
                   </Grid>

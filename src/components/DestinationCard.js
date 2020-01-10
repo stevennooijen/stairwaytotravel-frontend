@@ -36,12 +36,12 @@ class DestinationCard extends Component {
 
   render() {
     // Properties and actions to do with DestinationCard are provided through props
-    const { classes, card, toggleLike } = this.props
+    const { classes, place, toggleLike } = this.props
 
     return (
       <Card className={classes.card}>
         <CardHeader
-          title={card.name}
+          title={place.name}
           // Change title font for this one component: https://material-ui.com/components/typography/#typography
           titleTypographyProps={{
             variant: 'h6',
@@ -53,21 +53,21 @@ class DestinationCard extends Component {
               color="primary"
               // Set what needs to happen when Favorite is clicked
               // Function is provided through props from higher order component
-              onClick={() => toggleLike(card.id)}
+              onClick={() => toggleLike(place.id)}
             >
               {/* Whether the item is already liked is also retrieved from higher order component through props */}
-              {card.liked ? <FavoriteIcon /> : <FavoriteBorder />}
+              {place.liked ? <FavoriteIcon /> : <FavoriteBorder />}
             </IconButton>
           }
         />
         <CardMedia
           className={classes.cardMedia}
-          image={card.image}
-          title={card.name}
+          image={place.image}
+          title={place.name}
         />
         <CardContent className={classes.cardContent}>
           <Typography color="textSecondary" variant="body1" component="p">
-            {card.country_name}
+            {place.country_name}
           </Typography>
         </CardContent>
       </Card>

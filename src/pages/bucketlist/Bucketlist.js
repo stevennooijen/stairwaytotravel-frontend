@@ -86,12 +86,7 @@ class Bucketlist extends React.Component {
                   // State blijft zodoende in de Bucketlist component op 'hoog' niveau
                   <Grid item key={card.id} xs={12} sm={6} md={4} lg={3}>
                     <DestinationCard
-                      id={card.id}
-                      title={card.name}
-                      image={card.image}
-                      // image={require('../../assets/beach.jpg')}
-                      text={card.country_name}
-                      liked={card.liked}
+                      card={card}
                       toggleLike={id => this.toggleLike(id)}
                     />
                   </Grid>

@@ -61,8 +61,16 @@ class Mapview extends Component {
   // onChildClick callback can take two arguments: key and childProps
   onChildClickCallback = key => {
     this.setState(state => {
+      // get index for the one that is already open
+      const indexAlreadyOpen = state.places.findIndex(e => e.show === true)
+      // get index for the one that was clicked, and change state
       const index = state.places.findIndex(e => e.id === key)
-      state.places[index].show = !state.places[index].show // eslint-disable-line no-param-reassign
+      state.places[index].show = !state.places[index].show
+      // close the already open if exists
+      if (indexAlreadyOpen !== -1 && indexAlreadyOpen !== index) {
+        state.places[indexAlreadyOpen].show = !state.places[indexAlreadyOpen]
+          .show
+      }
       return { places: state.places }
     })
   }
@@ -78,10 +86,11 @@ class Mapview extends Component {
   }
 
   render() {
-    const { places, mapApiLoaded, mapInstance, mapApi } = this.state
+    const { places } = this.state
+    // const { places, mapApiLoaded, mapInstance, mapApi } = this.state
     const {
       placeQuery,
-      savePlaceQuery,
+      // savePlaceQuery,
       // mapApiLoaded,
       // mapInstance,
       // mapApi,

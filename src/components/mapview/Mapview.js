@@ -60,7 +60,7 @@ class Mapview extends Component {
 
   // On click remove destinationWindow
   _onClick = () => {
-    this.setState({ showPlace: null })
+    // this.setState({ showPlace: null })
   }
 
   _onChange = (center, zoom, bounds, marginBounds) => {
@@ -79,6 +79,7 @@ class Mapview extends Component {
     // const { places, mapApiLoaded, mapInstance, mapApi } = this.state
     const {
       places,
+      toggleLike,
       placeQuery,
       // savePlaceQuery,
       // mapApiLoaded,
@@ -135,7 +136,7 @@ class Mapview extends Component {
                 show={place.id === this.state.showPlace ? true : false}
                 // place is the object containing all the destination stuff
                 place={place}
-                toggleLike={null}
+                toggleLike={toggleLike}
                 // onChildMouseEnter={this.onChildMouseEnter}
                 // onChildMouseLeave={this.onChildMouseLeave}
                 // hover={this.state.hover}

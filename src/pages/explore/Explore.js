@@ -166,6 +166,7 @@ class Explore extends React.Component {
             mapApi={mapApi}
             apiHasLoaded={apiHasLoaded}
             places={this.state.destinationList}
+            toggleLike={id => this.toggleLike(id)}
           />
         ) : (
           <React.Fragment>

@@ -29,7 +29,6 @@ const DestinationPin = props => {
     bottom: 280,
     left: '-90px',
     width: 220,
-    zIndex: 100,
   }
 
   return (
@@ -38,7 +37,7 @@ const DestinationPin = props => {
       {props.show && (
         <div style={infoWindowStyle}>
           {/* TOOD: make sure ToggleLike works */}
-          <DestinationCard place={props.place} toggleLike={null} />
+          <DestinationCard place={props.place} toggleLike={props.toggleLike} />
         </div>
       )}
     </Fragment>

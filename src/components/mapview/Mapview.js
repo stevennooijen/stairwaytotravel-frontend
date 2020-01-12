@@ -6,7 +6,7 @@ import DestinationPin from './components/DestinationPin'
 // import SimpleSelect from '../../components/SearchBox2'
 // import { fitBounds } from 'google-map-react/utils'
 
-const LOS_ANGELES_CENTER = [34.0522, -118.2437]
+const AMSTERDAM_CENTER = [52.3667, 4.8945]
 
 function createMapOptions() {
   return {
@@ -29,7 +29,7 @@ class Mapview extends Component {
     super(props)
 
     this.state = {
-      places: [],
+      showPlace: null,
       bounds: [],
       // for the searchbox
       mapApiLoaded: false,
@@ -46,33 +46,21 @@ class Mapview extends Component {
     })
   }
 
-  componentDidMount() {
-    console.log('mount map')
-    fetch('places.json')
-      .then(response => response.json())
-      .then(data => {
-        data.results.forEach(result => {
-          result.show = false // eslint-disable-line no-param-reassign
-        })
-        this.setState({ places: data.results })
-      })
-  }
-
   // onChildClick callback can take two arguments: key and childProps
   onChildClickCallback = key => {
+    // set state on which place to show
     this.setState(state => {
-      // get index for the one that is already open
-      const indexAlreadyOpen = state.places.findIndex(e => e.show === true)
-      // get index for the one that was clicked, and change state
-      const index = state.places.findIndex(e => e.id === key)
-      state.places[index].show = !state.places[index].show
-      // close the already open if exists
-      if (indexAlreadyOpen !== -1 && indexAlreadyOpen !== index) {
-        state.places[indexAlreadyOpen].show = !state.places[indexAlreadyOpen]
-          .show
-      }
-      return { places: state.places }
+      const id = Number(key)
+      id === state.showPlace ? (state.showPlace = null) : (state.showPlace = id)
+      return { showPlace: state.showPlace }
     })
+
+    // TODO: center map op new chosen destination
+  }
+
+  // On click remove destinationWindow
+  _onClick = () => {
+    this.setState({ showPlace: null })
   }
 
   _onChange = (center, zoom, bounds, marginBounds) => {
@@ -83,12 +71,14 @@ class Mapview extends Component {
     console.log('bounds', bounds)
     this.setState({ bounds: bounds })
     // console.log('marginBounds', marginBounds)
+    // close destination window if opened
+    this.setState({ showPlace: null })
   }
 
   render() {
-    const { places } = this.state
     // const { places, mapApiLoaded, mapInstance, mapApi } = this.state
     const {
+      places,
       placeQuery,
       // savePlaceQuery,
       // mapApiLoaded,
@@ -115,16 +105,17 @@ class Mapview extends Component {
           // TODO: how to re-use the same map component that was preloaded on Home page?
           // map={mapInstance}
           // maps={mapApi}
-          defaultZoom={10}
+          defaultZoom={1}
           center={
             (placeQuery === '') | (placeQuery === undefined)
-              ? LOS_ANGELES_CENTER
+              ? AMSTERDAM_CENTER
               : placeQuery.geometry.viewport.getCenter().toJSON()
           }
           // TODO: how to extract zoom from geometry viewport? Prerably use map.fitbounds()
           // zoom={zoom}
           onChildClick={this.onChildClickCallback}
           onChange={this._onChange}
+          onClick={this._onClick}
           bootstrapURLKeys={{
             key: process.env.REACT_APP_MAP_KEY,
             libraries: ['places', 'geometry'],
@@ -135,11 +126,16 @@ class Mapview extends Component {
           {!isEmpty(places) &&
             places.map(place => (
               <DestinationPin
+                // this is required to handle clicks
                 key={place.id}
-                lat={place.geometry.location.lat}
-                lng={place.geometry.location.lng}
-                show={place.show}
+                // these are required by google map to plot
+                lat={place.latitude}
+                lng={place.longitude}
+                // these are passed along to destinationPin
+                show={place.id === this.state.showPlace ? true : false}
+                // place is the object containing all the destination stuff
                 place={place}
+                toggleLike={null}
                 // onChildMouseEnter={this.onChildMouseEnter}
                 // onChildMouseLeave={this.onChildMouseLeave}
                 // hover={this.state.hover}
@@ -153,10 +149,3 @@ class Mapview extends Component {
 }
 
 export default Mapview
-
-// <Marker
-//   key={place.id}
-//   text={place.name}
-//   lat={place.geometry.location.lat()}
-//   lng={place.geometry.location.lng()}
-// />

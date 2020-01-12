@@ -3,7 +3,6 @@ import Grid from '@material-ui/core/Grid'
 
 import Album from 'components/Album'
 import DestinationCard from 'components/DestinationCard'
-// import ExampleList from 'assets/Constants'
 import GetFlickrImage from 'components/GetFlickrImage'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { withStyles } from '@material-ui/core/styles'
@@ -11,7 +10,6 @@ import Container from '@material-ui/core/Container'
 
 import ExploreBar from './components/ExploreBar'
 import { Mapview } from '../../components/mapview'
-import SimpleSelect from '../../components/SearchBox2'
 
 const styles = theme => ({
   loaderContainer: {
@@ -167,6 +165,7 @@ class Explore extends React.Component {
             mapInstance={mapInstance}
             mapApi={mapApi}
             apiHasLoaded={apiHasLoaded}
+            places={this.state.destinationList}
           />
         ) : (
           <React.Fragment>

@@ -4,7 +4,7 @@ import { useTheme } from '@material-ui/core/styles'
 
 import NatureIcon from '@material-ui/icons/Nature'
 
-import DestinationWindow from './DestinationWindow'
+import DestinationCard from '../../DestinationCard'
 
 const DestinationPin = props => {
   const theme = useTheme()
@@ -24,10 +24,23 @@ const DestinationPin = props => {
     zIndex: 10,
   }
 
+  const infoWindowStyle = {
+    position: 'relative',
+    bottom: 280,
+    left: '-90px',
+    width: 220,
+    zIndex: 100,
+  }
+
   return (
     <Fragment>
       <NatureIcon style={markerStyle} />
-      {props.show && <DestinationWindow place={props.place} />}
+      {props.show && (
+        <div style={infoWindowStyle}>
+          {/* TOOD: make sure ToggleLike works */}
+          <DestinationCard place={props.place} toggleLike={null} />
+        </div>
+      )}
     </Fragment>
   )
 }

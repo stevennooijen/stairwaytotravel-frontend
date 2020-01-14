@@ -4,7 +4,7 @@ import { useTheme } from '@material-ui/core/styles'
 
 import NatureIcon from '@material-ui/icons/Nature'
 
-import DestinationCard from '../../DestinationCard'
+import DestinationCard from '../../destinationCard/DestinationCard'
 
 const DestinationPin = props => {
   const theme = useTheme()

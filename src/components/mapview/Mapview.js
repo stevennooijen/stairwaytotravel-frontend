@@ -1,12 +1,23 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
 
 import GoogleMap from './components/GoogleMap'
 import DestinationPin from './components/DestinationPin'
 // import SearchBox from '../../components/SearchBox'
 // import SimpleSelect from '../../components/SearchBox2'
 // import { fitBounds } from 'google-map-react/utils'
+import SearchHereButton from './components/SeachHereButton'
 
 const AMSTERDAM_CENTER = [52.3667, 4.8945]
+
+const styles = theme => ({
+  // in order to position searchHereButton in middle of mapview
+  mapview: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+})
 
 function createMapOptions() {
   return {
@@ -29,6 +40,7 @@ class Mapview extends Component {
     super(props)
 
     this.state = {
+      showSearchHere: false,
       showPlace: null,
       center: AMSTERDAM_CENTER,
       bounds: [],
@@ -79,16 +91,20 @@ class Mapview extends Component {
         Math.round(this.state.center[1] * 100))
     ) {
       this.setState({ showPlace: null })
+      // toggle showSearchHere button if map changed
+      this.setState({ showSearchHere: true })
     }
-    // console.log('zoom', zoom)
-    this.setState({ bounds: bounds })
-    // console.log('marginBounds', marginBounds)
-    // close destination window if opened
+  }
+
+  SearchOnGeo = () => {
+    this.setState({ showSearchHere: false })
+    // TODO: call fetch to new destinations based on Geo location
   }
 
   render() {
     // const { places, mapApiLoaded, mapInstance, mapApi } = this.state
     const {
+      classes,
       places,
       toggleLike,
       placeQuery,
@@ -101,7 +117,7 @@ class Mapview extends Component {
     // const { center, zoom } = {(placeQuery === undefined) ? LOS_ANGELES_CENTER, 10 :fitBounds(placeQuery.geometry.viewport)}
 
     return (
-      <Fragment>
+      <div className={classes.mapview}>
         {/* TODO: replace, is insterted for DEMO purposes */}
         {/* <SimpleSelect value={placename} onChange={addPlace} /> */}
         {/* {mapApiLoaded && (
@@ -112,6 +128,9 @@ class Mapview extends Component {
             placename={placeQuery}
           />
         )} */}
+        {this.state.showSearchHere ? (
+          <SearchHereButton onClick={this.SearchOnGeo} />
+        ) : null}
         <GoogleMap
           options={createMapOptions}
           // TODO: how to re-use the same map component that was preloaded on Home page?
@@ -119,6 +138,7 @@ class Mapview extends Component {
           // maps={mapApi}
           defaultZoom={1}
           // TODO: change center either on new placeQuery (need listener for this?) or on ChildClick
+          // TODO: create a listener for placeQuery changes. If happens, also set showSearchHere to false
           center={
             (placeQuery === '') | (placeQuery === undefined)
               ? this.state.center
@@ -157,9 +177,10 @@ class Mapview extends Component {
             ))}
         </GoogleMap>
         }
-      </Fragment>
+      </div>
     )
   }
 }
 
-export default Mapview
+// export default Mapview
+export default withStyles(styles)(Mapview)

@@ -30,6 +30,7 @@ class Mapview extends Component {
 
     this.state = {
       showPlace: null,
+      center: AMSTERDAM_CENTER,
       bounds: [],
       // for the searchbox
       mapApiLoaded: false,
@@ -56,6 +57,7 @@ class Mapview extends Component {
     })
 
     // TODO: center map op new chosen destination
+    // this.setState(center: {place}.geometry.viewport.getCenter().toJSON())
   }
 
   // On click remove destinationWindow
@@ -107,15 +109,17 @@ class Mapview extends Component {
           // map={mapInstance}
           // maps={mapApi}
           defaultZoom={1}
+          // TODO: change center either on new placeQuery or on ChildClick
           center={
             (placeQuery === '') | (placeQuery === undefined)
-              ? AMSTERDAM_CENTER
+              ? this.state.center
               : placeQuery.geometry.viewport.getCenter().toJSON()
           }
           // TODO: how to extract zoom from geometry viewport? Prerably use map.fitbounds()
           // zoom={zoom}
           onChildClick={this.onChildClickCallback}
           onChange={this._onChange}
+          // TODO: close destination window when clicked on map, but keep when click on child
           onClick={this._onClick}
           bootstrapURLKeys={{
             key: process.env.REACT_APP_MAP_KEY,

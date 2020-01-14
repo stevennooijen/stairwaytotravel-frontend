@@ -49,32 +49,41 @@ class Mapview extends Component {
 
   // onChildClick callback can take two arguments: key and childProps
   onChildClickCallback = key => {
-    // set state on which place to show
+    const id = Number(key)
+
+    // Center map op new chosen destination
+    const place = this.props.places.find(place => place.id === id)
+    this.setState({ center: [place.latitude, place.longitude] })
+
+    // set state on which place to show destination window for
     this.setState(state => {
-      const id = Number(key)
       id === state.showPlace ? (state.showPlace = null) : (state.showPlace = id)
       return { showPlace: state.showPlace }
     })
-
-    // TODO: center map op new chosen destination
-    // this.setState(center: {place}.geometry.viewport.getCenter().toJSON())
   }
 
   // On click remove destinationWindow
+  // TODO: on click only when not onChildClickBack, need to see toggleLike happening!
   _onClick = () => {
     // this.setState({ showPlace: null })
   }
 
   _onChange = (center, zoom, bounds, marginBounds) => {
-    // this.props.onCenterChange(center)
-    // this.props.onZoomChange(zoom)
-    // console.log('center', center)
+    // Avoid closing the destination window after onChildClickBack
+    // do this by checking if new location is NOT equal to the chosen center
+    // TODO: check with Leon if this can be done differently
+    if (
+      (Math.round(center.center.lat * 100) !==
+        Math.round(this.state.center[0] * 100)) |
+      (Math.round(center.center.lng * 100) !==
+        Math.round(this.state.center[1] * 100))
+    ) {
+      this.setState({ showPlace: null })
+    }
     // console.log('zoom', zoom)
-    console.log('bounds', bounds)
     this.setState({ bounds: bounds })
     // console.log('marginBounds', marginBounds)
     // close destination window if opened
-    this.setState({ showPlace: null })
   }
 
   render() {
@@ -109,7 +118,7 @@ class Mapview extends Component {
           // map={mapInstance}
           // maps={mapApi}
           defaultZoom={1}
-          // TODO: change center either on new placeQuery or on ChildClick
+          // TODO: change center either on new placeQuery (need listener for this?) or on ChildClick
           center={
             (placeQuery === '') | (placeQuery === undefined)
               ? this.state.center

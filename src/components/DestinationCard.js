@@ -14,6 +14,9 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 const styles = theme => ({
   card: {
     height: '100%',
+    // Make sure destinationPins don't show through the Card
+    zIndex: 100,
+    position: 'relative',
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9

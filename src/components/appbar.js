@@ -50,7 +50,7 @@ const styles = theme => ({
     borderTop: `1px solid ${theme.palette.divider}`,
     // elevation required for nabar on mobile to pop up above browser navbar
     elevation: 5,
-    zIndex: 10,
+    zIndex: 100,
   },
 })
 

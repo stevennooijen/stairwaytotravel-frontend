@@ -15,7 +15,7 @@ const styles = theme => ({
   card: {
     height: '100%',
     // Make sure destinationPins don't show through the Card
-    zIndex: 100,
+    zIndex: 20,
     position: 'relative',
   },
   cardMedia: {

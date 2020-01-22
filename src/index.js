@@ -10,7 +10,7 @@ import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 
 import { Home } from './pages/home'
-import { Explore } from './pages/explore'
+import { Explore, DestinationPage } from './pages/explore'
 import { Bucketlist } from './pages/bucketlist'
 import { About } from './pages/about'
 
@@ -43,8 +43,7 @@ class Root extends React.Component {
     this.setState({ placeQuery: place })
     // this.setState({ placeQuery: place.target.value })
     // TODO: remove, is inserted for demo purposes
-    console.log('global state', this.state.placeQuery)
-    console.log('global location', this.state.placeQuery.geometry.location)
+    console.log('global center', place.geometry.viewport.getCenter())
     // console.log('this', this.state.placeQuery.formatted_address)
   }
 
@@ -99,7 +98,7 @@ class Root extends React.Component {
                   />
                 )}
               />
-              <Route path="/explore/:name" render={() => <Explore />} />
+              <Route path="/explore/:name" component={DestinationPage} />
               <Route path="/bucketlist" render={() => <Bucketlist />} />
               <Route path="/about" render={() => <About />} />
             </App>

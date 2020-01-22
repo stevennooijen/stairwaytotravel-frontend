@@ -1,13 +1,14 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
+import { withRouter } from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles'
+
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Container from '@material-ui/core/Container'
 
 import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
 import GetFlickrImage from 'components/destinationCard/GetFlickrImage'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import { withStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
-
 import ExploreBar from './components/ExploreBar'
 import { Mapview } from '../../components/mapview'
 
@@ -180,6 +181,10 @@ class Explore extends React.Component {
                     <DestinationCard
                       place={place}
                       toggleLike={id => this.toggleLike(id)}
+                      onClick={() => {
+                        // send to destination page
+                        this.props.history.push('/explore/' + place.id)
+                      }}
                     />
                   </Grid>
                 ))}
@@ -198,4 +203,4 @@ class Explore extends React.Component {
   }
 }
 
-export default withStyles(styles)(Explore)
+export default withRouter(withStyles(styles)(Explore))

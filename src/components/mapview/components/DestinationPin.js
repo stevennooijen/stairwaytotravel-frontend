@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from '@material-ui/core/styles'
+import { withRouter } from 'react-router-dom'
 
 import NatureIcon from '@material-ui/icons/Nature'
 
@@ -39,8 +40,10 @@ const DestinationPin = props => {
           <DestinationCard
             place={props.place}
             toggleLike={props.toggleLike}
-            // history.push('/explore/{id}')}
-            onClick={() => console.log('TODO: Send to destination Page!')}
+            onClick={() => {
+              // send to destination page
+              props.history.push('/explore/' + props.place.id)
+            }}
           />
         </div>
       )}
@@ -60,4 +63,4 @@ DestinationPin.propTypes = {
   }).isRequired,
 }
 
-export default DestinationPin
+export default withRouter(DestinationPin)

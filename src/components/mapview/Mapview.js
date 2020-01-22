@@ -75,9 +75,8 @@ class Mapview extends Component {
   }
 
   // On click remove destinationWindow
-  // TODO: on click only when not onChildClickBack, need to see toggleLike happening!
   _onClick = () => {
-    // this.setState({ showPlace: null })
+    this.setState({ showPlace: null })
   }
 
   _onChange = (center, zoom, bounds, marginBounds) => {
@@ -148,7 +147,6 @@ class Mapview extends Component {
           // zoom={zoom}
           onChildClick={this.onChildClickCallback}
           onChange={this._onChange}
-          // TODO: close destination window when clicked on map, but keep when click on child
           onClick={this._onClick}
           bootstrapURLKeys={{
             key: process.env.REACT_APP_MAP_KEY,

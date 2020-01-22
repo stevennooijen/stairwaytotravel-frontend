@@ -11,6 +11,8 @@ import IconButton from '@material-ui/core/IconButton'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 
+// import PhotoCarousel from './Carousel'
+
 const styles = theme => ({
   card: {
     height: '100%',
@@ -39,10 +41,16 @@ class DestinationCard extends Component {
 
   render() {
     // Properties and actions to do with DestinationCard are provided through props
-    const { classes, place, toggleLike } = this.props
+    const { classes, place, toggleLike, onClick } = this.props
 
     return (
-      <Card className={classes.card}>
+      <Card
+        className={classes.card}
+        onClick={e => {
+          e.stopPropagation()
+          onClick()
+        }}
+      >
         <CardHeader
           title={place.name}
           // Change title font for this one component: https://material-ui.com/components/typography/#typography
@@ -56,7 +64,10 @@ class DestinationCard extends Component {
               color="primary"
               // Set what needs to happen when Favorite is clicked
               // Function is provided through props from higher order component
-              onClick={() => toggleLike(place.id)}
+              onClick={e => {
+                e.stopPropagation()
+                toggleLike(place.id)
+              }}
             >
               {/* Whether the item is already liked is also retrieved from higher order component through props */}
               {place.liked ? <FavoriteIcon /> : <FavoriteBorder />}
@@ -68,6 +79,7 @@ class DestinationCard extends Component {
           image={place.image}
           title={place.name}
         />
+        {/* <PhotoCarousel /> */}
         <CardContent className={classes.cardContent}>
           <Typography color="textSecondary" variant="body1" component="p">
             {place.country_name}

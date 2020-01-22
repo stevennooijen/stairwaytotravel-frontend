@@ -36,8 +36,12 @@ const DestinationPin = props => {
       <NatureIcon style={markerStyle} />
       {props.show && (
         <div style={infoWindowStyle}>
-          {/* TOOD: make sure ToggleLike works */}
-          <DestinationCard place={props.place} toggleLike={props.toggleLike} />
+          <DestinationCard
+            place={props.place}
+            toggleLike={props.toggleLike}
+            // history.push('/explore/{id}')}
+            onClick={() => console.log('TODO: Send to destination Page!')}
+          />
         </div>
       )}
     </Fragment>

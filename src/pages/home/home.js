@@ -8,6 +8,7 @@ import Footer from '../../components/Footer'
 import HeroUnit from './HeroUnit'
 // import SimpleSelect from '../../components/SearchBox2'
 import SearchBox from '../../components/SearchBox'
+import LocationSearchInput from '../../components/PlacesAutocomplete'
 
 // import GoogleMapReact from 'google-map-react'
 // const { googleMapLoader } = GoogleMapReact
@@ -69,7 +70,8 @@ class Home extends React.Component {
 
     return (
       <React.Fragment>
-        {mapApiLoaded && (
+        <LocationSearchInput />
+        {/* {mapApiLoaded && (
           // <p>test</p>
           <SearchBox
             map={mapInstance}
@@ -77,7 +79,7 @@ class Home extends React.Component {
             addplace={savePlaceQuery}
             placename={placeQuery}
           />
-        )}
+        )} */}
         {/* Hero unit. Pass along scroller as action for buttons */}
         <HeroUnit scrollTo={this.scrollToStepper} />
         {/* Stepper section, with reference for scrolling to */}

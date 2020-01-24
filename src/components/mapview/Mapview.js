@@ -44,19 +44,7 @@ class Mapview extends Component {
       showPlace: null,
       center: AMSTERDAM_CENTER,
       bounds: [],
-      // for the searchbox
-      mapApiLoaded: false,
-      mapInstance: null,
-      mapApi: null,
     }
-  }
-
-  apiHasLoaded = (map, maps) => {
-    this.setState({
-      mapApiLoaded: true,
-      mapInstance: map,
-      mapApi: maps,
-    })
   }
 
   // onChildClick callback can take two arguments: key and childProps
@@ -102,17 +90,7 @@ class Mapview extends Component {
 
   render() {
     // const { places, mapApiLoaded, mapInstance, mapApi } = this.state
-    const {
-      classes,
-      places,
-      toggleLike,
-      placeQuery,
-      // savePlaceQuery,
-      // mapApiLoaded,
-      // mapInstance,
-      // mapApi,
-      // apiHasLoaded,
-    } = this.props
+    const { classes, places, toggleLike, placeQuery, apiHasLoaded } = this.props
     // const { center, zoom } = {(placeQuery === undefined) ? LOS_ANGELES_CENTER, 10 :fitBounds(placeQuery.geometry.viewport)}
 
     return (
@@ -153,7 +131,7 @@ class Mapview extends Component {
             libraries: ['places', 'geometry'],
           }}
           yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map, maps }) => this.apiHasLoaded(map, maps)}
+          onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}
         >
           {!isEmpty(places) &&
             places.map(place => (

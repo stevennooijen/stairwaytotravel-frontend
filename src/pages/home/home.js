@@ -38,7 +38,6 @@ class Home extends React.Component {
     super(props)
     this.stepperRef = React.createRef()
   }
-
   // state = {
   // Check if previous search result still in sessionStorage, if not set as empty
   // continent: sessionStorage.getItem('continent') || '',
@@ -58,15 +57,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const {
-      classes,
-      placeQuery,
-      savePlaceQuery,
-      mapApiLoaded,
-      mapInstance,
-      mapApi,
-    } = this.props
-    // const { places, mapApiLoaded, mapInstance, mapApi } = this.state
+    const { classes } = this.props
 
     return (
       <React.Fragment>

@@ -31,9 +31,30 @@ class Explore extends React.Component {
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
       destinationList: [],
+      placeQuery: '',
 
       showMap: true,
+      // Google mapInstance object
+      mapApiLoaded: false,
+      mapInstance: null,
+      mapApi: null,
     }
+  }
+
+  apiHasLoaded = (map, maps) => {
+    this.setState({
+      mapApiLoaded: true,
+      mapInstance: map,
+      mapApi: maps,
+    })
+  }
+
+  savePlaceQuery = place => {
+    this.setState({ placeQuery: place })
+    // this.setState({ placeQuery: place.target.value })
+    // TODO: remove, is inserted for demo purposes
+    // console.log('global center', place.geometry.viewport.getCenter())
+    // console.log('this', this.state.placeQuery.formatted_address)
   }
 
   // Pipeline of functions. Result of previous is piped into next function
@@ -133,43 +154,35 @@ class Explore extends React.Component {
   }
 
   render() {
-    const {
-      classes,
-      placeQuery,
-      savePlaceQuery,
-      mapApiLoaded,
-      mapInstance,
-      mapApi,
-      apiHasLoaded,
-    } = this.props
+    const { classes } = this.props
+    const { placeQuery, mapApiLoaded, mapInstance, mapApi } = this.state
 
     return (
       <main>
         <ExploreBar
-          showMap={this.state.showMap}
-          toggleShowMap={() => this.toggleShowMap()}
-          placeQuery={placeQuery}
-          savePlaceQuery={savePlaceQuery}
+          // Pass on Google mapInstance and mapApi created in Mapview component
           mapApiLoaded={mapApiLoaded}
           mapInstance={mapInstance}
           mapApi={mapApi}
-          // value={placename} onChange={addPlace}
+          // Pass on other state
+          showMap={this.state.showMap}
+          toggleShowMap={() => this.toggleShowMap()}
+          placeQuery={placeQuery}
+          savePlaceQuery={this.savePlaceQuery}
         />
-        {/* <SimpleSelect value={placeQuery} onChange={savePlaceQuery} /> */}
         {/* Show map or show stream */}
         {this.state.showMap ? (
+          // Map
           <Mapview
-            // pass on global state to this component
+            // Create Google mapInstance object in Mapview and save in Explore state
+            apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
+            // Pass on other state
             placeQuery={placeQuery}
-            savePlaceQuery={savePlaceQuery}
-            mapApiLoaded={mapApiLoaded}
-            mapInstance={mapInstance}
-            mapApi={mapApi}
-            apiHasLoaded={apiHasLoaded}
             places={this.state.destinationList}
             toggleLike={id => this.toggleLike(id)}
           />
         ) : (
+          // Stream
           <React.Fragment>
             {/* check if destinations are loaded, if not display progress */}
             {this.state.destinationList && this.state.destinationList.length ? (

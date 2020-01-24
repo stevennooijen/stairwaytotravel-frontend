@@ -52,14 +52,15 @@ class SearchBox extends Component {
   }
 
   componentDidMount({ map, mapApi, placename } = this.props) {
-    this.searchBox = new mapApi.places.SearchBox(this.searchInput)
+    this.searchBox = new mapApi.places.Autocomplete(this.searchInput, {
+      types: ['(regions)'],
+    })
     // Prepopulate search field if there is a placename already
     if (placename !== '' && placename !== undefined) {
       this.searchInput.value = placename.formatted_address
     }
-    // this.onPlacesChanged(map, mapApi)(this.props.placename.place)
     // add listener for place changes
-    this.searchBox.addListener('places_changed', this.onPlacesChanged)
+    this.searchBox.addListener('place_changed', this.onPlacesChanged)
     this.searchBox.bindTo('bounds', map)
     console.log('mount')
   }
@@ -70,8 +71,8 @@ class SearchBox extends Component {
   }
 
   onPlacesChanged = ({ map, addplace } = this.props) => {
-    const selected = this.searchBox.getPlaces()
-    const { 0: place } = selected
+    console.log('call')
+    const place = this.searchBox.getPlace()
     if (!place.geometry) return
     if (place.geometry.viewport) {
       map.fitBounds(place.geometry.viewport)

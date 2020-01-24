@@ -90,8 +90,7 @@ class Mapview extends Component {
 
   render() {
     // const { places, mapApiLoaded, mapInstance, mapApi } = this.state
-    const { classes, places, toggleLike, placeQuery, apiHasLoaded } = this.props
-    // const { center, zoom } = {(placeQuery === undefined) ? LOS_ANGELES_CENTER, 10 :fitBounds(placeQuery.geometry.viewport)}
+    const { classes, places, toggleLike, apiHasLoaded } = this.props
 
     return (
       <div className={classes.mapview}>
@@ -114,13 +113,7 @@ class Mapview extends Component {
           // map={mapInstance}
           // maps={mapApi}
           defaultZoom={1}
-          // TODO: change center either on new placeQuery (need listener for this?) or on ChildClick
-          // TODO: create a listener for placeQuery changes. If happens, also set showSearchHere to false
-          center={
-            (placeQuery === '') | (placeQuery === undefined)
-              ? this.state.center
-              : placeQuery.geometry.viewport.getCenter().toJSON()
-          }
+          center={this.state.center}
           // TODO: how to extract zoom from geometry viewport? Prerably use map.fitbounds()
           // zoom={zoom}
           onChildClick={this.onChildClickCallback}

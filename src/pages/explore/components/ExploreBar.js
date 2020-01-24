@@ -140,20 +140,6 @@ class ExploreBar extends React.PureComponent {
                 placename={placeQuery}
               />
             )}
-            {/* <SearchBox /> */}
-            {/* <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Try &quot;Netherlands&quot;"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </div> */}
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton

@@ -177,7 +177,6 @@ class Explore extends React.Component {
             // Create Google mapInstance object in Mapview and save in Explore state
             apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
             // Pass on other state
-            placeQuery={placeQuery}
             places={this.state.destinationList}
             toggleLike={id => this.toggleLike(id)}
           />

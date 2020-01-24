@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import TextField from '@material-ui/core/TextField'
 import { withStyles, fade } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
@@ -105,7 +104,6 @@ class SearchBox extends Component {
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
-          // inputProps={{ 'aria-label': 'search' }}
           inputRef={ref => {
             this.searchInput = ref
           }}
@@ -113,19 +111,6 @@ class SearchBox extends Component {
           onFocus={this.clearSearchBox}
         />
       </div>
-      // <div className={classes.wrapper}>
-      //   <TextField
-      //     id="standard-basic"
-      //     label="Where"
-      //     // <input
-      //     inputRef={ref => {
-      //       this.searchInput = ref
-      //     }}
-      //     type="text"
-      //     onFocus={this.clearSearchBox}
-      //     placeholder="Enter a location"
-      //   />
-      // </div>
     )
   }
 }

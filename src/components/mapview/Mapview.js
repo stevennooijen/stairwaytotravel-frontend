@@ -3,9 +3,6 @@ import { withStyles } from '@material-ui/core/styles'
 
 import GoogleMap from './components/GoogleMap'
 import DestinationPin from './components/DestinationPin'
-// import SearchBox from '../../components/SearchBox'
-// import SimpleSelect from '../../components/SearchBox2'
-// import { fitBounds } from 'google-map-react/utils'
 import SearchHereButton from './components/SeachHereButton'
 
 const AMSTERDAM_CENTER = [52.3667, 4.8945]
@@ -89,33 +86,17 @@ class Mapview extends Component {
   }
 
   render() {
-    // const { places, mapApiLoaded, mapInstance, mapApi } = this.state
     const { classes, places, toggleLike, apiHasLoaded } = this.props
 
     return (
       <div className={classes.mapview}>
-        {/* TODO: replace, is insterted for DEMO purposes */}
-        {/* <SimpleSelect value={placename} onChange={addPlace} /> */}
-        {/* {mapApiLoaded && (
-          <SearchBox
-            map={mapInstance}
-            mapApi={mapApi}
-            addplace={savePlaceQuery}
-            placename={placeQuery}
-          />
-        )} */}
         {this.state.showSearchHere ? (
           <SearchHereButton onClick={this.SearchOnGeo} />
         ) : null}
         <GoogleMap
           options={createMapOptions}
-          // TODO: how to re-use the same map component that was preloaded on Home page?
-          // map={mapInstance}
-          // maps={mapApi}
           defaultZoom={1}
           center={this.state.center}
-          // TODO: how to extract zoom from geometry viewport? Prerably use map.fitbounds()
-          // zoom={zoom}
           onChildClick={this.onChildClickCallback}
           onChange={this._onChange}
           onClick={this._onClick}
@@ -139,9 +120,6 @@ class Mapview extends Component {
                 // place is the object containing all the destination stuff
                 place={place}
                 toggleLike={toggleLike}
-                // onChildMouseEnter={this.onChildMouseEnter}
-                // onChildMouseLeave={this.onChildMouseLeave}
-                // hover={this.state.hover}
               />
             ))}
         </GoogleMap>

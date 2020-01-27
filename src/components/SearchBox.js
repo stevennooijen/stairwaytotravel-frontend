@@ -50,44 +50,31 @@ class SearchBox extends Component {
     this.clearSearchBox = this.clearSearchBox.bind(this)
   }
 
-  componentDidMount({ map, mapApi, placename } = this.props) {
+  componentDidMount({ map, mapApi, placeName } = this.props) {
     this.searchBox = new mapApi.places.Autocomplete(this.searchInput, {
       types: ['(regions)'],
     })
     // Prepopulate search field if there is a placename already
-    if (placename !== '' && placename !== undefined) {
-      this.searchInput.value = placename.formatted_address
+    if (placeName !== '' && placeName !== undefined) {
+      this.searchInput.value = placeName.formatted_address
     }
     // add listener for place changes
-    this.searchBox.addListener('place_changed', this.onPlacesChanged)
+    this.searchBox.addListener('place_changed', this.onPlaceChanged)
     this.searchBox.bindTo('bounds', map)
-    console.log('mount')
   }
 
   componentWillUnmount({ mapApi } = this.props) {
     mapApi.event.clearInstanceListeners(this.searchInput)
-    console.log('willunmount')
   }
 
-  onPlacesChanged = ({ map, addplace } = this.props) => {
-    console.log('call')
+  onPlaceChanged = ({ handlePlaceChange } = this.props) => {
     const place = this.searchBox.getPlace()
-    if (!place.geometry) return
-    if (place.geometry.viewport) {
-      map.fitBounds(place.geometry.viewport)
-    } else {
-      map.setCenter(place.geometry.location)
-      map.setZoom(17)
-    }
-
-    addplace(place)
+    handlePlaceChange(place)
     this.searchInput.blur()
-    console.log('plaseschanged')
   }
 
   clearSearchBox() {
     this.searchInput.value = ''
-    console.log('clearbox')
   }
 
   render() {

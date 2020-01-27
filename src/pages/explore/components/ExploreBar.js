@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton'
 import MapIcon from '@material-ui/icons/Map'
 import PropTypes from 'prop-types'
 import ViewStreamIcon from '@material-ui/icons/ViewStream'
-import SearchBox from '../../../components/SearchBox'
 
 const styles = theme => ({
   root: {
@@ -103,16 +102,7 @@ class ExploreBar extends React.PureComponent {
   }
 
   render() {
-    const {
-      classes,
-      showMap,
-      toggleShowMap,
-      placeQuery,
-      savePlaceQuery,
-      mapApiLoaded,
-      mapInstance,
-      mapApi,
-    } = this.props
+    const { classes, showMap, toggleShowMap } = this.props
     // const menuId = 'primary-search-account-menu'
 
     return (
@@ -131,15 +121,8 @@ class ExploreBar extends React.PureComponent {
           }`}
         >
           <Toolbar>
-            {mapApiLoaded && (
-              // <p>test</p>
-              <SearchBox
-                map={mapInstance}
-                mapApi={mapApi}
-                addplace={savePlaceQuery}
-                placename={placeQuery}
-              />
-            )}
+            {/* SearchBox will be passed on here */}
+            {this.props.children}
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton

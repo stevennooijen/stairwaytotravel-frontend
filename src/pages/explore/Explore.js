@@ -11,6 +11,7 @@ import DestinationCard from 'components/destinationCard/DestinationCard'
 import GetFlickrImage from 'components/destinationCard/GetFlickrImage'
 import ExploreBar from './components/ExploreBar'
 import { Mapview } from '../../components/mapview'
+import SearchBox from '../../components/SearchBox'
 
 const styles = theme => ({
   loaderContainer: {
@@ -33,7 +34,7 @@ class Explore extends React.Component {
       destinationList: [],
       placeQuery: '',
 
-      showMap: true,
+      showMap: false,
       // Google mapInstance object
       mapApiLoaded: false,
       mapInstance: null,
@@ -153,6 +154,25 @@ class Explore extends React.Component {
     this.setState({ showMap: !this.state.showMap })
   }
 
+  // Check for state changes in PlaceQuery
+  // TODO: check with Leon if there is a better way of doing this to separate this logic from SearchBox
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.placeQuery !== this.state.placeQuery) {
+      this.handleUpdateMap(this.state.placeQuery, this.state.mapInstance)
+    }
+  }
+
+  // Update map viewport
+  handleUpdateMap(place, map) {
+    if (!place.geometry) return
+    if (place.geometry.viewport) {
+      map.fitBounds(place.geometry.viewport)
+    } else {
+      map.setCenter(place.geometry.location)
+      map.setZoom(17)
+    }
+  }
+
   render() {
     const { classes } = this.props
     const { placeQuery, mapApiLoaded, mapInstance, mapApi } = this.state
@@ -160,16 +180,20 @@ class Explore extends React.Component {
     return (
       <main>
         <ExploreBar
-          // Pass on Google mapInstance and mapApi created in Mapview component
-          mapApiLoaded={mapApiLoaded}
-          mapInstance={mapInstance}
-          mapApi={mapApi}
-          // Pass on other state
           showMap={this.state.showMap}
           toggleShowMap={() => this.toggleShowMap()}
-          placeQuery={placeQuery}
-          savePlaceQuery={this.savePlaceQuery}
-        />
+        >
+          {/* TODO: load API before already in list view. Cannot wait till map is loaded! */}
+          {mapApiLoaded && (
+            <SearchBox
+              map={mapInstance}
+              mapApi={mapApi}
+              placename={placeQuery}
+              handlePlaceChange={this.savePlaceQuery}
+              // Map centering is triggered by change in placeQuery state
+            />
+          )}
+        </ExploreBar>
         {/* Show map or show stream */}
         {this.state.showMap ? (
           // Map

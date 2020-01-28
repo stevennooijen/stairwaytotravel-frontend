@@ -60,6 +60,7 @@ class SearchBox extends Component {
     }
     // add listener for place changes
     this.searchBox.addListener('place_changed', this.onPlaceChanged)
+    // Use bindTo() to bias the results to the map's viewport, even while that viewport changes.
     this.searchBox.bindTo('bounds', map)
   }
 

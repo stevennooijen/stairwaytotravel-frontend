@@ -1,8 +1,8 @@
 import React from 'react'
-import Grid from '@material-ui/core/Grid'
 import { withRouter } from 'react-router-dom'
-import { withStyles } from '@material-ui/core/styles'
 
+import Grid from '@material-ui/core/Grid'
+import { withStyles } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '@material-ui/core/Container'
 
@@ -12,6 +12,7 @@ import GetFlickrImage from 'components/destinationCard/GetFlickrImage'
 import ExploreBar from './components/ExploreBar'
 import { Mapview } from '../../components/mapview'
 import SearchBox from '../../components/SearchBox'
+import GoogleMap from '../../components/mapview/components/GoogleMap'
 
 const styles = theme => ({
   loaderContainer: {
@@ -28,13 +29,14 @@ class Explore extends React.Component {
     super(props)
 
     this.state = {
+      // state for query
       continent: sessionStorage.getItem('continent'),
+      mapBounds: {},
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
       destinationList: [],
-      placeQuery: '',
 
-      showMap: false,
+      showMap: true,
       // Google mapInstance object
       mapApiLoaded: false,
       mapInstance: null,
@@ -50,12 +52,8 @@ class Explore extends React.Component {
     })
   }
 
-  savePlaceQuery = place => {
-    this.setState({ placeQuery: place })
-    // this.setState({ placeQuery: place.target.value })
-    // TODO: remove, is inserted for demo purposes
-    // console.log('global center', place.geometry.viewport.getCenter())
-    // console.log('this', this.state.placeQuery.formatted_address)
+  handleBoundsChange = newBounds => {
+    this.setState({ mapBounds: newBounds })
   }
 
   // Pipeline of functions. Result of previous is piped into next function
@@ -154,59 +152,64 @@ class Explore extends React.Component {
     this.setState({ showMap: !this.state.showMap })
   }
 
-  // Check for state changes in PlaceQuery
-  // TODO: check with Leon if there is a better way of doing this to separate this logic from SearchBox
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.placeQuery !== this.state.placeQuery) {
-      this.handleUpdateMap(this.state.placeQuery, this.state.mapInstance)
-    }
-  }
-
-  // Update map viewport
-  handleUpdateMap(place, map) {
-    if (!place.geometry) return
-    if (place.geometry.viewport) {
-      map.fitBounds(place.geometry.viewport)
-    } else {
-      map.setCenter(place.geometry.location)
-      map.setZoom(17)
-    }
-  }
-
   render() {
-    const { classes } = this.props
-    const { placeQuery, mapApiLoaded, mapInstance, mapApi } = this.state
+    const { classes, placeQuery, savePlaceQuery } = this.props
+    const { mapApiLoaded, mapInstance, mapApi } = this.state
 
     return (
       <main>
-        <ExploreBar
-          showMap={this.state.showMap}
-          toggleShowMap={() => this.toggleShowMap()}
-        >
-          {/* TODO: load API before already in list view. Cannot wait till map is loaded! */}
-          {mapApiLoaded && (
-            <SearchBox
-              map={mapInstance}
-              mapApi={mapApi}
-              placename={placeQuery}
-              handlePlaceChange={this.savePlaceQuery}
-              // Map centering is triggered by change in placeQuery state
-            />
-          )}
-        </ExploreBar>
         {/* Show map or show stream */}
         {this.state.showMap ? (
-          // Map
-          <Mapview
-            // Create Google mapInstance object in Mapview and save in Explore state
-            apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
-            // Pass on other state
-            places={this.state.destinationList}
-            toggleLike={id => this.toggleLike(id)}
-          />
-        ) : (
-          // Stream
+          // Map - in this case the searchBox uses the same mapInstance as the map itself
           <React.Fragment>
+            <ExploreBar
+              showMap={this.state.showMap}
+              toggleShowMap={() => this.toggleShowMap()}
+            >
+              {/* TODO: see how this can be decoupled from the same mapInstance as the mapview uses */}
+              {mapApiLoaded && (
+                <SearchBox
+                  map={mapInstance}
+                  mapApi={mapApi}
+                  placeName={placeQuery}
+                  handlePlaceChange={savePlaceQuery}
+                  // Map centering is triggered by change in placeQuery state
+                />
+              )}
+            </ExploreBar>
+            <Mapview
+              // Create Google mapInstance object in Mapview and save in Explore state
+              apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
+              // Pass on other stuff
+              mapInstance={mapInstance}
+              handleBoundsChange={this.handleBoundsChange}
+              placeQuery={placeQuery}
+              places={this.state.destinationList}
+              toggleLike={id => this.toggleLike(id)}
+            />
+          </React.Fragment>
+        ) : (
+          // Stream - in this case we create a mapInstance for the searchBox only
+          <React.Fragment>
+            <GoogleMap
+              onGoogleApiLoaded={({ map, maps }) => {
+                this.apiHasLoaded(map, maps)
+              }}
+            />
+            <ExploreBar
+              showMap={this.state.showMap}
+              toggleShowMap={() => this.toggleShowMap()}
+            >
+              {/* TODO: load API before already in list view. Cannot wait till map is loaded! */}
+              {mapApiLoaded && (
+                <SearchBox
+                  map={mapInstance}
+                  mapApi={mapApi}
+                  placeName={placeQuery}
+                  handlePlaceChange={savePlaceQuery}
+                />
+              )}
+            </ExploreBar>
             {/* check if destinations are loaded, if not display progress */}
             {this.state.destinationList && this.state.destinationList.length ? (
               <Album>

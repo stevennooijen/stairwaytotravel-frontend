@@ -15,7 +15,21 @@ import { Bucketlist } from './pages/bucketlist'
 import { About } from './pages/about'
 
 class Root extends React.Component {
+  constructor(props) {
+    super(props)
+    // TODO: eventually pass on this global state through url parameters
+    this.state = {
+      placeQuery: '',
+    }
+  }
+
+  savePlaceQuery = place => {
+    this.setState({ placeQuery: place })
+  }
+
   render() {
+    const { placeQuery } = this.state
+
     return (
       <MuiThemeProvider theme={theme}>
         {/* Router is not a standard requirement but is added to create links/urls/rounting */}
@@ -29,11 +43,22 @@ class Root extends React.Component {
                 render={props => (
                   <Home
                     {...props}
-                    // possibly pass on global state to a component here
+                    placeQuery={placeQuery}
+                    savePlaceQuery={this.savePlaceQuery}
                   />
                 )}
               />
-              <Route exact path="/explore" component={Explore} />
+              <Route
+                exact
+                path="/explore"
+                render={props => (
+                  <Explore
+                    {...props}
+                    placeQuery={placeQuery}
+                    savePlaceQuery={this.savePlaceQuery}
+                  />
+                )}
+              />
               <Route path="/explore/:name" component={DestinationPage} />
               <Route path="/bucketlist" render={() => <Bucketlist />} />
               <Route path="/about" render={() => <About />} />

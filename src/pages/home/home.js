@@ -1,19 +1,13 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
 
-import SearchStepper from './stepper/SearchStepper'
+import { withStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
+import SearchStepper from './stepper/SearchStepper'
 import Footer from '../../components/Footer'
 import HeroUnit from './HeroUnit'
-// import SimpleSelect from '../../components/SearchBox2'
 import SearchBox from '../../components/SearchBox'
-import LocationSearchInput from '../../components/PlacesAutocomplete'
-
-// import GoogleMapReact from 'google-map-react'
-// const { googleMapLoader } = GoogleMapReact
-// import { bootstrapURLKeys } from './bootstrapURLKeys';
-// import GoogleMapReact from 'google-map-react'
+import GoogleMap from '../../components/mapview/components/GoogleMap'
 
 const styles = theme => ({
   stepper: {
@@ -23,25 +17,25 @@ const styles = theme => ({
   },
 })
 
-// const bootstrapURLKeys = {
-//   key: process.env.REACT_APP_MAP_KEY,
-//   libraries: ['places', 'geometry'],
-// }
-// const bootstrapURLKeys = {
-//   // ...yourKeys,
-//   key: process.env.REACT_APP_MAP_KEY,
-//   libraries: ['places'].join(','),
-// }
-
 class Home extends React.Component {
   constructor(props) {
     super(props)
     this.stepperRef = React.createRef()
+
+    this.state = {
+      mapsApiLoaded: false,
+      mapsInstance: null,
+      mapsApi: null,
+    }
   }
-  // state = {
-  // Check if previous search result still in sessionStorage, if not set as empty
-  // continent: sessionStorage.getItem('continent') || '',
-  // }
+
+  apiHasLoaded = (map, maps) => {
+    this.setState({
+      mapsApiLoaded: true,
+      mapsInstance: map,
+      mapsApi: maps,
+    })
+  }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value })
@@ -57,20 +51,25 @@ class Home extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { mapsApiLoaded, mapsInstance, mapsApi } = this.state
+    const { classes, placeQuery, savePlaceQuery } = this.props
 
     return (
       <React.Fragment>
-        <LocationSearchInput />
-        {/* {mapApiLoaded && (
-          // <p>test</p>
+        {/* // Here we create a mapInstance for the searchBox only */}
+        <GoogleMap
+          onGoogleApiLoaded={({ map, maps }) => {
+            this.apiHasLoaded(map, maps)
+          }}
+        />
+        {mapsApiLoaded && (
           <SearchBox
-            map={mapInstance}
-            mapApi={mapApi}
-            addplace={savePlaceQuery}
-            placename={placeQuery}
+            map={mapsInstance}
+            mapApi={mapsApi}
+            placeName={placeQuery}
+            handlePlaceChange={savePlaceQuery}
           />
-        )} */}
+        )}
         {/* Hero unit. Pass along scroller as action for buttons */}
         <HeroUnit scrollTo={this.scrollToStepper} />
         {/* Stepper section, with reference for scrolling to */}

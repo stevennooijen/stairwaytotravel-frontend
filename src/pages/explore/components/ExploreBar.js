@@ -1,10 +1,8 @@
 import React from 'react'
-import { withStyles, fade } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
-// import InputBase from '@material-ui/core/InputBase'
-// import SearchIcon from '@material-ui/icons/Search'
 import MapIcon from '@material-ui/icons/Map'
 import PropTypes from 'prop-types'
 import ViewStreamIcon from '@material-ui/icons/ViewStream'
@@ -21,37 +19,6 @@ const styles = theme => ({
     transform: 'translateY(-110%)',
     transition: 'transform .5s',
   },
-  // search: {
-  //   position: 'relative',
-  //   borderRadius: theme.shape.borderRadius,
-  //   backgroundColor: fade(theme.palette.common.white, 0.15),
-  //   '&:hover': {
-  //     backgroundColor: fade(theme.palette.common.white, 0.25),
-  //   },
-  //   marginRight: theme.spacing(2),
-  //   marginLeft: 0,
-  //   width: '100%',
-  // },
-  // searchIcon: {
-  //   width: theme.spacing(7),
-  //   height: '100%',
-  //   position: 'absolute',
-  //   pointerEvents: 'none',
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-  // inputRoot: {
-  //   color: 'inherit',
-  // },
-  // inputInput: {
-  //   padding: theme.spacing(1, 1, 1, 7),
-  //   transition: theme.transitions.create('width'),
-  //   width: '100%',
-  //   [theme.breakpoints.up('md')]: {
-  //     width: 200,
-  //   },
-  // },
   sectionDesktop: {
     display: 'flex',
   },
@@ -108,7 +75,7 @@ class ExploreBar extends React.PureComponent {
     return (
       // {/* Could split AppBar and Toolbar in separate components */}
       // {/* AppBar would then just facilitate for the scroll logic */}
-      <div className={classes.grow}>
+      <div>
         <AppBar
           position="fixed"
           //   color="default"
@@ -123,7 +90,6 @@ class ExploreBar extends React.PureComponent {
           <Toolbar>
             {/* SearchBox will be passed on here */}
             {this.props.children}
-            <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton
                 edge="end"

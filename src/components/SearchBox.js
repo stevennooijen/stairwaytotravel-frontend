@@ -4,13 +4,6 @@ import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
 
 const styles = theme => ({
-  wrapper: {
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    padding: '20px',
-  },
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -68,10 +61,10 @@ class SearchBox extends Component {
     mapApi.event.clearInstanceListeners(this.searchInput)
   }
 
+  // whatever needs to happen is passed on from the higher component through handlePlaceChange
   onPlaceChanged = ({ handlePlaceChange } = this.props) => {
     const place = this.searchBox.getPlace()
     handlePlaceChange(place)
-    this.searchInput.blur()
   }
 
   clearSearchBox() {

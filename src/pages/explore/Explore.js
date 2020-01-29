@@ -36,7 +36,7 @@ class Explore extends React.Component {
       // destinationList: ExampleList,
       destinationList: [],
 
-      showMap: true,
+      showMap: false,
       // Google mapInstance object
       mapApiLoaded: false,
       mapInstance: null,
@@ -172,7 +172,9 @@ class Explore extends React.Component {
                   map={mapInstance}
                   mapApi={mapApi}
                   placeName={placeQuery}
-                  handlePlaceChange={savePlaceQuery}
+                  handlePlaceChange={place => {
+                    savePlaceQuery(place)
+                  }}
                   // Map centering is triggered by change in placeQuery state
                 />
               )}
@@ -206,7 +208,9 @@ class Explore extends React.Component {
                   map={mapInstance}
                   mapApi={mapApi}
                   placeName={placeQuery}
-                  handlePlaceChange={savePlaceQuery}
+                  handlePlaceChange={place => {
+                    savePlaceQuery(place)
+                  }}
                 />
               )}
             </ExploreBar>

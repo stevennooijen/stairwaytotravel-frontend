@@ -1,7 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+import Paper from '@material-ui/core/Paper'
 
 import SearchStepper from './stepper/SearchStepper'
 import Footer from '../../components/Footer'
@@ -14,6 +18,21 @@ const styles = theme => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
     backgroundColor: theme.palette.background.paper,
+  },
+  heroText: {
+    marginBottom: theme.spacing(4),
+    marginTop: theme.spacing(10),
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: theme.spacing(8),
+      marginRight: theme.spacing(8),
+    },
+  },
+  more: {
+    margin: theme.spacing(2),
+  },
+  searchBox: {
+    padding: '2px 4px',
+    // width: 400,
   },
 })
 
@@ -62,16 +81,45 @@ class Home extends React.Component {
             this.apiHasLoaded(map, maps)
           }}
         />
-        {mapsApiLoaded && (
-          <SearchBox
-            map={mapsInstance}
-            mapApi={mapsApi}
-            placeName={placeQuery}
-            handlePlaceChange={savePlaceQuery}
-          />
-        )}
         {/* Hero unit. Pass along scroller as action for buttons */}
-        <HeroUnit scrollTo={this.scrollToStepper} />
+        <HeroUnit scrollTo={this.scrollToStepper}>
+          <Typography
+            color="inherit"
+            align="center"
+            variant="h5"
+            className={classes.heroText}
+          >
+            Create your personalized travel itinerary
+          </Typography>
+          <Paper className={classes.searchBox}>
+            {mapsApiLoaded && (
+              <SearchBox
+                map={mapsInstance}
+                mapApi={mapsApi}
+                placeName={placeQuery}
+                handlePlaceChange={place => {
+                  savePlaceQuery(place)
+                  this.props.history.push('/explore/')
+                }}
+              />
+            )}
+          </Paper>
+          <Typography variant="body2" color="inherit" className={classes.more}>
+            OR...
+          </Typography>
+          <Button
+            component={Link}
+            to="/explore"
+            variant="outlined"
+            color="inherit"
+            onClick={() => {
+              sessionStorage.clear()
+            }}
+            size="large"
+          >
+            Search random!
+          </Button>
+        </HeroUnit>
         {/* Stepper section, with reference for scrolling to */}
         <Container
           className={classes.stepper}

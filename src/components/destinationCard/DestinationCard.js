@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
+import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import CardHeader from '@material-ui/core/CardHeader'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
-import { withStyles } from '@material-ui/core/styles'
-
 import IconButton from '@material-ui/core/IconButton'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
+import Box from '@material-ui/core/Box'
 
 // import PhotoCarousel from './Carousel'
 
@@ -19,12 +19,27 @@ const styles = theme => ({
     // Make sure destinationPins don't show through the Card
     zIndex: 20,
     position: 'relative',
+    // boxShadow: 'none',
   },
   cardMedia: {
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '80%', // 16:9 => '56.25%'
   },
   cardContent: {
-    flexGrow: 1,
+    padding: theme.spacing(1),
+    '&:last-child': {
+      paddingBottom: theme.spacing(1.5),
+    },
+  },
+  favoriteCircle: {
+    position: 'absolute',
+    top: 9,
+    right: 8,
+    backgroundColor: theme.palette.background.default,
+    borderRadius: '50%',
+    // opacity: 0.8,
+  },
+  favoriteButton: {
+    padding: 4,
   },
 })
 
@@ -51,15 +66,18 @@ class DestinationCard extends Component {
           onClick()
         }}
       >
-        <CardHeader
+        <CardMedia
+          className={classes.cardMedia}
+          image={place.image}
           title={place.name}
-          // Change title font for this one component: https://material-ui.com/components/typography/#typography
-          titleTypographyProps={{
-            variant: 'h6',
-            component: 'h2',
-          }}
-          action={
+        >
+          <Box
+            component="span"
+            className={classes.favoriteCircle}
+            boxShadow={3}
+          >
             <IconButton
+              className={classes.favoriteButton}
               aria-label="Add to favorites"
               color="primary"
               // Set what needs to happen when Favorite is clicked
@@ -69,18 +87,15 @@ class DestinationCard extends Component {
                 toggleLike(place.id)
               }}
             >
-              {/* Whether the item is already liked is also retrieved from higher order component through props */}
               {place.liked ? <FavoriteIcon /> : <FavoriteBorder />}
             </IconButton>
-          }
-        />
-        <CardMedia
-          className={classes.cardMedia}
-          image={place.image}
-          title={place.name}
-        />
+          </Box>
+        </CardMedia>
         {/* <PhotoCarousel /> */}
         <CardContent className={classes.cardContent}>
+          <Typography color="textSecondary" variant="h6" component="h2">
+            {place.name}
+          </Typography>
           <Typography color="textSecondary" variant="body1" component="p">
             {place.country_name}
           </Typography>

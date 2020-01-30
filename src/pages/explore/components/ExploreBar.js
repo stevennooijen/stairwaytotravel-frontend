@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import MapIcon from '@material-ui/icons/Map'
 import PropTypes from 'prop-types'
 import ViewStreamIcon from '@material-ui/icons/ViewStream'
+import Container from '@material-ui/core/Container'
 
 const styles = theme => ({
   root: {
@@ -87,23 +88,25 @@ class ExploreBar extends React.PureComponent {
                 : classes.hide
           }`}
         >
-          <Toolbar>
-            {/* SearchBox will be passed on here */}
-            {this.props.children}
-            <div className={classes.sectionDesktop}>
-              <IconButton
-                edge="end"
-                aria-label="account of current user"
-                // aria-controls={menuId}
-                aria-haspopup="true"
-                //   TODO: add action for mapview
-                onClick={toggleShowMap}
-                color="inherit"
-              >
-                {showMap ? <ViewStreamIcon /> : <MapIcon />}
-              </IconButton>
-            </div>
-          </Toolbar>
+          <Container maxWidth="lg">
+            <Toolbar>
+              {/* SearchBox will be passed on here */}
+              {this.props.children}
+              <div className={classes.sectionDesktop}>
+                <IconButton
+                  edge="end"
+                  aria-label="account of current user"
+                  // aria-controls={menuId}
+                  aria-haspopup="true"
+                  //   TODO: add action for mapview
+                  onClick={toggleShowMap}
+                  color="inherit"
+                >
+                  {showMap ? <ViewStreamIcon /> : <MapIcon />}
+                </IconButton>
+              </div>
+            </Toolbar>
+          </Container>
         </AppBar>
         {/* Render 2nd toolbar to make sure content doesn't disappear behind the first */}
         <Toolbar />

@@ -97,7 +97,7 @@ class Home extends React.Component {
                 placeName={placeQuery}
                 handlePlaceChange={place => {
                   savePlaceQuery(place)
-                  this.props.history.push('/explore/')
+                  this.props.history.push('/explore')
                 }}
               />
             )}

@@ -2,12 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 
-import SearchStepper from './stepper/SearchStepper'
 import Footer from '../../components/Footer'
 import HeroUnit from './HeroUnit'
 import SearchBox from '../../components/SearchBox'
@@ -82,7 +80,7 @@ class Home extends React.Component {
           }}
         />
         {/* Hero unit. Pass along scroller as action for buttons */}
-        <HeroUnit scrollTo={this.scrollToStepper}>
+        <HeroUnit>
           <Typography
             color="inherit"
             align="center"
@@ -120,15 +118,6 @@ class Home extends React.Component {
             Search random!
           </Button>
         </HeroUnit>
-        {/* Stepper section, with reference for scrolling to */}
-        <Container
-          className={classes.stepper}
-          maxWidth="md"
-          ref={this.stepperRef}
-        >
-          <SearchStepper />
-        </Container>
-        {/* Footer */}
         <Footer />
       </React.Fragment>
     )

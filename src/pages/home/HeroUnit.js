@@ -1,6 +1,6 @@
 import React from 'react'
-
 import PropTypes from 'prop-types'
+
 import { withStyles } from '@material-ui/core/styles'
 
 import HeroUnitLayout from './HeroUnitLayout'
@@ -26,13 +26,10 @@ const styles = theme => ({
 })
 
 function ProductHero(props) {
-  const { classes, scrollTo } = props
+  const { classes } = props
 
   return (
-    <HeroUnitLayout
-      backgroundClassName={classes.background}
-      scrollTo={scrollTo}
-    >
+    <HeroUnitLayout backgroundClassName={classes.background}>
       {/* Increase the network loading priority of the background image. */}
       <img
         style={{ display: 'none' }}

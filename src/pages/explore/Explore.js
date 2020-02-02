@@ -85,29 +85,32 @@ class Explore extends React.Component {
     const itemList = null
 
     if (itemList === null) {
-      // First fetch the list of recommended destinations
       this.fetchDestinations(bounds)
-        .then(response => response.json())
-        // Then save this to State to start rendering the cards
-        .then(data => {
-          const destinationList = data.Destinations
-          this.setState(oldState => ({
-            ...oldState,
-            destinationList,
-          }))
-
-          return destinationList
-        })
-        // Then for each destination create promise to fetch an image and set State if resolved
-        .then(destinationList => {
-          destinationList.forEach(item => {
-            this.fetchImage(item.name)
-          })
-        })
-        .catch(err => console.log(err))
     } else {
       this.setState({ destinationList: itemList })
     }
+  }
+
+  fetchDestinations(bounds) {
+    this.fetchDestinationApi(bounds)
+      .then(response => response.json())
+      // Then save this to State to start rendering the cards
+      .then(data => {
+        const destinationList = data.Destinations
+        this.setState(oldState => ({
+          ...oldState,
+          destinationList,
+        }))
+
+        return destinationList
+      })
+      // Then for each destination create promise to fetch an image and set State if resolved
+      .then(destinationList => {
+        destinationList.forEach(item => {
+          this.fetchImage(item.name)
+        })
+      })
+      .catch(err => console.log(err))
   }
 
   // Query based on destination name + country_name + (possibly activity filter?) + (geolocation?)
@@ -132,7 +135,7 @@ class Explore extends React.Component {
   }
 
   // Call an API, API_URL is retrieved from .env files
-  fetchDestinations(bounds) {
+  fetchDestinationApi(bounds) {
     // return search as requested by sessionStorage (=Search tab)
     if (bounds) {
       return fetch(
@@ -207,8 +210,11 @@ class Explore extends React.Component {
                   placeName={placeQuery}
                   handlePlaceChange={place => {
                     savePlaceQuery(place)
+                    const bounds = this.extractBoundsFromPlaceObject(place)
+                    this.handleBoundsChange(bounds)
+                    this.fetchDestinations(bounds)
+                    // Map centering is triggered by change in placeQuery state in Mapview component
                   }}
-                  // Map centering is triggered by change in placeQuery state
                 />
               )}
             </ExploreBar>
@@ -243,6 +249,9 @@ class Explore extends React.Component {
                   placeName={placeQuery}
                   handlePlaceChange={place => {
                     savePlaceQuery(place)
+                    const bounds = this.extractBoundsFromPlaceObject(place)
+                    this.handleBoundsChange(bounds)
+                    this.fetchDestinations(bounds)
                   }}
                 />
               )}

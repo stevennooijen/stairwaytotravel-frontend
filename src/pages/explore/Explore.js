@@ -30,7 +30,7 @@ class Explore extends React.Component {
 
     this.state = {
       // state for query
-      continent: sessionStorage.getItem('continent'),
+      // continent: sessionStorage.getItem('continent'),
       mapBounds: {},
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
@@ -56,14 +56,37 @@ class Explore extends React.Component {
     this.setState({ mapBounds: newBounds })
   }
 
+  extractBoundsFromPlaceObject = googlePlaceObject => {
+    const viewport = googlePlaceObject.geometry.viewport
+    return {
+      ne: {
+        lat: viewport.getNorthEast().lat(),
+        lng: viewport.getNorthEast().lng(),
+      },
+      sw: {
+        lat: viewport.getSouthWest().lat(),
+        lng: viewport.getSouthWest().lng(),
+      },
+    }
+  }
+
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
+    // retrieve bounds from PlaceQuery
+    const bounds = this.props.placeQuery
+      ? this.extractBoundsFromPlaceObject(this.props.placeQuery)
+      : null
+    if (bounds) {
+      this.handleBoundsChange(bounds)
+    }
+
     // this._isMounted = true
-    const itemList = JSON.parse(sessionStorage.getItem('destinationList'))
+    // const itemList = JSON.parse(sessionStorage.getItem('destinationList'))
+    const itemList = null
 
     if (itemList === null) {
       // First fetch the list of recommended destinations
-      this.fetchDestinations()
+      this.fetchDestinations(bounds)
         .then(response => response.json())
         // Then save this to State to start rendering the cards
         .then(data => {
@@ -109,17 +132,27 @@ class Explore extends React.Component {
   }
 
   // Call an API, API_URL is retrieved from .env files
-  fetchDestinations() {
+  fetchDestinations(bounds) {
     // return search as requested by sessionStorage (=Search tab)
-    if (this.state.continent) {
+    if (bounds) {
       return fetch(
         process.env.REACT_APP_API_URL +
-          '/api/explore/?continent=' +
-          sessionStorage.getItem('continent'),
+          '/api/explore/?' +
+          'ne_lat=' +
+          bounds.ne.lat +
+          '&ne_lng=' +
+          bounds.ne.lng +
+          '&sw_lat=' +
+          bounds.sw.lat +
+          '&sw_lng=' +
+          bounds.sw.lng,
       )
       // return random destination
     } else {
-      return fetch(process.env.REACT_APP_API_URL + '/api/explore')
+      return fetch(
+        process.env.REACT_APP_API_URL + '/api/explore',
+        // '/api/explore/?ne_lat=12.34&ne_lng=5.32&sw_lat=10.1&sw_lng=-3.01',
+      )
     }
   }
 

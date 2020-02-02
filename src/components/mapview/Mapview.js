@@ -3,17 +3,10 @@ import { withStyles } from '@material-ui/core/styles'
 
 import GoogleMap from './components/GoogleMap'
 import DestinationPin from './components/DestinationPin'
-import SearchHereButton from './components/SeachHereButton'
 
 const AMSTERDAM_CENTER = [52.3667, 4.8945]
 
 const styles = theme => ({
-  // in order to position searchHereButton in middle of mapview
-  mapview: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
   wrapper: {
     // This is a hard requirement for GoogleMapReact to display. Don't change!
     width: '100%',
@@ -42,10 +35,8 @@ class Mapview extends Component {
     super(props)
 
     this.state = {
-      showSearchHere: false,
       showPlace: null,
       center: AMSTERDAM_CENTER,
-      bounds: [],
     }
   }
 
@@ -92,7 +83,7 @@ class Mapview extends Component {
     this.setState({ showPlace: null })
   }
 
-  _onChange = (viewport, { handleBoundsChange } = this.props) => {
+  _onChange = (viewport, { handleOnChange } = this.props) => {
     // Avoid closing the destination window after onChildClickBack
     // do this by checking if new location is NOT equal to the chosen center
     // TODO: check with Leon if this can be done differently
@@ -103,57 +94,44 @@ class Mapview extends Component {
         Math.round(this.state.center[1] * 100))
     ) {
       this.setState({ showPlace: null })
-      // toggle showSearchHere button if map changed
-      this.setState({ showSearchHere: true })
+      // Update bounds and pass on to state of Explore component
+      const newBounds = {
+        ne: viewport.bounds.ne,
+        sw: viewport.bounds.sw,
+      }
+      handleOnChange(newBounds)
     }
-    // Update bounds and pass on to state of Explore component
-    const newBounds = {
-      ne: viewport.bounds.ne,
-      sw: viewport.bounds.sw,
-    }
-    handleBoundsChange(newBounds)
-  }
-
-  SearchOnGeo = () => {
-    this.setState({ showSearchHere: false })
-    // TODO: call fetch to new destinations based on Geo location
   }
 
   render() {
     const { classes, places, toggleLike, apiHasLoaded } = this.props
 
     return (
-      <div className={classes.mapview}>
-        {this.state.showSearchHere ? (
-          <SearchHereButton onClick={this.SearchOnGeo} />
-        ) : null}
-        <div className={classes.wrapper}>
-          <GoogleMap
-            options={createMapOptions}
-            center={this.state.center}
-            onChildClick={this.onChildClickCallback}
-            onChange={this._onChange}
-            onClick={this._onClick}
-            onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}
-          >
-            {!isEmpty(places) &&
-              places.map(place => (
-                <DestinationPin
-                  // this is required to handle clicks
-                  key={place.id}
-                  // these are required by google map to plot
-                  lat={place.latitude}
-                  lng={place.longitude}
-                  // these are passed along to destinationPin
-                  show={place.id === this.state.showPlace ? true : false}
-                  // place is the object containing all the destination stuff
-                  place={place}
-                  toggleLike={toggleLike}
-                />
-              ))}
-          </GoogleMap>
-        </div>
-        }
+      <div className={classes.wrapper}>
+        <GoogleMap
+          options={createMapOptions}
+          center={this.state.center}
+          onChildClick={this.onChildClickCallback}
+          onChange={this._onChange}
+          onClick={this._onClick}
+          onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}
+        >
+          {!isEmpty(places) &&
+            places.map(place => (
+              <DestinationPin
+                // this is required to handle clicks
+                key={place.id}
+                // these are required by google map to plot
+                lat={place.latitude}
+                lng={place.longitude}
+                // these are passed along to destinationPin
+                show={place.id === this.state.showPlace ? true : false}
+                // place is the object containing all the destination stuff
+                place={place}
+                toggleLike={toggleLike}
+              />
+            ))}
+        </GoogleMap>
       </div>
     )
   }

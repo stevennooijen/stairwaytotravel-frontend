@@ -13,12 +13,19 @@ import ExploreBar from './components/ExploreBar'
 import { Mapview } from '../../components/mapview'
 import SearchBox from '../../components/SearchBox'
 import GoogleMap from '../../components/mapview/components/GoogleMap'
+import SearchHereButton from '../../components/mapview/components/SeachHereButton'
 
 const styles = theme => ({
   loaderContainer: {
     marginTop: theme.spacing(8),
     display: 'flex',
     justifyContent: 'center',
+  },
+  // in order to position searchHereButton in middle of mapview
+  mapview: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
   },
 })
 
@@ -37,6 +44,7 @@ class Explore extends React.Component {
       destinationList: [],
 
       showMap: false,
+      showSearchHere: false,
       // Google mapInstance object
       mapApiLoaded: false,
       mapInstance: null,
@@ -218,16 +226,30 @@ class Explore extends React.Component {
                 />
               )}
             </ExploreBar>
-            <Mapview
-              // Create Google mapInstance object in Mapview and save in Explore state
-              apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
-              // Pass on other stuff
-              mapInstance={mapInstance}
-              handleBoundsChange={this.handleBoundsChange}
-              placeQuery={placeQuery}
-              places={this.state.destinationList}
-              toggleLike={id => this.toggleLike(id)}
-            />
+            <div className={classes.mapview}>
+              {this.state.showSearchHere ? (
+                <SearchHereButton
+                  onClick={() => {
+                    this.setState({ showSearchHere: false })
+                    this.fetchDestinations(this.state.mapBounds)
+                  }}
+                />
+              ) : null}
+              <Mapview
+                // Create Google mapInstance object in Mapview and save in Explore state
+                apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
+                // Pass on other stuff
+                mapInstance={mapInstance}
+                handleOnChange={newBounds => {
+                  this.handleBoundsChange(newBounds)
+                  this.setState({ showSearchHere: true })
+                }}
+                placeQuery={placeQuery}
+                places={this.state.destinationList}
+                toggleLike={id => this.toggleLike(id)}
+              />
+              }
+            </div>
           </React.Fragment>
         ) : (
           // Stream - in this case we create a mapInstance for the searchBox only

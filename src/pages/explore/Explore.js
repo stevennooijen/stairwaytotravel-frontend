@@ -42,6 +42,7 @@ class Explore extends React.Component {
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
       destinationList: [],
+      likedDestinations: [],
 
       showMap: false,
       showSearchHere: false,
@@ -183,13 +184,18 @@ class Explore extends React.Component {
     this.setState({
       destinationList: newList,
     })
-
-    // hier: api call naar backend. dat wanneer je de pagina refresht en vraagt wat de gelikedte kaarten zijn dat alles weer teurg komt.
-    // beetje state in de front-end en dan veel state in de backend!
-
-    // Hier: Apart lijstje van likes wegschijven naar session/localStorage
-    // Bij like data kopieren van de een naar de lijst met likes. en een update naar de backend
     sessionStorage.setItem('destinationList', JSON.stringify(newList))
+
+    // For bucketlist page: keep track of likes and save in an array to session storage
+    const likedDestinations = this.state.likedDestinations
+    const newLikedDestinations = likedDestinations.includes(id)
+      ? likedDestinations.filter(item => item !== id)
+      : [...likedDestinations, id]
+    this.setState({ likedDestinations: newLikedDestinations })
+    sessionStorage.setItem(
+      'likedDestinations',
+      JSON.stringify(newLikedDestinations),
+    )
   }
 
   toggleShowMap() {

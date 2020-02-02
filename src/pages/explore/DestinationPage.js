@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { fetchSingleDestination } from '../../components/fetching'
 
 class DestinationPage extends Component {
   // Constructor can only be called once to define state
@@ -19,15 +20,11 @@ class DestinationPage extends Component {
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
     console.log(this.state.destination_id)
-    this.fetchSingleDestination(this.state.destination_id)
+    fetchSingleDestination(this.state.destination_id)
       .then(response => response.json())
       .then(destinationJson => this.setdestination(destinationJson))
       //   TODO: display something when error is found instead of printing to console
       .catch(err => console.log(err))
-  }
-
-  fetchSingleDestination(id) {
-    return fetch(process.env.REACT_APP_API_URL + '/api/' + id)
   }
 
   // Change state of variable 'destination_data'

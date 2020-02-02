@@ -1,44 +1,82 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
+
+import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Container from '@material-ui/core/Container'
 
 import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
 import WarningCard from 'components/WarningCard'
-// import ExampleList from 'assets/Constants'
+import { fetchSingleDestination } from '../../components/fetching'
+import GetFlickrImage from 'components/destinationCard/GetFlickrImage'
+
+const styles = theme => ({
+  loaderContainer: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    justifyContent: 'center',
+  },
+})
 
 class Bucketlist extends React.Component {
-  _isMounted = false
-
   constructor(props) {
     super(props)
 
     this.state = {
-      continent: sessionStorage.getItem('continent'),
-      // For testing purposes, could use ExampleList from Constants. destinationList: ExampleList,
-      // Initialize empty if for when nothing in sessionStorage
-      destinationList: undefined,
-      likesCount: 0,
+      destinationList: [],
     }
   }
 
-  // Initialize destinations and likes if something in sessionStorage
   componentDidMount() {
-    this._isMounted = true
-    const itemList = JSON.parse(sessionStorage.getItem('destinationList'))
-    this.setState({
-      destinationList: itemList,
-    })
-    this.calculateLikes(itemList)
-  }
-
-  calculateLikes(destinations) {
-    if (destinations) {
-      this.setState({
-        likesCount: destinations.filter(item => item.liked === true).length,
+    // Initialize destinations and likes if something in sessionStorage
+    const likedDestinationList = JSON.parse(
+      sessionStorage.getItem('likedDestinations'),
+    )
+    // fetch data if likes
+    if (likedDestinationList) {
+      likedDestinationList.forEach(id => {
+        fetchSingleDestination(id)
+          .then(response => response.json())
+          // Store each item in destinationList
+          .then(destinationJson => {
+            destinationJson.liked = true
+            this.setState({
+              destinationList: [...this.state.destinationList, destinationJson],
+            })
+            return destinationJson.name
+          })
+          // Then fetch image and save in 'image' attribute in appropriate list item
+          .then(destinationName => {
+            this.fetchImage(destinationName)
+          })
+          .catch(err => console.log(err))
       })
     } else {
-      this.setState({ likesCount: 0 })
+      this.setState({ destinationList: null })
     }
+  }
+
+  // Query based on destination name + country_name + (possibly activity filter?) + (geolocation?)
+  fetchImage(destinationName) {
+    // Create promise and setState when resolved through the callback `.then()`
+    GetFlickrImage(destinationName).then(imageUrl => {
+      this.setState(oldState => ({
+        // Posssibly improve this by using a Map type (like a dict) instead of looping over an array
+        // You could then access each item directly: destionationList[i]
+        destinationList: oldState.destinationList.map(item => {
+          if (item.name === destinationName) {
+            return {
+              ...item,
+              image: imageUrl,
+            }
+          } else {
+            return item
+          }
+        }),
+      }))
+    })
   }
 
   toggleLike(id) {
@@ -63,36 +101,37 @@ class Bucketlist extends React.Component {
     // Hier: Apart lijstje van likes wegschijven naar session/localStorage
     // Bij like data kopieren van de een naar de lijst met likes. en een update naar de backend
     sessionStorage.setItem('destinationList', JSON.stringify(newList))
-
-    // update likes count for warning message if likesCount = 0
-    this.calculateLikes(newList)
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false
   }
 
   render() {
+    const { classes } = this.props
+
     return (
       <main>
-        {this.state.likesCount > 0 ? (
-          // Show liked destinations if likesCount > 0
-          <Album>
-            {this.state.destinationList.map(
-              place =>
-                // only show cards when they are liked
-                place.liked ? (
-                  // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
-                  // State blijft zodoende in de Bucketlist component op 'hoog' niveau
-                  <Grid item key={place.id} xs={12} sm={6} md={4} lg={3}>
-                    <DestinationCard
-                      place={place}
-                      toggleLike={id => this.toggleLike(id)}
-                    />
-                  </Grid>
-                ) : null,
-            )}
-          </Album>
+        {/* If no likedDestinations, destinationsList is set to null and warning should be displayed */}
+        {this.state.destinationList ? (
+          // Show loading indicator till destinations are fetched
+          this.state.destinationList.length > 0 ? (
+            <Album>
+              {this.state.destinationList.map(place => (
+                <Grid item key={place.id} xs={12} sm={6} md={4} lg={3}>
+                  <DestinationCard
+                    place={place}
+                    toggleLike={id => this.toggleLike(id)}
+                    onClick={() => {
+                      // send to destination page
+                      this.props.history.push('/explore/' + place.id)
+                    }}
+                  />
+                </Grid>
+              ))}
+            </Album>
+          ) : (
+            //  show Indeterminate progress indicator while waiting for destinations to load
+            <Container className={classes.loaderContainer}>
+              <CircularProgress />
+            </Container>
+          )
         ) : (
           // Provide warning if no liked destinations
           <Album>
@@ -104,4 +143,4 @@ class Bucketlist extends React.Component {
   }
 }
 
-export default Bucketlist
+export default withRouter(withStyles(styles)(Bucketlist))

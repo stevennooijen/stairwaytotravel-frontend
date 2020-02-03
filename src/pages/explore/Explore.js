@@ -42,7 +42,9 @@ class Explore extends React.Component {
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
       destinationList: [],
-      likedDestinations: [],
+      likedDestinations: JSON.parse(
+        sessionStorage.getItem('likedDestinations'),
+      ),
 
       showMap: false,
       showSearchHere: false,
@@ -81,6 +83,10 @@ class Explore extends React.Component {
 
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
+    // If no already liked destinations, set to empty array
+    if (this.state.likedDestinations === null)
+      this.setState({ likedDestinations: [] })
+
     // retrieve bounds from PlaceQuery
     const bounds = this.props.placeQuery
       ? this.extractBoundsFromPlaceObject(this.props.placeQuery)

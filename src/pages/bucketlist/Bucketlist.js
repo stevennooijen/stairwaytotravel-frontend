@@ -8,7 +8,7 @@ import Container from '@material-ui/core/Container'
 
 import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
-import WarningCard from 'components/WarningCard'
+import WarningCard from './WarningCard'
 import { fetchSingleDestination } from '../../components/fetching'
 import GetFlickrImage from 'components/destinationCard/GetFlickrImage'
 
@@ -26,6 +26,9 @@ class Bucketlist extends React.Component {
 
     this.state = {
       destinationList: [],
+      // likedDestinations: JSON.parse(
+      //   sessionStorage.getItem('likedDestinations'),
+      // ),
     }
   }
 
@@ -35,7 +38,7 @@ class Bucketlist extends React.Component {
       sessionStorage.getItem('likedDestinations'),
     )
     // fetch data if likes
-    if (likedDestinationList) {
+    if (likedDestinationList && likedDestinationList.length > 0) {
       likedDestinationList.forEach(id => {
         fetchSingleDestination(id)
           .then(response => response.json())
@@ -79,28 +82,24 @@ class Bucketlist extends React.Component {
     })
   }
 
-  toggleLike(id) {
-    const newList = this.state.destinationList.map(item => {
-      if (item.id === id) {
-        return {
-          ...item,
-          liked: !item.liked,
-        }
-      } else {
-        return item
-      }
-    })
+  removeLike(id) {
+    // remove from destination list
+    const newDestinationList = this.state.destinationList.filter(
+      destination => destination.id !== id,
+    )
+    newDestinationList.length > 0
+      ? this.setState({ destinationList: newDestinationList })
+      : this.setState({ destinationList: null })
 
-    this.setState({
-      destinationList: newList,
-    })
-
-    // hier: api call naar backend. dat wanneer je de pagina refresht en vraagt wat de gelikedte kaarten zijn dat alles weer teurg komt.
-    // beetje state in de front-end en dan veel state in de backend!
-
-    // Hier: Apart lijstje van likes wegschijven naar session/localStorage
-    // Bij like data kopieren van de een naar de lijst met likes. en een update naar de backend
-    sessionStorage.setItem('destinationList', JSON.stringify(newList))
+    // removed from liked list in session storage
+    const likedDestinations = JSON.parse(
+      sessionStorage.getItem('likedDestinations'),
+    )
+    const newLikedDestinations = likedDestinations.filter(item => item !== id)
+    sessionStorage.setItem(
+      'likedDestinations',
+      JSON.stringify(newLikedDestinations),
+    )
   }
 
   render() {
@@ -117,7 +116,7 @@ class Bucketlist extends React.Component {
                 <Grid item key={place.id} xs={12} sm={6} md={4} lg={3}>
                   <DestinationCard
                     place={place}
-                    toggleLike={id => this.toggleLike(id)}
+                    toggleLike={id => this.removeLike(id)}
                     onClick={() => {
                       // send to destination page
                       this.props.history.push('/explore/' + place.id)

@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
-import RedirectButton from './RedirectButton'
+import RedirectButton from '../../components/RedirectButton'
 
 const styles = theme => ({
   card: {
@@ -21,7 +21,7 @@ class WarningCard extends Component {
       <Card className={classes.card}>
         <CardContent>
           <Typography gutterBottom variant="h6" component="h2">
-            Huh? No wishes?
+            No wishes?
           </Typography>
           <Typography color="textSecondary" variant="body1" component="p">
             Looks like you haven't added any destinations to your bucketlist

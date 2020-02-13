@@ -14,6 +14,7 @@ import { Mapview } from '../../components/mapview'
 import SearchBox from '../../components/SearchBox'
 import GoogleMap from '../../components/mapview/components/GoogleMap'
 import SearchHereButton from '../../components/mapview/components/SeachHereButton'
+import NothingFoundCard from './components/NothingFoundCard'
 
 const styles = theme => ({
   loaderContainer: {
@@ -41,6 +42,7 @@ class Explore extends React.Component {
       mapBounds: {},
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
+      loading: true,
       destinationList: [],
       likedDestinations: JSON.parse(
         sessionStorage.getItem('likedDestinations'),
@@ -116,6 +118,7 @@ class Explore extends React.Component {
           ...oldState,
           destinationList,
         }))
+        this.setState({ loading: false })
 
         return destinationList
       })
@@ -298,8 +301,13 @@ class Explore extends React.Component {
                 />
               )}
             </ExploreBar>
-            {/* check if destinations are loaded, if not display progress */}
-            {this.state.destinationList && this.state.destinationList.length ? (
+            {this.state.loading ? (
+              //  show Indeterminate progress indicator while waiting for destinations to load
+              <Container className={classes.loaderContainer}>
+                <CircularProgress />
+              </Container>
+            ) : this.state.destinationList.length > 0 ? (
+              // if destinations found
               <Album>
                 {this.state.destinationList.map(place => (
                   // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
@@ -320,11 +328,10 @@ class Explore extends React.Component {
                 ))}
               </Album>
             ) : (
-              //  show Indeterminate progress indicator while waiting for destinations to load
-              <Container className={classes.loaderContainer}>
-                {/* <LinearProgress /> */}
-                <CircularProgress />
-              </Container>
+              // if no destinations found
+              <Album>
+                <NothingFoundCard />
+              </Album>
             )}
           </React.Fragment>
         )}

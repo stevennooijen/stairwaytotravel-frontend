@@ -123,6 +123,9 @@ class Explore extends React.Component {
       .then(destinationList => {
         destinationList.forEach(item => {
           this.fetchImage(item.name)
+          if (this.state.likedDestinations.includes(item.id)) {
+            this.toggleLike(item.id)
+          }
         })
       })
       .catch(err => console.log(err))
@@ -191,7 +194,9 @@ class Explore extends React.Component {
       destinationList: newList,
     })
     sessionStorage.setItem('destinationList', JSON.stringify(newList))
+  }
 
+  updateLikedDestinationsList(id) {
     // For bucketlist page: keep track of likes and save in an array to session storage
     const likedDestinations = this.state.likedDestinations
     const newLikedDestinations = likedDestinations.includes(id)
@@ -258,7 +263,10 @@ class Explore extends React.Component {
                 }}
                 placeQuery={placeQuery}
                 places={this.state.destinationList}
-                toggleLike={id => this.toggleLike(id)}
+                toggleLike={id => {
+                  this.toggleLike(id)
+                  this.updateLikedDestinationsList(id)
+                }}
               />
               }
             </div>
@@ -299,7 +307,10 @@ class Explore extends React.Component {
                   <Grid item key={place.id} xs={12} sm={6} md={4} lg={3}>
                     <DestinationCard
                       place={place}
-                      toggleLike={id => this.toggleLike(id)}
+                      toggleLike={id => {
+                        this.toggleLike(id)
+                        this.updateLikedDestinationsList(id)
+                      }}
                       onClick={() => {
                         // send to destination page
                         this.props.history.push('/explore/' + place.id)

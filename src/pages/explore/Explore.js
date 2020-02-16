@@ -8,13 +8,14 @@ import Container from '@material-ui/core/Container'
 
 import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
-import GetFlickrImage from 'components/destinationCard/GetFlickrImage'
+import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import ExploreBar from './components/ExploreBar'
 import { Mapview } from '../../components/mapview'
 import SearchBox from '../../components/SearchBox'
 import GoogleMap from '../../components/mapview/components/GoogleMap'
 import SearchHereButton from '../../components/mapview/components/SeachHereButton'
 import NothingFoundCard from './components/NothingFoundCard'
+import FetchExploreDestinations from '../../components/fetching/FetchExploreDestinations'
 
 const styles = theme => ({
   loaderContainer: {
@@ -97,7 +98,6 @@ class Explore extends React.Component {
       this.handleBoundsChange(bounds)
     }
 
-    // this._isMounted = true
     // const itemList = JSON.parse(sessionStorage.getItem('destinationList'))
     const itemList = null
 
@@ -109,75 +109,43 @@ class Explore extends React.Component {
   }
 
   fetchDestinations(bounds) {
-    this.fetchDestinationApi(bounds)
-      .then(response => response.json())
-      // Then save this to State to start rendering the cards
-      .then(data => {
-        const destinationList = data.Destinations
-        this.setState(oldState => ({
-          ...oldState,
-          destinationList,
-        }))
-        this.setState({ loading: false })
+    this.setState({ loading: true, destinationList: [] })
 
-        return destinationList
-      })
-      // Then for each destination create promise to fetch an image and set State if resolved
+    FetchExploreDestinations(bounds)
+      .then(response => response.json())
+      .then(data => data.Destinations)
       .then(destinationList => {
+        // for each of the fetched destinations in the list do:
         destinationList.forEach(item => {
-          this.fetchImage(item.name)
-          if (this.state.likedDestinations.includes(item.id)) {
-            this.toggleLike(item.id)
-          }
+          // 1. retrieve flickr Images
+          GetFlickrImages(item.name)
+            .then(imageUrls => {
+              return {
+                ...item,
+                image: imageUrls,
+              }
+            })
+            // 2. set liked to true if destination already in likedList
+            .then(item => {
+              if (this.state.likedDestinations.includes(item.id)) {
+                return {
+                  ...item,
+                  liked: true,
+                }
+              } else {
+                return item
+              }
+            })
+            // 3. save fetched destination to state
+            .then(item =>
+              this.setState({
+                destinationList: [...this.state.destinationList, item],
+                loading: false,
+              }),
+            )
         })
       })
       .catch(err => console.log(err))
-  }
-
-  // Query based on destination name + country_name + (possibly activity filter?) + (geolocation?)
-  fetchImage(destinationName) {
-    // Create promise and setState when resolved through the callback `.then()`
-    GetFlickrImage(destinationName).then(imageUrl => {
-      this.setState(oldState => ({
-        // Posssibly improve this by using a Map type (like a dict) instead of looping over an array
-        // You could then access each item directly: destionationList[i]
-        destinationList: oldState.destinationList.map(item => {
-          if (item.name === destinationName) {
-            return {
-              ...item,
-              image: imageUrl,
-            }
-          } else {
-            return item
-          }
-        }),
-      }))
-    })
-  }
-
-  // Call an API, API_URL is retrieved from .env files
-  fetchDestinationApi(bounds) {
-    // return search as requested by sessionStorage (=Search tab)
-    if (bounds) {
-      return fetch(
-        process.env.REACT_APP_API_URL +
-          '/api/explore/?' +
-          'ne_lat=' +
-          bounds.ne.lat +
-          '&ne_lng=' +
-          bounds.ne.lng +
-          '&sw_lat=' +
-          bounds.sw.lat +
-          '&sw_lng=' +
-          bounds.sw.lng,
-      )
-      // return random destination
-    } else {
-      return fetch(
-        process.env.REACT_APP_API_URL + '/api/explore',
-        // '/api/explore/?ne_lat=12.34&ne_lng=5.32&sw_lat=10.1&sw_lng=-3.01',
-      )
-    }
   }
 
   toggleLike(id) {

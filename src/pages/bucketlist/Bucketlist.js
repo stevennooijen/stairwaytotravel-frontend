@@ -10,7 +10,7 @@ import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
 import WarningCard from './WarningCard'
 import { fetchSingleDestination } from '../../components/fetching'
-import GetFlickrImage from 'components/destinationCard/GetFlickrImage'
+import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 
 const styles = theme => ({
   loaderContainer: {
@@ -39,47 +39,34 @@ class Bucketlist extends React.Component {
     )
     // fetch data if likes
     if (likedDestinationList && likedDestinationList.length > 0) {
+      // for each of the fetched destinations in the list do:
       likedDestinationList.forEach(id => {
+        // 1. fetch the data
         fetchSingleDestination(id)
           .then(response => response.json())
-          // Store each item in destinationList
-          .then(destinationJson => {
-            destinationJson.liked = true
-            this.setState({
-              destinationList: [...this.state.destinationList, destinationJson],
-            })
-            return destinationJson.name
-          })
-          // Then fetch image and save in 'image' attribute in appropriate list item
-          .then(destinationName => {
-            this.fetchImage(destinationName)
+          .then(item => {
+            // 2. retrieve flickr Images
+            GetFlickrImages(item.name)
+              .then(imageUrls => {
+                return {
+                  ...item,
+                  image: imageUrls,
+                  // 3. set liked to true as we are on bucketlist page
+                  liked: true,
+                }
+              })
+              // 4. save fetched destination to state
+              .then(item =>
+                this.setState({
+                  destinationList: [...this.state.destinationList, item],
+                }),
+              )
           })
           .catch(err => console.log(err))
       })
     } else {
       this.setState({ destinationList: null })
     }
-  }
-
-  // Query based on destination name + country_name + (possibly activity filter?) + (geolocation?)
-  fetchImage(destinationName) {
-    // Create promise and setState when resolved through the callback `.then()`
-    GetFlickrImage(destinationName).then(imageUrl => {
-      this.setState(oldState => ({
-        // Posssibly improve this by using a Map type (like a dict) instead of looping over an array
-        // You could then access each item directly: destionationList[i]
-        destinationList: oldState.destinationList.map(item => {
-          if (item.name === destinationName) {
-            return {
-              ...item,
-              image: imageUrl,
-            }
-          } else {
-            return item
-          }
-        }),
-      }))
-    })
   }
 
   removeLike(id) {

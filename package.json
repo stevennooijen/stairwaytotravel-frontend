@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.1.0",
+    "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.1.0",
-    "@material-ui/lab": "^4.0.0-alpha.14",
+    "@material-ui/lab": "^4.0.0-alpha.39",
     "emotion": "^9.2.10",
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.2.0",
@@ -17,7 +17,9 @@
     "react-parallax": "^2.2.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5",
-    "react-select": "^3.0.3"
+    "react-select": "^3.0.3",
+    "react-swipeable-views": "^0.13.9",
+    "react-swipeable-views-utils": "^0.13.9"
   },
   "devDependencies": {
     "eslint-plugin-prettier": "^2.6.2",

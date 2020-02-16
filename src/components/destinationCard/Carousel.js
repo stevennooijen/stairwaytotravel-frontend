@@ -1,4 +1,6 @@
 import React from 'react'
+import SwipeableViews from 'react-swipeable-views'
+
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import MobileStepper from '@material-ui/core/MobileStepper'
 import Button from '@material-ui/core/Button'
@@ -65,16 +67,35 @@ export default function TextMobileStepper(props) {
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
 
+  function handleStepChange(step) {
+    setActiveStep(step)
+  }
+
   return (
     <div className={classes.root}>
-      <img
-        className={classes.img}
-        src={props.imageList[activeStep]}
-        alt="Something matching the destination"
-        // TODO: set proper alt text
-        // src={tutorialSteps[activeStep].imgPath}
-        // alt={tutorialSteps[activeStep].label}
-      />
+      <SwipeableViews
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        index={activeStep}
+        onChangeIndex={handleStepChange}
+        enableMouseEvents
+      >
+        {props.imageList.map((step, index) => (
+          // TODO: use alt text label for defining a unique key
+          // <div key={step.label}>
+          <div key={step}>
+            {Math.abs(activeStep - index) <= 2 ? (
+              <img
+                className={classes.img}
+                src={step}
+                alt="Something matching the destination"
+                // TODO: set proper alt text
+                // src={step.imgPath}
+                // alt={step.label}
+              />
+            ) : null}
+          </div>
+        ))}
+      </SwipeableViews>
       {props.children}
       <MobileStepper
         variant="dots"

@@ -28,8 +28,8 @@ const DestinationPin = props => {
   const infoWindowStyle = {
     position: 'relative',
     bottom: 280,
-    left: '-90px',
-    width: 220,
+    left: '-120px',
+    width: 250,
   }
 
   return (

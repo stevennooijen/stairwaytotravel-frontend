@@ -50,7 +50,7 @@ class Bucketlist extends React.Component {
               .then(imageUrls => {
                 return {
                   ...item,
-                  image: imageUrls,
+                  images: imageUrls,
                   // 3. set liked to true as we are on bucketlist page
                   liked: true,
                 }

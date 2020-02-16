@@ -122,7 +122,7 @@ class Explore extends React.Component {
             .then(imageUrls => {
               return {
                 ...item,
-                image: imageUrls,
+                images: imageUrls,
               }
             })
             // 2. set liked to true if destination already in likedList

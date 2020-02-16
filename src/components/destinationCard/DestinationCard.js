@@ -65,7 +65,7 @@ class DestinationCard extends Component {
           onClick()
         }}
       >
-        <PhotoCarousel imageList={place.image}>
+        <PhotoCarousel imageList={place.images}>
           <Box
             component="span"
             className={classes.favoriteCircle}

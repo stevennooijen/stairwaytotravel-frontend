@@ -7,20 +7,6 @@ import Button from '@material-ui/core/Button'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 
-// TODO: also pass along alt text of the image. Input array needs to be of form:
-// const tutorialSteps = [
-//   {
-//     label: 'San Francisco – Oakland Bay Bridge, United States',
-//     imgPath:
-//       'https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60',
-//   },
-//   {
-//     label: 'Bird',
-//     imgPath:
-//       'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60',
-//   },
-// ]
-
 const useStyles = makeStyles(theme => ({
   root: {
     // maxWidth: 400,
@@ -80,17 +66,12 @@ export default function TextMobileStepper(props) {
         enableMouseEvents
       >
         {props.imageList.map((step, index) => (
-          // TODO: use alt text label for defining a unique key
-          // <div key={step.label}>
-          <div key={step}>
+          <div key={step.label + step.imgPath}>
             {Math.abs(activeStep - index) <= 2 ? (
               <img
                 className={classes.img}
-                src={step}
-                alt="Something matching the destination"
-                // TODO: set proper alt text
-                // src={step.imgPath}
-                // alt={step.label}
+                src={step.imgPath}
+                alt={step.label}
               />
             ) : null}
           </div>

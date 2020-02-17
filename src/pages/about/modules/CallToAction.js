@@ -11,12 +11,11 @@ import ReactGA from 'react-ga'
 
 const styles = theme => ({
   root: {
-    marginTop: theme.spacing(10),
+    marginTop: 0,
     marginBottom: 0,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: theme.palette.background.default,
   },
   card: {
     // set width and margin equal to width of AboutCompany cards
@@ -24,6 +23,7 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
     margin: theme.spacing(10, 2),
+    backgroundColor: theme.palette.background.paper,
   },
   cardContent: {
     margin: theme.spacing(2),
@@ -128,7 +128,7 @@ class CallToAction extends React.Component {
             />
             <Button
               type="submit"
-              color="primary"
+              color="secondary"
               variant="contained"
               className={classes.button}
             >

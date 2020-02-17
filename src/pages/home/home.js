@@ -67,6 +67,13 @@ class Home extends React.Component {
     })
   }
 
+  scrollToCall2Action = () => {
+    this.call2actionRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
+
   render() {
     const { mapsApiLoaded, mapsInstance, mapsApi } = this.state
     const { classes, placeQuery, savePlaceQuery } = this.props

@@ -47,7 +47,7 @@ class Footer extends React.Component {
             </Link>
           </li>
           <li>
-            <Link href="/about" variant="subtitle1">
+            <Link href="/about" variant="subtitle1" color="secondary">
               About
             </Link>
           </li>
@@ -55,6 +55,7 @@ class Footer extends React.Component {
             <Link
               href="mailto:steven.nooijen@gmail.com?subject=Question about Stairway to Travel: ..."
               variant="subtitle1"
+              color="secondary"
             >
               Contact
             </Link>

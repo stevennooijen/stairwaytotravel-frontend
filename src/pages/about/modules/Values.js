@@ -12,12 +12,8 @@ import UnbiasedIcon from '@material-ui/icons/Visibility'
 const styles = theme => ({
   root: {
     display: 'flex',
-    backgroundColor: theme.palette.background.paper,
-  },
-  container: {
     marginTop: theme.spacing(10),
     marginBottom: theme.spacing(10),
-    display: 'flex',
     position: 'relative',
     flexDirection: 'column',
     alignItems: 'center',
@@ -43,51 +39,49 @@ function ProductValues(props) {
   const { classes } = props
 
   return (
-    <section className={classes.root}>
-      <Container className={classes.container}>
-        <Typography
-          variant="h2"
-          marked="center"
-          className={classes.title}
-          component="h2"
-        >
-          Our mission
-        </Typography>
-        <Grid container spacing={5}>
-          <Grid item xs={12} md={4}>
-            <div className={classes.item}>
-              <Typography variant="h3">Personalized</Typography>
-              <PersonalizedIcon fontSize="large" className={classes.image} />
-              <Typography>
-                We turn the travel industry upside down and ask you what
-                <b> you </b>
-                want to do instead of pushing our own offers.
-              </Typography>
-            </div>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <div className={classes.item}>
-              <Typography variant="h3">Unique</Typography>
-              <UniqueIcon fontSize="large" className={classes.image} />
-              <Typography>
-                We don't recommend the obvious, but help you find something
-                special.
-              </Typography>
-            </div>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <div className={classes.item}>
-              <Typography variant="h3">Unbiased</Typography>
-              <UnbiasedIcon fontSize="large" className={classes.image} />
-              <Typography>
-                We believe in transparancy and want to provide unbiased advice.
-                There is no hidden agenda.
-              </Typography>
-            </div>
-          </Grid>
+    <Container className={classes.root} component="section" maxWidth={false}>
+      <Typography
+        variant="h2"
+        marked="center"
+        className={classes.title}
+        component="h2"
+      >
+        Our values
+      </Typography>
+      <Grid container spacing={5}>
+        <Grid item xs={12} md={4}>
+          <div className={classes.item}>
+            <Typography variant="h3">Personalized</Typography>
+            <PersonalizedIcon fontSize="large" className={classes.image} />
+            <Typography>
+              We turn the travel industry upside down and ask you what
+              <b> you </b>
+              want to do instead of pushing off-the-shelf offers.
+            </Typography>
+          </div>
         </Grid>
-      </Container>
-    </section>
+        <Grid item xs={12} md={4}>
+          <div className={classes.item}>
+            <Typography variant="h3">Unique</Typography>
+            <UniqueIcon fontSize="large" className={classes.image} />
+            <Typography>
+              We don't recommend the obvious, but help you find something truly
+              special.
+            </Typography>
+          </div>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <div className={classes.item}>
+            <Typography variant="h3">Unbiased</Typography>
+            <UnbiasedIcon fontSize="large" className={classes.image} />
+            <Typography>
+              We believe in transparancy and want to provide unbiased advice.
+              There is no hidden agenda.
+            </Typography>
+          </div>
+        </Grid>
+      </Grid>
+    </Container>
   )
 }
 

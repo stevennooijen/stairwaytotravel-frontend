@@ -9,8 +9,9 @@ import Link from '@material-ui/core/Link'
 
 const styles = theme => ({
   root: {
-    marginTop: theme.spacing(10),
-    marginBottom: 0,
+    paddingTop: theme.spacing(10),
+    paddingBottom: theme.spacing(10),
+    backgroundColor: theme.palette.background.paper,
   },
   cardWrapper: {
     display: 'flex',
@@ -46,7 +47,7 @@ class AboutCompany extends React.Component {
     const { classes } = this.props
 
     return (
-      <Container className={classes.root} component="section">
+      <Container className={classes.root} component="section" maxWidth={false}>
         <Grid container>
           <Grid item xs={12} md={6} className={classes.cardWrapper}>
             <Card className={classes.card}>
@@ -82,7 +83,10 @@ class AboutCompany extends React.Component {
               </div>
               <Typography className={classes.imageSubtitle} variant="subtitle1">
                 Steven Nooijen - Founder -{' '}
-                <Link href="https://www.linkedin.com/in/stevennooijen/">
+                <Link
+                  href="https://www.linkedin.com/in/stevennooijen/"
+                  color="secondary"
+                >
                   Linkedin
                 </Link>
               </Typography>

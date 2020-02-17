@@ -2,10 +2,6 @@ import React from 'react'
 import { Parallax } from 'react-parallax'
 import { withStyles } from '@material-ui/core/styles'
 
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import { Link } from 'react-router-dom'
-
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -34,10 +30,6 @@ const styles = theme => ({
     // this causes the text between buttons to lay on top of the overlay
     zIndex: 1,
   },
-  text: {
-    // keep distance between buttons
-    margin: theme.spacing(2),
-  },
 })
 
 function ParallaxBlock(props) {
@@ -53,37 +45,7 @@ function ParallaxBlock(props) {
       >
         <div className={classes.overlay} />
         <div className={classes.container}>
-          <div className={classes.insideStyles}>
-            <Button
-              component={Link}
-              to="/explore"
-              variant="outlined"
-              color="inherit"
-              onClick={() => {
-                sessionStorage.clear()
-              }}
-              size="large"
-            >
-              Explore random
-            </Button>
-            <Typography
-              variant="body2"
-              color="inherit"
-              className={classes.text}
-            >
-              OR...
-            </Typography>
-            <Button
-              component={Link}
-              to="/"
-              color="primary"
-              variant="contained"
-              size="large"
-              //   onClick={scrollTo}
-            >
-              Specify wishes
-            </Button>
-          </div>
+          <div className={classes.insideStyles}>{props.children}</div>
         </div>
       </Parallax>
     </div>

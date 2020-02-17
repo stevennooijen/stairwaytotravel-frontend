@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
-
 import HeroUnitLayout from './HeroUnitLayout'
 
 const backgroundImage = require('../../assets/img/used/beach-blur-boardwalk.jpg')

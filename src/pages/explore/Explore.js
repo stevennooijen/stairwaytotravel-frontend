@@ -280,7 +280,7 @@ class Explore extends React.Component {
                 {this.state.destinationList.map(place => (
                   // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
                   // State blijft zodoende in de Bucketlist component op 'hoog' niveau
-                  <Grid item key={place.id} xs={12} sm={6} md={4} lg={3}>
+                  <Grid item key={place.id} xs={12} sm={6} md={4}>
                     <DestinationCard
                       place={place}
                       toggleLike={id => {

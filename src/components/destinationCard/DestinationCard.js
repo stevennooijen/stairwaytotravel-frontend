@@ -18,6 +18,7 @@ const styles = theme => ({
     // Make sure destinationPins don't show through the Card
     zIndex: 20,
     position: 'relative',
+    maxWidth: 400,
     // boxShadow: 'none',
   },
   cardMedia: {

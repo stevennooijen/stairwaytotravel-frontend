@@ -100,7 +100,7 @@ class Bucketlist extends React.Component {
           this.state.destinationList.length > 0 ? (
             <Album>
               {this.state.destinationList.map(place => (
-                <Grid item key={place.id} xs={12} sm={6} md={4} lg={3}>
+                <Grid item key={place.id} xs={12} sm={6} md={4}>
                   <DestinationCard
                     place={place}
                     toggleLike={id => this.removeLike(id)}

@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from '@material-ui/core/styles'
+
+import { withStyles } from '@material-ui/core/styles'
+// import { useTheme } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
 
 import NatureIcon from '@material-ui/icons/Nature'
 
 import DestinationCard from '../../destinationCard/DestinationCard'
 
-const DestinationPin = props => {
-  const theme = useTheme()
-
-  const markerStyle = {
+const styles = theme => ({
+  markerStyle: {
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: '50%',
     // or set width & height to '1.8rem'
@@ -18,25 +18,43 @@ const DestinationPin = props => {
     width: 30,
     padding: 5,
     // Changes when active
-    backgroundColor: props.show
-      ? `${theme.palette.secondary.main}`
-      : `${theme.palette.background.paper}`,
-    color: props.show ? 'white' : 'black',
+    // backgroundColor: this.props.show
+    //   ? `${theme.palette.secondary.main}`
+    //   : `${theme.palette.background.paper}`,
+    // color: this.props.show ? 'white' : 'black',
+    backgroundColor: `${theme.palette.secondary.main}`,
+    color: 'white',
     zIndex: 10,
-  }
-
-  const infoWindowStyle = {
-    position: 'relative',
+  },
+  infoWindowStyle: {
+    // position: 'relative',
     bottom: 280,
     left: '-120px',
-    width: 250,
-  }
+    // width: 250,
+    position: 'relative',
+    // top: -400,
+    // left: -200,
+    width: 380,
+    // left: '50%',
+    // top: '50%',
+    // transform: 'translate(-50%, -50%)',
+    [theme.breakpoints.down('xs')]: {
+      width: 250,
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  },
+})
+
+const DestinationPin = props => {
+  const { classes } = props
 
   return (
     <Fragment>
-      <NatureIcon style={markerStyle} />
+      <NatureIcon className={classes.markerStyle} />
       {props.show && (
-        <div style={infoWindowStyle}>
+        <div className={classes.infoWindowStyle}>
           <DestinationCard
             place={props.place}
             toggleLike={props.toggleLike}
@@ -63,4 +81,4 @@ DestinationPin.propTypes = {
   }).isRequired,
 }
 
-export default withRouter(DestinationPin)
+export default withRouter(withStyles(styles)(DestinationPin))

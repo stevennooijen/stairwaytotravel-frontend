@@ -1,16 +1,15 @@
 import React, { Fragment } from 'react'
+import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles'
-// import { useTheme } from '@material-ui/core/styles'
-import { withRouter } from 'react-router-dom'
-
+import { makeStyles } from '@material-ui/core/styles'
 import NatureIcon from '@material-ui/icons/Nature'
 
 import DestinationCard from '../../destinationCard/DestinationCard'
 
-const styles = theme => ({
-  markerStyle: {
+// const styles = theme => ({
+const useStyles = makeStyles(theme => ({
+  markerStyle: props => ({
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: '50%',
     // or set width & height to '1.8rem'
@@ -18,37 +17,30 @@ const styles = theme => ({
     width: 30,
     padding: 5,
     // Changes when active
-    // backgroundColor: this.props.show
-    //   ? `${theme.palette.secondary.main}`
-    //   : `${theme.palette.background.paper}`,
-    // color: this.props.show ? 'white' : 'black',
-    backgroundColor: `${theme.palette.secondary.main}`,
-    color: 'white',
+    backgroundColor: props.show
+      ? `${theme.palette.secondary.main}`
+      : `${theme.palette.background.paper}`,
+    color: props.show ? 'white' : 'black',
     zIndex: 10,
-  },
+  }),
   infoWindowStyle: {
-    // position: 'relative',
-    bottom: 280,
-    left: '-120px',
-    // width: 250,
-    position: 'relative',
-    // top: -400,
-    // left: -200,
-    width: 380,
-    // left: '50%',
-    // top: '50%',
-    // transform: 'translate(-50%, -50%)',
+    // for now position in middle of screen
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    // adapt size of info window based on screen size
+    width: 400,
+    [theme.breakpoints.only('sm')]: {
+      width: 325,
+    },
     [theme.breakpoints.down('xs')]: {
       width: 250,
-      left: '50%',
-      top: '50%',
-      transform: 'translate(-50%, -50%)',
     },
   },
-})
+}))
 
 const DestinationPin = props => {
-  const { classes } = props
+  const classes = useStyles(props)
 
   return (
     <Fragment>
@@ -81,4 +73,4 @@ DestinationPin.propTypes = {
   }).isRequired,
 }
 
-export default withRouter(withStyles(styles)(DestinationPin))
+export default withRouter(DestinationPin)

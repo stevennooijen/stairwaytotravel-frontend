@@ -10,14 +10,19 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 400,
-    flexGrow: 1,
+  },
+  imageContainer: {
+    height: 0,
+    paddingTop: '75%', // 4:3
+    overflow: 'hidden',
+    position: 'relative',
   },
   img: {
-    height: 255,
-    maxWidth: 400,
-    overflow: 'hidden',
-    display: 'block',
+    position: 'absolute',
+    top: 0,
+    left: 0,
     width: '100%',
+    height: '100%',
   },
   favoriteCircle: {
     position: 'absolute',
@@ -59,7 +64,10 @@ export default function TextMobileStepper(props) {
         enableMouseEvents
       >
         {props.imageList.map((step, index) => (
-          <div key={step.label + step.imgPath}>
+          <div
+            key={step.label + step.imgPath}
+            className={classes.imageContainer}
+          >
             {Math.abs(activeStep - index) <= 2 ? (
               <img
                 className={classes.img}

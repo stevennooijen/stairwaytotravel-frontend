@@ -17,11 +17,11 @@ const useStyles = makeStyles(theme => ({
     height: 30,
     width: 30,
     padding: 5,
-    // Changes when active
-    backgroundColor: props.show
+    // Changes when liked
+    backgroundColor: props.place.liked
       ? `${theme.palette.secondary.main}`
       : `${theme.palette.background.paper}`,
-    color: props.show ? 'white' : 'black',
+    color: props.place.liked ? 'white' : 'black',
     zIndex: 10,
   }),
   infoWindowStyle: {

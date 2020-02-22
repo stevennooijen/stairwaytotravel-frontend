@@ -182,6 +182,7 @@ class Explore extends React.Component {
 
   toggleShowMap() {
     this.setState({ showMap: !this.state.showMap })
+    window.scrollTo(0, 0)
   }
 
   render() {

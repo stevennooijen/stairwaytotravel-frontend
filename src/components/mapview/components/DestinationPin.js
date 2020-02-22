@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
 import NatureIcon from '@material-ui/icons/Nature'
+import LocationCityIcon from '@material-ui/icons/LocationCity'
+import PlaceIcon from '@material-ui/icons/Place'
 
 import DestinationCard from '../../destinationCard/DestinationCard'
 
@@ -46,7 +48,13 @@ const DestinationPin = props => {
 
   return (
     <Fragment>
-      <NatureIcon className={classes.markerStyle} />
+      {props.place.dest_wiki_type === 'park' ? (
+        <NatureIcon className={classes.markerStyle} />
+      ) : ['guide', 'star'].includes(props.place.status) ? (
+        <LocationCityIcon className={classes.markerStyle} />
+      ) : (
+        <PlaceIcon className={classes.markerStyle} />
+      )}
       {props.show && (
         <div className={classes.infoWindowStyle}>
           <DestinationCard

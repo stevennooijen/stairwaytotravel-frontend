@@ -84,7 +84,7 @@ class DestinationCard extends Component {
             </IconButton>
           </Box>
         </PhotoCarousel>
-        <CardContent className={classes.cardContent}>
+        <CardContent className={classes.cardContent} align="center">
           <Typography color="textSecondary" variant="h6" component="h2">
             {place.name}
           </Typography>

@@ -48,7 +48,7 @@ const DestinationPin = props => {
 
   return (
     <Fragment>
-      {props.place.dest_wiki_type === 'park' ? (
+      {props.place.type === 'park' ? (
         <NatureIcon className={classes.markerStyle} />
       ) : ['guide', 'star'].includes(props.place.status) ? (
         <LocationCityIcon className={classes.markerStyle} />

@@ -89,7 +89,7 @@ class DestinationCard extends Component {
             {place.name}
           </Typography>
           <Typography color="textSecondary" variant="body1" component="p">
-            {place.country_name}
+            {place.country}
           </Typography>
         </CardContent>
       </Card>

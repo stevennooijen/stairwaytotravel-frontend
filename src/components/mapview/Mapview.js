@@ -69,7 +69,7 @@ class Mapview extends Component {
 
     // Center map op new chosen destination
     const place = this.props.places.find(place => place.id === id)
-    this.setState({ center: [place.latitude, place.longitude] })
+    this.setState({ center: [place.lat, place.lng] })
 
     // set state on which place to show destination window for
     this.setState(state => {
@@ -122,8 +122,8 @@ class Mapview extends Component {
                 // this is required to handle clicks
                 key={place.id}
                 // these are required by google map to plot
-                lat={place.latitude}
-                lng={place.longitude}
+                lat={place.lat}
+                lng={place.lng}
                 // these are passed along to destinationPin
                 show={place.id === this.state.showPlace ? true : false}
                 // place is the object containing all the destination stuff

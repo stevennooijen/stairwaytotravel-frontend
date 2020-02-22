@@ -16,6 +16,8 @@ const styles = theme => ({
   card: {
     height: '100%',
     maxWidth: 400,
+    // position needed to show favorite icon on top of card
+    position: 'relative',
     // boxShadow: 'none',
   },
   cardMedia: {

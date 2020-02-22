@@ -15,9 +15,6 @@ import PhotoCarousel from './Carousel'
 const styles = theme => ({
   card: {
     height: '100%',
-    // Make sure destinationPins don't show through the Card
-    zIndex: 20,
-    position: 'relative',
     maxWidth: 400,
     // boxShadow: 'none',
   },

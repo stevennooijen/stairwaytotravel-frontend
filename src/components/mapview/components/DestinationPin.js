@@ -7,7 +7,6 @@ import NatureIcon from '@material-ui/icons/Nature'
 
 import DestinationCard from '../../destinationCard/DestinationCard'
 
-// const styles = theme => ({
 const useStyles = makeStyles(theme => ({
   markerStyle: props => ({
     border: `1px solid ${theme.palette.divider}`,
@@ -24,6 +23,9 @@ const useStyles = makeStyles(theme => ({
     zIndex: 10,
   }),
   infoWindowStyle: {
+    // Make sure destinationPins don't show through the Card
+    position: 'absolute',
+    zIndex: 20,
     // for now position in middle of screen
     left: '50%',
     top: '50%',

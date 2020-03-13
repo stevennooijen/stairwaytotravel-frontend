@@ -44,6 +44,7 @@ class Explore extends React.Component {
       // For testing purposes, could use ExampleList from Constants
       // destinationList: ExampleList,
       loading: true,
+      destinationsFound: true,
       destinationList: [],
       likedDestinations: JSON.parse(
         sessionStorage.getItem('likedDestinations'),
@@ -115,35 +116,41 @@ class Explore extends React.Component {
       .then(response => response.json())
       .then(data => data.Destinations)
       .then(destinationList => {
-        // for each of the fetched destinations in the list do:
-        destinationList.forEach(item => {
-          // 1. retrieve flickr Images
-          GetFlickrImages(item.name)
-            .then(imageUrls => {
-              return {
-                ...item,
-                images: imageUrls,
-              }
+        destinationList.length > 0
+          ? // for each of the fetched destinations in the list do:
+            destinationList.forEach(item => {
+              // 1. retrieve flickr Images
+              GetFlickrImages(item.name)
+                .then(imageUrls => {
+                  return {
+                    ...item,
+                    images: imageUrls,
+                  }
+                })
+                // 2. set liked to true if destination already in likedList
+                .then(item => {
+                  if (this.state.likedDestinations.includes(item.id)) {
+                    return {
+                      ...item,
+                      liked: true,
+                    }
+                  } else {
+                    return item
+                  }
+                })
+                // 3. save fetched destination to state
+                .then(item =>
+                  this.setState({
+                    destinationList: [...this.state.destinationList, item],
+                    loading: false,
+                    destinationsFound: true,
+                  }),
+                )
             })
-            // 2. set liked to true if destination already in likedList
-            .then(item => {
-              if (this.state.likedDestinations.includes(item.id)) {
-                return {
-                  ...item,
-                  liked: true,
-                }
-              } else {
-                return item
-              }
+          : this.setState({
+              loading: false,
+              destinationsFound: false,
             })
-            // 3. save fetched destination to state
-            .then(item =>
-              this.setState({
-                destinationList: [...this.state.destinationList, item],
-                loading: false,
-              }),
-            )
-        })
       })
       .catch(err => console.log(err))
   }
@@ -275,7 +282,7 @@ class Explore extends React.Component {
               <Container className={classes.loaderContainer}>
                 <CircularProgress />
               </Container>
-            ) : this.state.destinationList.length > 0 ? (
+            ) : this.state.destinationsFound ? (
               // if destinations found
               <Album>
                 {this.state.destinationList.map(place => (

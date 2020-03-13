@@ -11,6 +11,7 @@ import DestinationCard from 'components/destinationCard/DestinationCard'
 import WarningCard from './WarningCard'
 import { fetchSingleDestination } from '../../components/fetching'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
+import FloatingActionButton from './FloatingActionButton'
 
 const styles = theme => ({
   loaderContainer: {
@@ -98,20 +99,23 @@ class Bucketlist extends React.Component {
         {this.state.destinationList ? (
           // Show loading indicator till destinations are fetched
           this.state.destinationList.length > 0 ? (
-            <Album>
-              {this.state.destinationList.map(place => (
-                <Grid item key={place.id} xs={12} sm={6} md={4}>
-                  <DestinationCard
-                    place={place}
-                    toggleLike={id => this.removeLike(id)}
-                    onClick={() => {
-                      // send to destination page
-                      this.props.history.push('/explore/' + place.id)
-                    }}
-                  />
-                </Grid>
-              ))}
-            </Album>
+            <div>
+              <Album>
+                {this.state.destinationList.map(place => (
+                  <Grid item key={place.id} xs={12} sm={6} md={4}>
+                    <DestinationCard
+                      place={place}
+                      toggleLike={id => this.removeLike(id)}
+                      onClick={() => {
+                        // send to destination page
+                        this.props.history.push('/explore/' + place.id)
+                      }}
+                    />
+                  </Grid>
+                ))}
+              </Album>
+              <FloatingActionButton />
+            </div>
           ) : (
             //  show Indeterminate progress indicator while waiting for destinations to load
             <Container className={classes.loaderContainer}>

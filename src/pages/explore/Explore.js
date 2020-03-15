@@ -241,6 +241,7 @@ class Explore extends React.Component {
                   this.setState({ showSearchHere: true })
                 }}
                 placeQuery={placeQuery}
+                mapBounds={this.state.mapBounds}
                 places={this.state.destinationList}
                 toggleLike={id => {
                   this.toggleLike(id)

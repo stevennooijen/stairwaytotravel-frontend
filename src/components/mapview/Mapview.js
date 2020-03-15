@@ -44,16 +44,29 @@ class Mapview extends Component {
   // TODO: check with Leon if there is a better way of doing this to separate this logic from SearchBox
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.placeQuery !== this.props.placeQuery) {
-      this.handleUpdateMap(this.props.placeQuery, this.props.mapInstance)
+      this.handlePlaceUpdateMap(this.props.placeQuery, this.props.mapInstance)
     }
     // This focusses the map on placeQuery when it is loaded again
     if (prevProps.mapInstance !== this.props.mapInstance) {
-      this.handleUpdateMap(this.props.placeQuery, this.props.mapInstance)
+      this.handleBoundsUpdateMap(this.props.mapBounds, this.props.mapInstance)
+    }
+  }
+
+  handleBoundsUpdateMap(bounds, map) {
+    if (isEmpty(bounds)) return
+    else {
+      const mapBounds = new window.google.maps.LatLngBounds()
+      const ne = new window.google.maps.LatLng(bounds.ne)
+      const sw = new window.google.maps.LatLng(bounds.sw)
+      mapBounds.extend(ne)
+      mapBounds.extend(sw)
+      // 0 for no padding! otherwise padding is added to the map bounds
+      map.fitBounds(mapBounds, 0)
     }
   }
 
   // Update map viewport
-  handleUpdateMap(place, map) {
+  handlePlaceUpdateMap(place, map) {
     if (!place.geometry) return
     if (place.geometry.viewport) {
       map.fitBounds(place.geometry.viewport)

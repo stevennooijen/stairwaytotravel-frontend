@@ -119,6 +119,7 @@ class Home extends React.Component {
             color="inherit"
             onClick={() => {
               sessionStorage.clear()
+              savePlaceQuery('')
             }}
             size="large"
           >

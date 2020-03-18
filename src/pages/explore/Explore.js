@@ -1,5 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
+import queryString from 'query-string'
 
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
@@ -39,6 +40,7 @@ class Explore extends React.Component {
 
     this.state = {
       // state for query
+      queryParams: queryString.parse(this.props.location.search),
       // continent: sessionStorage.getItem('continent'),
       mapBounds: {},
       // For testing purposes, could use ExampleList from Constants
@@ -87,6 +89,9 @@ class Explore extends React.Component {
 
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
+    // Set defaults based on query string parameters
+    if (this.state.queryParams.map === 'true') this.setState({ showMap: true })
+
     // If no already liked destinations, set to empty array
     if (this.state.likedDestinations === null)
       this.setState({ likedDestinations: [] })
@@ -190,6 +195,16 @@ class Explore extends React.Component {
   toggleShowMap() {
     this.setState({ showMap: !this.state.showMap })
     window.scrollTo(0, 0)
+    // Update query string in url
+    const newQueryParams = this.state.queryParams
+    newQueryParams.map = !this.state.showMap
+    this.pushUrlWithQueryParams(newQueryParams)
+  }
+
+  pushUrlWithQueryParams(queryParams) {
+    this.props.history.push(
+      this.props.location.pathname + '?' + queryString.stringify(queryParams),
+    )
   }
 
   render() {

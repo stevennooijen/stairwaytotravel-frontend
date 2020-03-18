@@ -8,9 +8,12 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
   },
   fab: {
-    position: 'absolute',
+    position: 'fixed',
     top: theme.spacing(10),
     zIndex: 200,
+    // align in the middle
+    left: '50%',
+    transform: 'translate(-50%)',
   },
 }))
 

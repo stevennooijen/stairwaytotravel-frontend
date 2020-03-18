@@ -24,11 +24,14 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
   },
-  // in order to position searchHereButton in middle of mapview
-  mapview: {
+  body: {
     display: 'flex',
-    alignItems: 'center',
     flexDirection: 'column',
+    height: '100vh',
+  },
+  // in order to position searchHereButton in middle of mapview
+  mapContainer: {
+    flexGrow: 1,
   },
 })
 
@@ -212,7 +215,7 @@ class Explore extends React.Component {
     const { mapApiLoaded, mapInstance, mapApi } = this.state
 
     return (
-      <main>
+      <div className={classes.body}>
         {/* Show map or show stream */}
         {this.state.showMap ? (
           // Map - in this case the searchBox uses the same mapInstance as the map itself
@@ -237,15 +240,15 @@ class Explore extends React.Component {
                 />
               )}
             </ExploreBar>
-            <div className={classes.mapview}>
-              {this.state.showSearchHere ? (
-                <SearchHereButton
-                  onClick={() => {
-                    this.setState({ showSearchHere: false })
-                    this.fetchDestinations(this.state.mapBounds)
-                  }}
-                />
-              ) : null}
+            {this.state.showSearchHere && (
+              <SearchHereButton
+                onClick={() => {
+                  this.setState({ showSearchHere: false })
+                  this.fetchDestinations(this.state.mapBounds)
+                }}
+              />
+            )}
+            <div className={classes.mapContainer}>
               <Mapview
                 // Create Google mapInstance object in Mapview and save in Explore state
                 apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
@@ -263,7 +266,6 @@ class Explore extends React.Component {
                   this.updateLikedDestinationsList(id)
                 }}
               />
-              }
             </div>
           </React.Fragment>
         ) : (
@@ -327,7 +329,7 @@ class Explore extends React.Component {
             )}
           </React.Fragment>
         )}
-      </main>
+      </div>
     )
   }
 }

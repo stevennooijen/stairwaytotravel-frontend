@@ -9,8 +9,7 @@ const AMSTERDAM_CENTER = [52.3667, 4.8945]
 const styles = theme => ({
   wrapper: {
     // This is a hard requirement for GoogleMapReact to display. Don't change!
-    width: '100%',
-    height: '100vh',
+    height: '100%',
   },
 })
 

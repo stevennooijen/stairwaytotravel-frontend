@@ -1,30 +1,34 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { withStyles } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import queryString from 'query-string'
 
+import { withStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import SearchIcon from '@material-ui/icons/Search'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import ExploreIcon from '@material-ui/icons/Explore'
-
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import Slide from '@material-ui/core/Slide'
-import PropTypes from 'prop-types'
 
 // Taken from hidden app-bar example: https://material-ui.com/components/app-bar/
 function HideOnScroll(props) {
-  const { children, pathname } = props
+  const { children, location } = props
   const trigger = useScrollTrigger()
   const pages = ['/', '/about']
+  const queryParams = queryString.parse(location.search)
 
   return (
     <Slide
       appear={false}
       direction="up"
-      // make sure appbar doesn't display when on top of certain pages
+      // make sure appbar doesn't display when on top of certain pages, or when map is open
       in={
-        pages.includes(pathname) && window.pageYOffset === 0 ? false : !trigger
+        pages.includes(location.pathname) ||
+        (queryParams.map === 'true' && window.pageYOffset === 0)
+          ? false
+          : !trigger
       }
     >
       {children}
@@ -56,15 +60,13 @@ const styles = theme => ({
 
 class SimpleBottomNavigation extends Component {
   state = {
-    value: this.props.location.pathname,
+    location: this.props.location,
   }
 
   // Update state in case the url changes due to a link from /home
   componentWillReceiveProps(newProps) {
-    const { pathname } = newProps.location
-
     this.setState({
-      value: pathname,
+      location: newProps.location,
     })
   }
 
@@ -76,14 +78,14 @@ class SimpleBottomNavigation extends Component {
   }
 
   render() {
-    const { value } = this.state
+    const { location } = this.state
     const { classes } = this.props
 
     return (
       // Add transition on the navbar
-      <HideOnScroll pathname={this.state.value}>
+      <HideOnScroll location={location}>
         <BottomNavigation
-          value={value}
+          value={location.pathname}
           onChange={this.handleChange}
           showLabels
           // className is used to give the div an id

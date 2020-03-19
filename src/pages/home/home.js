@@ -46,6 +46,10 @@ class Home extends React.Component {
     }
   }
 
+  componentDidMount() {
+    window.scrollTo(0, 0)
+  }
+
   apiHasLoaded = (map, maps) => {
     this.setState({
       mapsApiLoaded: true,

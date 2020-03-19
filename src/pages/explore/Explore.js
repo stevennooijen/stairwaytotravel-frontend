@@ -215,11 +215,11 @@ class Explore extends React.Component {
     const { mapApiLoaded, mapInstance, mapApi } = this.state
 
     return (
-      <div className={classes.body}>
+      <div>
         {/* Show map or show stream */}
         {this.state.showMap ? (
           // Map - in this case the searchBox uses the same mapInstance as the map itself
-          <React.Fragment>
+          <div className={classes.body}>
             <ExploreBar
               showMap={this.state.showMap}
               toggleShowMap={() => this.toggleShowMap()}
@@ -267,7 +267,7 @@ class Explore extends React.Component {
                 }}
               />
             </div>
-          </React.Fragment>
+          </div>
         ) : (
           // Stream - in this case we create a mapInstance for the searchBox only
           <React.Fragment>

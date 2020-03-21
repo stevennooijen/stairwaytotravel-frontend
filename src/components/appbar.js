@@ -11,6 +11,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite'
 import ExploreIcon from '@material-ui/icons/Explore'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 import Slide from '@material-ui/core/Slide'
+import Badge from '@material-ui/core/Badge'
 
 // Taken from hidden app-bar example: https://material-ui.com/components/app-bar/
 function HideOnScroll(props) {
@@ -75,11 +76,15 @@ class SimpleBottomNavigation extends Component {
     // change history programatically when value changes
     // https://stackoverflow.com/questions/48907932/material-ui-app-bar-w-react-router
     this.props.history.push(value)
+    // Make sure notification dot for new likes is set to false after visiting bucketlist
+    if (value === '/bucketlist') {
+      this.props.setNewLike(false)
+    }
   }
 
   render() {
     const { location } = this.state
-    const { classes } = this.props
+    const { classes, newLike } = this.props
 
     return (
       // Add transition on the navbar
@@ -104,7 +109,11 @@ class SimpleBottomNavigation extends Component {
           <BottomNavigationAction
             label="Bucket List"
             value="/bucketlist"
-            icon={<FavoriteIcon />}
+            icon={
+              <Badge color="primary" variant="dot" invisible={!newLike}>
+                <FavoriteIcon />
+              </Badge>
+            }
           />
         </BottomNavigation>
       </HideOnScroll>

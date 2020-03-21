@@ -54,6 +54,7 @@ class Explore extends React.Component {
       likedDestinations: JSON.parse(
         sessionStorage.getItem('likedDestinations'),
       ),
+      newLikes: [],
 
       showMap: false,
       showSearchHere: false,
@@ -195,6 +196,20 @@ class Explore extends React.Component {
     )
   }
 
+  updateNewLikes(id) {
+    // Same as above, can be turned into generic helper function!
+    const newLikes = this.state.newLikes
+    const newNewLikes = newLikes.includes(id)
+      ? newLikes.filter(item => item !== id)
+      : [...newLikes, id]
+    this.setState({ newLikes: newNewLikes })
+
+    // set newLike for notification dot when there are new likes
+    if (newNewLikes.length > 0) {
+      this.props.setNewLike(true)
+    } else this.props.setNewLike(false)
+  }
+
   toggleShowMap() {
     this.setState({ showMap: !this.state.showMap })
     window.scrollTo(0, 0)
@@ -264,6 +279,7 @@ class Explore extends React.Component {
                 toggleLike={id => {
                   this.toggleLike(id)
                   this.updateLikedDestinationsList(id)
+                  this.updateNewLikes(id)
                 }}
               />
             </div>
@@ -312,6 +328,7 @@ class Explore extends React.Component {
                       toggleLike={id => {
                         this.toggleLike(id)
                         this.updateLikedDestinationsList(id)
+                        this.updateNewLikes(id)
                       }}
                       onClick={() => {
                         // send to destination page

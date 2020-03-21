@@ -9,6 +9,7 @@ import App from './App'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 
+import SimpleBottomNavigation from 'components/appbar'
 import { Home } from './pages/home'
 import { Explore, DestinationPage } from './pages/explore'
 import { Bucketlist } from './pages/bucketlist'
@@ -20,6 +21,7 @@ class Root extends React.Component {
     // TODO: eventually pass on this global state through url parameters
     this.state = {
       placeQuery: '',
+      newLike: false,
     }
   }
 
@@ -27,8 +29,12 @@ class Root extends React.Component {
     this.setState({ placeQuery: place })
   }
 
+  setNewLike = value => {
+    this.setState({ newLike: value })
+  }
+
   render() {
-    const { placeQuery } = this.state
+    const { placeQuery, newLike } = this.state
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -56,16 +62,20 @@ class Root extends React.Component {
                     {...props}
                     placeQuery={placeQuery}
                     savePlaceQuery={this.savePlaceQuery}
+                    setNewLike={this.setNewLike}
                   />
                 )}
               />
               <Route path="/explore/:name" component={DestinationPage} />
               <Route path="/bucketlist" render={() => <Bucketlist />} />
               <Route path="/about" render={() => <About />} />
+              <SimpleBottomNavigation
+                newLike={newLike}
+                setNewLike={this.setNewLike}
+              />
             </App>
           </div>
         </Router>
-        ,
       </MuiThemeProvider>
     )
   }

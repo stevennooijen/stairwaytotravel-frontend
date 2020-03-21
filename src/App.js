@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+
 import { withStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-
-import SimpleBottomNavigation from 'components/appbar'
 
 import ReactGA from 'react-ga'
 
@@ -32,7 +31,6 @@ class App extends Component {
       <div className="App">
         <CssBaseline />
         {children}
-        <SimpleBottomNavigation />
       </div>
     )
   }

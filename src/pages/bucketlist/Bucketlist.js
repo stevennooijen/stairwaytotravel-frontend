@@ -15,9 +15,7 @@ import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import FloatingActionButton from './FloatingActionButton'
 
 import ExploreBar from '../explore/components/ExploreBar'
-import { Mapview } from '../../components/mapview'
-import GoogleMap from '../../components/mapview/components/GoogleMap'
-import DestinationPin from '../../components/mapview/components/DestinationPin'
+import Mapview from '../../components/mapview/MapviewBucketlist'
 
 const styles = theme => ({
   loaderContainer: {
@@ -64,6 +62,9 @@ const apiIsLoaded = (map, maps, places) => {
   const bounds = getMapBounds(map, maps, places)
   // Fit map to bounds
   map.fitBounds(bounds)
+  // Enforce minimal zoom level
+  const zoom = map.getZoom()
+  map.setZoom(zoom > 8 ? 8 : zoom)
   // Bind the resize listener
   bindResizeListener(map, maps, bounds)
 }
@@ -165,26 +166,15 @@ class Bucketlist extends React.Component {
         />
         {this.state.showMap ? (
           <div className={classes.mapContainer}>
-            <GoogleMap
-              onGoogleApiLoaded={({ map, maps }) =>
+            <Mapview
+              apiHasLoaded={(map, maps) =>
                 apiIsLoaded(map, maps, this.state.destinationList)
               }
-            >
-              {this.state.destinationList.map(place => (
-                <DestinationPin
-                  // this is required to handle clicks
-                  key={place.id}
-                  // these are required by google map to plot
-                  lat={place.lat}
-                  lng={place.lng}
-                  // these are passed along to destinationPin
-                  show={place.id === this.state.showPlace ? true : false}
-                  // place is the object containing all the destination stuff
-                  place={place}
-                  toggleLike={id => this.removeLike(id)}
-                />
-              ))}
-            </GoogleMap>
+              places={this.state.destinationList}
+              toggleLike={id => {
+                this.removeLike(id)
+              }}
+            />
           </div>
         ) : // {/* If no likedDestinations, destinationsList is set to null and warning should be displayed */}
         this.state.destinationList ? (

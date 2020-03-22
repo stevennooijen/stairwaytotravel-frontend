@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 import GoogleMap from './components/GoogleMap'
 import DestinationPin from './components/DestinationPin'
+import { isEmpty } from '../utils'
 
 const AMSTERDAM_CENTER = [52.3667, 4.8945]
 
@@ -17,16 +18,6 @@ function createMapOptions() {
   return {
     gestureHandling: 'greedy', // Will capture all touch events on the map towards map panning
   }
-}
-
-// to replace lodash.isEmpty import
-function isEmpty(value) {
-  return (
-    value === undefined ||
-    value === null ||
-    (typeof value === 'object' && Object.keys(value).length === 0) ||
-    (typeof value === 'string' && value.trim().length === 0)
-  )
 }
 
 class Mapview extends Component {

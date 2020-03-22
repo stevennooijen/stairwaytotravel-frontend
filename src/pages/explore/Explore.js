@@ -17,6 +17,7 @@ import GoogleMap from '../../components/mapview/components/GoogleMap'
 import SearchHereButton from '../../components/mapview/components/SeachHereButton'
 import NothingFoundCard from './components/NothingFoundCard'
 import FetchExploreDestinations from '../../components/fetching/FetchExploreDestinations'
+import { isEmpty } from '../../components/utils'
 
 const styles = theme => ({
   loaderContainer: {
@@ -34,16 +35,6 @@ const styles = theme => ({
     flexGrow: 1,
   },
 })
-
-// to replace lodash.isEmpty import
-function isEmpty(value) {
-  return (
-    value === undefined ||
-    value === null ||
-    (typeof value === 'object' && Object.keys(value).length === 0) ||
-    (typeof value === 'string' && value.trim().length === 0)
-  )
-}
 
 const handleBoundsUpdateMap = (map, bounds) => {
   if (isEmpty(bounds)) return

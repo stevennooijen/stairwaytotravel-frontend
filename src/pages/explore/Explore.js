@@ -35,6 +35,40 @@ const styles = theme => ({
   },
 })
 
+// to replace lodash.isEmpty import
+function isEmpty(value) {
+  return (
+    value === undefined ||
+    value === null ||
+    (typeof value === 'object' && Object.keys(value).length === 0) ||
+    (typeof value === 'string' && value.trim().length === 0)
+  )
+}
+
+const handleBoundsUpdateMap = (map, bounds) => {
+  if (isEmpty(bounds)) return
+  else {
+    const mapBounds = new window.google.maps.LatLngBounds()
+    const ne = new window.google.maps.LatLng(bounds.ne)
+    const sw = new window.google.maps.LatLng(bounds.sw)
+    mapBounds.extend(ne)
+    mapBounds.extend(sw)
+    // 0 for no padding! otherwise padding is added to the map bounds
+    map.fitBounds(mapBounds, 0)
+  }
+}
+
+// Update map viewport
+const handlePlaceUpdateMap = (map, place) => {
+  if (!place.geometry) return
+  if (place.geometry.viewport) {
+    map.fitBounds(place.geometry.viewport)
+  } else {
+    map.setCenter(place.geometry.location)
+    map.setZoom(17)
+  }
+}
+
 class Explore extends React.Component {
   // _isMounted = false
 
@@ -62,6 +96,18 @@ class Explore extends React.Component {
       mapApiLoaded: false,
       mapInstance: null,
       mapApi: null,
+    }
+  }
+
+  // Check for state changes in PlaceQuery to update map
+  // TODO: check with Leon if there is a better way of doing this to separate this logic from SearchBox
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.placeQuery !== this.props.placeQuery) {
+      handlePlaceUpdateMap(this.state.mapInstance, this.props.placeQuery)
+    }
+    // This focusses the map on placeQuery when it is loaded again
+    if (prevState.mapInstance !== this.state.mapInstance) {
+      handleBoundsUpdateMap(this.state.mapInstance, this.state.mapBounds)
     }
   }
 
@@ -268,13 +314,10 @@ class Explore extends React.Component {
                 // Create Google mapInstance object in Mapview and save in Explore state
                 apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
                 // Pass on other stuff
-                mapInstance={mapInstance}
                 handleOnChange={newBounds => {
                   this.handleBoundsChange(newBounds)
                   this.setState({ showSearchHere: true })
                 }}
-                placeQuery={placeQuery}
-                mapBounds={this.state.mapBounds}
                 places={this.state.destinationList}
                 toggleLike={id => {
                   this.toggleLike(id)

@@ -13,9 +13,10 @@ import WarningCard from './WarningCard'
 import { fetchSingleDestination } from '../../components/fetching'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import FloatingActionButton from './FloatingActionButton'
-
 import ExploreBar from '../explore/components/ExploreBar'
-import Mapview from '../../components/mapview/MapviewBucketlist'
+import { Mapview } from '../../components/mapview'
+
+const MINIMUM_ZOOM = 8
 
 const styles = theme => ({
   loaderContainer: {
@@ -64,7 +65,7 @@ const apiIsLoaded = (map, maps, places) => {
   map.fitBounds(bounds)
   // Enforce minimal zoom level
   const zoom = map.getZoom()
-  map.setZoom(zoom > 8 ? 8 : zoom)
+  map.setZoom(zoom > MINIMUM_ZOOM ? MINIMUM_ZOOM : zoom)
   // Bind the resize listener
   bindResizeListener(map, maps, bounds)
 }

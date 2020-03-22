@@ -15,6 +15,11 @@ import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import FloatingActionButton from './FloatingActionButton'
 import ExploreBar from '../explore/components/ExploreBar'
 import { Mapview } from '../../components/mapview'
+import {
+  getMapBounds,
+  bindResizeListener,
+} from '../../components/mapview/utils'
+import { pushUrlWithQueryParams } from '../../components/utils'
 
 const MINIMUM_ZOOM = 8
 
@@ -34,28 +39,6 @@ const styles = theme => ({
     flexGrow: 1,
   },
 })
-
-// Return map bounds based on list of places
-const getMapBounds = (map, maps, places) => {
-  const bounds = new maps.LatLngBounds()
-
-  places.forEach(place => {
-    bounds.extend(
-      // new maps.LatLng(place.geometry.location.lat, place.geometry.location.lng),
-      new maps.LatLng(place.lat, place.lng),
-    )
-  })
-  return bounds
-}
-
-// Re-center map when resizing the window
-const bindResizeListener = (map, maps, bounds) => {
-  maps.event.addDomListenerOnce(map, 'idle', () => {
-    maps.event.addDomListener(window, 'resize', () => {
-      map.fitBounds(bounds)
-    })
-  })
-}
 
 // Fit map to its bounds after the api is loaded
 const apiIsLoaded = (map, maps, places) => {
@@ -147,13 +130,7 @@ class Bucketlist extends React.Component {
     // Update query string in url
     const newQueryParams = this.state.queryParams
     newQueryParams.map = !this.state.showMap
-    this.pushUrlWithQueryParams(newQueryParams)
-  }
-
-  pushUrlWithQueryParams(queryParams) {
-    this.props.history.push(
-      this.props.location.pathname + '?' + queryString.stringify(queryParams),
-    )
+    pushUrlWithQueryParams(newQueryParams, this.props)
   }
 
   render() {

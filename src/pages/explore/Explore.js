@@ -17,7 +17,12 @@ import GoogleMap from '../../components/mapview/components/GoogleMap'
 import SearchHereButton from '../../components/mapview/components/SeachHereButton'
 import NothingFoundCard from './components/NothingFoundCard'
 import FetchExploreDestinations from '../../components/fetching/FetchExploreDestinations'
-import { isEmpty } from '../../components/utils'
+import {
+  fitMapToPlace,
+  fitMapToBounds,
+  extractBoundsFromPlaceObject,
+} from '../../components/mapview/utils'
+import { pushUrlWithQueryParams } from '../../components/utils'
 
 const styles = theme => ({
   loaderContainer: {
@@ -35,30 +40,6 @@ const styles = theme => ({
     flexGrow: 1,
   },
 })
-
-const handleBoundsUpdateMap = (map, bounds) => {
-  if (isEmpty(bounds)) return
-  else {
-    const mapBounds = new window.google.maps.LatLngBounds()
-    const ne = new window.google.maps.LatLng(bounds.ne)
-    const sw = new window.google.maps.LatLng(bounds.sw)
-    mapBounds.extend(ne)
-    mapBounds.extend(sw)
-    // 0 for no padding! otherwise padding is added to the map bounds
-    map.fitBounds(mapBounds, 0)
-  }
-}
-
-// Update map viewport
-const handlePlaceUpdateMap = (map, place) => {
-  if (!place.geometry) return
-  if (place.geometry.viewport) {
-    map.fitBounds(place.geometry.viewport)
-  } else {
-    map.setCenter(place.geometry.location)
-    map.setZoom(17)
-  }
-}
 
 class Explore extends React.Component {
   // _isMounted = false
@@ -94,11 +75,11 @@ class Explore extends React.Component {
   // TODO: check with Leon if there is a better way of doing this to separate this logic from SearchBox
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.placeQuery !== this.props.placeQuery) {
-      handlePlaceUpdateMap(this.state.mapInstance, this.props.placeQuery)
+      fitMapToPlace(this.state.mapInstance, this.props.placeQuery)
     }
     // This focusses the map on placeQuery when it is loaded again
     if (prevState.mapInstance !== this.state.mapInstance) {
-      handleBoundsUpdateMap(this.state.mapInstance, this.state.mapBounds)
+      fitMapToBounds(this.state.mapInstance, this.state.mapBounds)
     }
   }
 
@@ -114,20 +95,6 @@ class Explore extends React.Component {
     this.setState({ mapBounds: newBounds })
   }
 
-  extractBoundsFromPlaceObject = googlePlaceObject => {
-    const viewport = googlePlaceObject.geometry.viewport
-    return {
-      ne: {
-        lat: viewport.getNorthEast().lat(),
-        lng: viewport.getNorthEast().lng(),
-      },
-      sw: {
-        lat: viewport.getSouthWest().lat(),
-        lng: viewport.getSouthWest().lng(),
-      },
-    }
-  }
-
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
     // Set defaults based on query string parameters
@@ -139,7 +106,7 @@ class Explore extends React.Component {
 
     // retrieve bounds from PlaceQuery
     const bounds = this.props.placeQuery
-      ? this.extractBoundsFromPlaceObject(this.props.placeQuery)
+      ? extractBoundsFromPlaceObject(this.props.placeQuery)
       : null
     if (bounds) {
       this.handleBoundsChange(bounds)
@@ -253,13 +220,7 @@ class Explore extends React.Component {
     // Update query string in url
     const newQueryParams = this.state.queryParams
     newQueryParams.map = !this.state.showMap
-    this.pushUrlWithQueryParams(newQueryParams)
-  }
-
-  pushUrlWithQueryParams(queryParams) {
-    this.props.history.push(
-      this.props.location.pathname + '?' + queryString.stringify(queryParams),
-    )
+    pushUrlWithQueryParams(newQueryParams, this.props)
   }
 
   render() {
@@ -284,7 +245,7 @@ class Explore extends React.Component {
                   placeName={placeQuery}
                   handlePlaceChange={place => {
                     savePlaceQuery(place)
-                    const bounds = this.extractBoundsFromPlaceObject(place)
+                    const bounds = extractBoundsFromPlaceObject(place)
                     this.handleBoundsChange(bounds)
                     this.fetchDestinations(bounds)
                     // Map centering is triggered by change in placeQuery state in Mapview component
@@ -338,7 +299,7 @@ class Explore extends React.Component {
                   placeName={placeQuery}
                   handlePlaceChange={place => {
                     savePlaceQuery(place)
-                    const bounds = this.extractBoundsFromPlaceObject(place)
+                    const bounds = extractBoundsFromPlaceObject(place)
                     this.handleBoundsChange(bounds)
                     this.fetchDestinations(bounds)
                   }}

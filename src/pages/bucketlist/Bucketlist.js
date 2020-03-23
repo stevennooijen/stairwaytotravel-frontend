@@ -3,9 +3,9 @@ import { withRouter } from 'react-router-dom'
 import queryString from 'query-string'
 
 import { withStyles } from '@material-ui/core/styles'
+import { Typography, Container } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Container from '@material-ui/core/Container'
 import ExploreIcon from '@material-ui/icons/Explore'
 
 import Album from 'components/Album'
@@ -26,6 +26,9 @@ import MapFloatingActionButton from '../../components/mapview/components/MapFloa
 const MINIMUM_ZOOM = 8
 
 const styles = theme => ({
+  pageTitle: {
+    width: '100%',
+  },
   loaderContainer: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -148,7 +151,11 @@ class Bucketlist extends React.Component {
         <ExploreBar
           showMap={this.state.showMap}
           toggleShowMap={() => this.toggleShowMap()}
-        />
+        >
+          <Typography variant="h5" component="h1" className={classes.pageTitle}>
+            My bucketlist
+          </Typography>
+        </ExploreBar>
         {this.state.showMap ? (
           <React.Fragment>
             {/* if no destinations show FAB on map to start exploring */}

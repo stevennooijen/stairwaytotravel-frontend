@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import { withStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
-import NavigationIcon from '@material-ui/icons/Navigation'
+import FlightTakeoffIcon from '@material-ui/icons/FlightTakeoff'
 
 const styles = theme => ({
   fab: {
@@ -13,9 +13,6 @@ const styles = theme => ({
     left: 'auto',
     position: 'fixed',
   },
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-  },
 })
 
 class FloatingActionButton extends Component {
@@ -23,9 +20,8 @@ class FloatingActionButton extends Component {
     const { classes } = this.props
 
     return (
-      <Fab variant="extended" className={classes.fab}>
-        <NavigationIcon className={classes.extendedIcon} />
-        Navigate
+      <Fab color="primary" aria-label="book it" className={classes.fab}>
+        <FlightTakeoffIcon />
       </Fab>
     )
   }

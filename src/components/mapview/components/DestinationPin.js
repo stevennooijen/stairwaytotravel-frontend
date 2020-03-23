@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     padding: 5,
     // Changes when liked
     backgroundColor: props.place.liked
-      ? `${theme.palette.secondary.main}`
+      ? `${theme.palette.primary.main}`
       : `${theme.palette.background.paper}`,
     color: props.place.liked ? 'white' : 'black',
     zIndex: 10,

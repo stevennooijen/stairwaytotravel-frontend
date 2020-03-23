@@ -79,7 +79,7 @@ class ExploreBar extends React.PureComponent {
       <div>
         <AppBar
           position="fixed"
-          //   color="default"
+          color="default"
           className={`${classes.root} ${
             this.state.shouldShow === null
               ? ''
@@ -100,7 +100,6 @@ class ExploreBar extends React.PureComponent {
                   aria-haspopup="true"
                   //   TODO: add action for mapview
                   onClick={toggleShowMap}
-                  color="inherit"
                 >
                   {showMap ? <ViewStreamIcon /> : <MapIcon />}
                 </IconButton>

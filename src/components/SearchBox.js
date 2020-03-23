@@ -6,10 +6,11 @@ import SearchIcon from '@material-ui/icons/Search'
 const styles = theme => ({
   search: {
     position: 'relative',
+    border: `1px solid ${theme.palette.divider}`,
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: fade(theme.palette.background.paper, 0.15),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: fade(theme.palette.background.paper, 0.25),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -28,7 +29,6 @@ const styles = theme => ({
     justifyContent: 'center',
   },
   inputRoot: {
-    color: 'inherit',
     width: '100%',
   },
   inputInput: {

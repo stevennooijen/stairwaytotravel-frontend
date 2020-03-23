@@ -152,7 +152,7 @@ class Bucketlist extends React.Component {
           showMap={this.state.showMap}
           toggleShowMap={() => this.toggleShowMap()}
         >
-          <Typography variant="h5" component="h1" className={classes.pageTitle}>
+          <Typography variant="h6" component="h1" className={classes.pageTitle}>
             My bucket list
           </Typography>
         </ExploreBar>

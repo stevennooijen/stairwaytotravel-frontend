@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '@material-ui/core/Container'
+import RefreshIcon from '@material-ui/icons/Refresh'
 
 import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
@@ -14,7 +15,7 @@ import ExploreBar from './components/ExploreBar'
 import { Mapview } from '../../components/mapview'
 import SearchBox from '../../components/SearchBox'
 import GoogleMap from '../../components/mapview/components/GoogleMap'
-import SearchHereButton from '../../components/mapview/components/SeachHereButton'
+import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
 import NothingFoundCard from './components/NothingFoundCard'
 import FetchExploreDestinations from '../../components/fetching/FetchExploreDestinations'
 import {
@@ -30,12 +31,15 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
   body: {
     display: 'flex',
     flexDirection: 'column',
     height: '100vh',
   },
-  // in order to position searchHereButton in middle of mapview
+  // in order to position MapFloatingActionButton in middle of mapview
   mapContainer: {
     flexGrow: 1,
   },
@@ -254,12 +258,15 @@ class Explore extends React.Component {
               )}
             </ExploreBar>
             {this.state.showSearchHere && (
-              <SearchHereButton
+              <MapFloatingActionButton
                 onClick={() => {
                   this.setState({ showSearchHere: false })
                   this.fetchDestinations(this.state.mapBounds)
                 }}
-              />
+              >
+                <RefreshIcon className={classes.extendedIcon} />
+                Search here
+              </MapFloatingActionButton>
             )}
             <div className={classes.mapContainer}>
               <Mapview

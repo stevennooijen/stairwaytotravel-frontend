@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '@material-ui/core/Container'
+import ExploreIcon from '@material-ui/icons/Explore'
 
 import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
@@ -20,6 +21,7 @@ import {
   bindResizeListener,
 } from '../../components/mapview/utils'
 import { pushUrlWithQueryParams } from '../../components/utils'
+import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
 
 const MINIMUM_ZOOM = 8
 
@@ -29,12 +31,15 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
   body: {
     display: 'flex',
     flexDirection: 'column',
     height: '100vh',
   },
-  // in order to position searchHereButton in middle of mapview
+  // in order to position MapFloatingActionButton in middle of mapview
   mapContainer: {
     flexGrow: 1,
   },
@@ -42,15 +47,17 @@ const styles = theme => ({
 
 // Fit map to its bounds after the api is loaded
 const apiIsLoaded = (map, maps, places) => {
-  // Get bounds by our places
-  const bounds = getMapBounds(map, maps, places)
-  // Fit map to bounds
-  map.fitBounds(bounds)
-  // Enforce minimal zoom level
-  const zoom = map.getZoom()
-  map.setZoom(zoom > MINIMUM_ZOOM ? MINIMUM_ZOOM : zoom)
-  // Bind the resize listener
-  bindResizeListener(map, maps, bounds)
+  if (places !== null) {
+    // Get bounds by our places
+    const bounds = getMapBounds(map, maps, places)
+    // Fit map to bounds
+    map.fitBounds(bounds)
+    // Enforce minimal zoom level
+    const zoom = map.getZoom()
+    map.setZoom(zoom > MINIMUM_ZOOM ? MINIMUM_ZOOM : zoom)
+    // Bind the resize listener
+    bindResizeListener(map, maps, bounds)
+  }
 }
 
 class Bucketlist extends React.Component {
@@ -143,17 +150,31 @@ class Bucketlist extends React.Component {
           toggleShowMap={() => this.toggleShowMap()}
         />
         {this.state.showMap ? (
-          <div className={classes.mapContainer}>
-            <Mapview
-              apiHasLoaded={(map, maps) =>
-                apiIsLoaded(map, maps, this.state.destinationList)
-              }
-              places={this.state.destinationList}
-              toggleLike={id => {
-                this.removeLike(id)
-              }}
-            />
-          </div>
+          <React.Fragment>
+            {/* if no destinations show FAB on map to start exploring */}
+            {this.state.destinationList === null && (
+              <MapFloatingActionButton
+                onClick={() => {
+                  this.props.history.push('/explore')
+                }}
+              >
+                <ExploreIcon className={classes.extendedIcon} />
+                Start exploring
+              </MapFloatingActionButton>
+            )}
+            {/* map component */}
+            <div className={classes.mapContainer}>
+              <Mapview
+                apiHasLoaded={(map, maps) =>
+                  apiIsLoaded(map, maps, this.state.destinationList)
+                }
+                places={this.state.destinationList}
+                toggleLike={id => {
+                  this.removeLike(id)
+                }}
+              />
+            </div>
+          </React.Fragment>
         ) : // {/* If no likedDestinations, destinationsList is set to null and warning should be displayed */}
         this.state.destinationList ? (
           // Show loading indicator till destinations are fetched

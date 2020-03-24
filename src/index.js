@@ -9,7 +9,7 @@ import App from './App'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 
-import SimpleBottomNavigation from 'components/appbar'
+import SimpleBottomNavigation from 'components/BottomNavigation'
 import { Home } from './pages/home'
 import { Explore, DestinationPage } from './pages/explore'
 import { Bucketlist } from './pages/bucketlist'

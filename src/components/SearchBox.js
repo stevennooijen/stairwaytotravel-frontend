@@ -20,7 +20,7 @@ const styles = theme => ({
     // },
   },
   searchIcon: {
-    width: theme.spacing(5),
+    width: theme.spacing(6),
     height: '100%',
     position: 'absolute',
     pointerEvents: 'none',
@@ -32,7 +32,7 @@ const styles = theme => ({
     width: '100%',
   },
   inputInput: {
-    padding: theme.spacing(1, 1, 1, 5),
+    padding: theme.spacing(1.5, 1.5, 1.5, 5.5),
   },
 })
 

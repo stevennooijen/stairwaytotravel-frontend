@@ -28,10 +28,6 @@ const styles = theme => ({
   more: {
     margin: theme.spacing(2),
   },
-  searchBox: {
-    padding: '2px 4px',
-    // width: 400,
-  },
 })
 
 class Home extends React.Component {
@@ -100,7 +96,7 @@ class Home extends React.Component {
           >
             Create your personalized travel itinerary
           </Typography>
-          <Paper className={classes.searchBox}>
+          <Paper>
             {mapsApiLoaded && (
               <SearchBox
                 map={mapsInstance}

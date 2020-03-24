@@ -11,7 +11,7 @@ import RefreshIcon from '@material-ui/icons/Refresh'
 import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
-import ExploreBar from './components/ExploreBar'
+import TopAppBar from '../../components/TopAppBar'
 import { Mapview } from '../../components/mapview'
 import SearchBox from '../../components/SearchBox'
 import GoogleMap from '../../components/mapview/components/GoogleMap'
@@ -237,7 +237,7 @@ class Explore extends React.Component {
         {this.state.showMap ? (
           // Map - in this case the searchBox uses the same mapInstance as the map itself
           <div className={classes.body}>
-            <ExploreBar
+            <TopAppBar
               showMap={this.state.showMap}
               toggleShowMap={() => this.toggleShowMap()}
             >
@@ -256,7 +256,7 @@ class Explore extends React.Component {
                   }}
                 />
               )}
-            </ExploreBar>
+            </TopAppBar>
             {this.state.showSearchHere && (
               <MapFloatingActionButton
                 onClick={() => {
@@ -294,7 +294,7 @@ class Explore extends React.Component {
                 this.apiHasLoaded(map, maps)
               }}
             />
-            <ExploreBar
+            <TopAppBar
               showMap={this.state.showMap}
               toggleShowMap={() => this.toggleShowMap()}
             >
@@ -312,7 +312,7 @@ class Explore extends React.Component {
                   }}
                 />
               )}
-            </ExploreBar>
+            </TopAppBar>
             {this.state.loading ? (
               //  show Indeterminate progress indicator while waiting for destinations to load
               <Container className={classes.loaderContainer}>

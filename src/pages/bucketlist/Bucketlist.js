@@ -14,7 +14,7 @@ import WarningCard from './WarningCard'
 import { fetchSingleDestination } from '../../components/fetching'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import FloatingActionButton from './FloatingActionButton'
-import ExploreBar from '../explore/components/ExploreBar'
+import TopAppBar from '../../components/TopAppBar'
 import { Mapview } from '../../components/mapview'
 import {
   getMapBounds,
@@ -148,14 +148,14 @@ class Bucketlist extends React.Component {
 
     return (
       <div className={classes.body}>
-        <ExploreBar
+        <TopAppBar
           showMap={this.state.showMap}
           toggleShowMap={() => this.toggleShowMap()}
         >
           <Typography variant="h6" component="h1" className={classes.pageTitle}>
             My bucket list
           </Typography>
-        </ExploreBar>
+        </TopAppBar>
         {this.state.showMap ? (
           <React.Fragment>
             {/* if no destinations show FAB on map to start exploring */}

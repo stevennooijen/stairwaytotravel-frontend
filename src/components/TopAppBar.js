@@ -25,7 +25,7 @@ const styles = theme => ({
   },
 })
 
-class ExploreBar extends React.PureComponent {
+class TopAppBar extends React.PureComponent {
   constructor(props) {
     super(props)
 
@@ -114,8 +114,8 @@ class ExploreBar extends React.PureComponent {
   }
 }
 
-ExploreBar.propTypes = {
+TopAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(ExploreBar)
+export default withStyles(styles)(TopAppBar)

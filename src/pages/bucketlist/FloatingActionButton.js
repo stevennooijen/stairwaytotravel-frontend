@@ -6,12 +6,17 @@ import FlightTakeoffIcon from '@material-ui/icons/FlightTakeoff'
 
 const styles = theme => ({
   fab: {
+    position: 'fixed',
     margin: 0,
     top: 'auto',
-    right: 30,
     bottom: 70,
-    left: 'auto',
-    position: 'fixed',
+    // center right
+    right: 30,
+    // center middle if bigger screen
+    [theme.breakpoints.up('sm')]: {
+      left: '50%',
+      transform: 'translateX(-50%)',
+    },
   },
 })
 

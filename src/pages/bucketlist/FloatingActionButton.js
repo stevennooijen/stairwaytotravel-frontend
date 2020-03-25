@@ -22,10 +22,15 @@ const styles = theme => ({
 
 class FloatingActionButton extends Component {
   render() {
-    const { classes } = this.props
+    const { classes, onClick } = this.props
 
     return (
-      <Fab color="primary" aria-label="book it" className={classes.fab}>
+      <Fab
+        color="primary"
+        aria-label="book it"
+        className={classes.fab}
+        onClick={onClick}
+      >
         <FlightTakeoffIcon />
       </Fab>
     )

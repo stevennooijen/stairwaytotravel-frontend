@@ -22,6 +22,7 @@ import {
 } from '../../components/mapview/utils'
 import { pushUrlWithQueryParams } from '../../components/utils'
 import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
+import CheckoutDialog from './CheckoutDialog'
 
 const MINIMUM_ZOOM = 8
 
@@ -71,6 +72,7 @@ class Bucketlist extends React.Component {
       destinationList: [],
       queryParams: queryString.parse(this.props.location.search),
       showMap: false,
+      dialogOpen: false,
     }
   }
 
@@ -143,6 +145,10 @@ class Bucketlist extends React.Component {
     pushUrlWithQueryParams(newQueryParams, this.props)
   }
 
+  toggleDialog() {
+    this.setState({ dialogOpen: !this.state.dialogOpen })
+  }
+
   render() {
     const { classes } = this.props
 
@@ -201,7 +207,11 @@ class Bucketlist extends React.Component {
                   </Grid>
                 ))}
               </Album>
-              <FloatingActionButton />
+              <FloatingActionButton onClick={() => this.toggleDialog()} />
+              <CheckoutDialog
+                open={this.state.dialogOpen}
+                handleClose={() => this.toggleDialog()}
+              />
             </div>
           ) : (
             //  show Indeterminate progress indicator while waiting for destinations to load

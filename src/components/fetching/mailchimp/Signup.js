@@ -1,3 +1,4 @@
+// Returns id (string) of new user, or null if user already exists
 const signup = (email, status, location) => {
   return fetch(
     process.env.REACT_APP_API_URL +
@@ -10,7 +11,7 @@ const signup = (email, status, location) => {
     {
       method: 'POST',
     },
-  )
+  ).then(response => response.json())
 }
 
 export default signup

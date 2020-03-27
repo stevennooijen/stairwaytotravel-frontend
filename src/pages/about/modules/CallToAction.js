@@ -10,6 +10,7 @@ import Card from '@material-ui/core/Card'
 import ReactGA from 'react-ga'
 
 import signup from '../../../components/fetching/mailchimp/Signup'
+import updateMemberStatus from '../../../components/fetching/mailchimp/UpdateMemberStatus'
 
 const styles = theme => ({
   root: {
@@ -76,11 +77,7 @@ class CallToAction extends React.Component {
   handleSubmit = event => {
     // Make sure page is not loaded again after submitting the form
     event.preventDefault()
-    // Call signup endpoint that then calls the Mailchimp server
-    signup(this.state.textFieldValue, 'subscribed', window.location.pathname)
-    // TODO: maybe return error message if POST not succesfull?
-    // .then(response => response.json())
-    // .catch(err => console.log(err))
+    this.handleSignup(this.state.textFieldValue)
 
     this.setState({
       open: true,
@@ -94,6 +91,19 @@ class CallToAction extends React.Component {
       label: 'Signup for email updates',
       value: 5,
     })
+  }
+
+  handleSignup = email_address => {
+    // Call signup endpoint that then calls the Mailchimp server
+    signup(email_address, 'subscribed', window.location.pathname)
+      .then(id => {
+        // if null returned, the user already exists so we only need to change the member status
+        if (id === null) {
+          updateMemberStatus(email_address, 'subscribed')
+        }
+      })
+      // TODO: maybe return error message if POST not succesfull?
+      .catch(err => console.log(err))
   }
 
   handleClose = () => {

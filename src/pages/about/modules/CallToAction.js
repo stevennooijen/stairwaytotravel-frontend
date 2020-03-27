@@ -9,6 +9,8 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Card from '@material-ui/core/Card'
 import ReactGA from 'react-ga'
 
+import signup from '../../../components/fetching/mailchimp/Signup'
+
 const styles = theme => ({
   root: {
     marginTop: 0,
@@ -72,16 +74,10 @@ class CallToAction extends React.Component {
   }
 
   handleSubmit = event => {
+    // Make sure page is not loaded again after submitting the form
     event.preventDefault()
     // Call signup endpoint that then calls the Mailchimp server
-    fetch(
-      process.env.REACT_APP_API_URL +
-        '/signup/?email=' +
-        this.state.textFieldValue,
-      {
-        method: 'POST',
-      },
-    )
+    signup(this.state.textFieldValue, 'subscribed', window.location.pathname)
     // TODO: maybe return error message if POST not succesfull?
     // .then(response => response.json())
     // .catch(err => console.log(err))

@@ -73,6 +73,7 @@ class Bucketlist extends React.Component {
       queryParams: queryString.parse(this.props.location.search),
       showMap: false,
       dialogOpen: false,
+      textFieldValue: '',
     }
   }
 
@@ -149,6 +150,12 @@ class Bucketlist extends React.Component {
     this.setState({ dialogOpen: !this.state.dialogOpen })
   }
 
+  handleTextFieldChange = event => {
+    this.setState({
+      textFieldValue: event.target.value,
+    })
+  }
+
   render() {
     const { classes } = this.props
 
@@ -211,6 +218,12 @@ class Bucketlist extends React.Component {
               <CheckoutDialog
                 open={this.state.dialogOpen}
                 handleClose={() => this.toggleDialog()}
+                textFieldValue={this.state.textFieldValue}
+                handleTextFieldChange={this.handleTextFieldChange}
+                handleSubmit={event => {
+                  event.preventDefault()
+                  console.log('submit', this.state.textFieldValue)
+                }}
               />
             </div>
           ) : (

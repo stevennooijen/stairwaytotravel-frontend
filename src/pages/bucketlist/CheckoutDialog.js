@@ -10,7 +10,13 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 
 class CheckoutDialog extends Component {
   render() {
-    const { open, handleClose } = this.props
+    const {
+      open,
+      textFieldValue,
+      handleTextFieldChange,
+      handleClose,
+      handleSubmit,
+    } = this.props
 
     return (
       <Dialog
@@ -19,28 +25,32 @@ class CheckoutDialog extends Component {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Booking</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Do you need help with booking this trip? Please share your email
-            address so we can reach out to you.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          {/* <Button onClick={handleClose} color="primary">
+        <form onSubmit={handleSubmit}>
+          <DialogContent>
+            <DialogContentText>
+              Do you need help with booking this trip? Please share your email
+              address so we can reach out to you.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Email Address"
+              type="email"
+              fullWidth
+              value={textFieldValue}
+              onChange={handleTextFieldChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            {/* <Button onClick={handleClose} color="primary">
             Cancel
           </Button> */}
-          <Button onClick={handleClose} color="primary">
-            Send
-          </Button>
-        </DialogActions>
+            <Button type="submit" onClick={handleClose} color="primary">
+              Send
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     )
   }

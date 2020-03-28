@@ -23,6 +23,8 @@ import {
 import { pushUrlWithQueryParams } from '../../components/utils'
 import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
 import CheckoutDialog from './CheckoutDialog'
+import signup from '../../components/fetching/mailchimp/Signup'
+import addLikesEvent from '../../components/fetching/mailchimp/AddLikesEvent'
 
 const MINIMUM_ZOOM = 8
 
@@ -222,7 +224,17 @@ class Bucketlist extends React.Component {
                 handleTextFieldChange={this.handleTextFieldChange}
                 handleSubmit={event => {
                   event.preventDefault()
-                  console.log('submit', this.state.textFieldValue)
+                  // first signup, then add event. Otherwise can happen the other way around
+                  signup(
+                    this.state.textFieldValue,
+                    'transactional',
+                    window.location.pathname,
+                  ).then(() => {
+                    const likes = this.state.destinationList.map(
+                      dest => dest.id,
+                    )
+                    addLikesEvent(this.state.textFieldValue, likes)
+                  })
                 }}
               />
             </div>

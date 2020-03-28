@@ -127,6 +127,7 @@ class CallToAction extends React.Component {
             </Typography>
             <TextField
               // noBorder
+              type="email"
               className={classes.textField}
               placeholder="Your email"
               value={this.state.textFieldValue}

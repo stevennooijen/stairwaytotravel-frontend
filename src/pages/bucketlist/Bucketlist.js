@@ -23,8 +23,9 @@ import {
 import { pushUrlWithQueryParams } from '../../components/utils'
 import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
 import CheckoutDialog from './CheckoutDialog'
-import signup from '../../components/fetching/mailchimp/Signup'
+import postSignupForm from '../../components/fetching/mailchimp/PostSignupForm'
 import addLikesEvent from '../../components/fetching/mailchimp/AddLikesEvent'
+import patchMemberLikesHtml from '../../components/fetching/mailchimp/PatchMemberLikesHtml'
 
 const MINIMUM_ZOOM = 8
 
@@ -224,17 +225,25 @@ class Bucketlist extends React.Component {
                 handleTextFieldChange={this.handleTextFieldChange}
                 handleSubmit={event => {
                   event.preventDefault()
-                  // first signup, then add event. Otherwise can happen the other way around
-                  signup(
+                  const likes = this.state.destinationList.map(dest => dest.id)
+                  // first signup, then add event as an event needs a member to be registered
+                  postSignupForm(
                     this.state.textFieldValue,
                     'transactional',
                     window.location.pathname,
-                  ).then(() => {
-                    const likes = this.state.destinationList.map(
-                      dest => dest.id,
-                    )
-                    addLikesEvent(this.state.textFieldValue, likes)
-                  })
+                    likes,
+                  )
+                    .then(id => {
+                      // if null returned, the user already exists so we need to patch the member
+                      // the LikesHtml field is a temporary utility and will be overwritten each time
+                      if (id === null) {
+                        patchMemberLikesHtml(this.state.textFieldValue, likes)
+                      }
+                    })
+                    .then(() => {
+                      // An event is posted for permanent storage, plus triggers the campaign automation
+                      addLikesEvent(this.state.textFieldValue, likes)
+                    })
                 }}
               />
             </div>

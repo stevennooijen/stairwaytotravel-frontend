@@ -9,7 +9,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Card from '@material-ui/core/Card'
 import ReactGA from 'react-ga'
 
-import signup from '../../../components/fetching/mailchimp/Signup'
+import postSignupForm from '../../../components/fetching/mailchimp/PostSignupForm'
 import updateMemberStatus from '../../../components/fetching/mailchimp/UpdateMemberStatus'
 
 const styles = theme => ({
@@ -95,7 +95,7 @@ class CallToAction extends React.Component {
 
   handleSignup = email_address => {
     // Call signup endpoint that then calls the Mailchimp server
-    signup(email_address, 'subscribed', window.location.pathname)
+    postSignupForm(email_address, 'subscribed', window.location.pathname)
       .then(id => {
         // if null returned, the user already exists so we only need to change the member status
         if (id === null) {

@@ -8,7 +8,17 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
+import CheckboxGroup from './CheckboxGroup'
+
 class CheckoutDialog extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      checkboxError: true,
+    }
+  }
+
   render() {
     const {
       open,
@@ -24,12 +34,12 @@ class CheckoutDialog extends Component {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Booking</DialogTitle>
+        <DialogTitle id="form-dialog-title">Vamos, let's go!</DialogTitle>
         <form onSubmit={handleSubmit}>
-          <DialogContent>
+          <DialogContent dividers>
             <DialogContentText>
-              Do you need help with booking this trip? Please share your email
-              address so we can reach out to you.
+              To receive a copy of your bucket list, please share your email
+              address. Don't worry, it is not used for email marketing.
             </DialogContentText>
             <TextField
               autoFocus
@@ -42,11 +52,31 @@ class CheckoutDialog extends Component {
               onChange={handleTextFieldChange}
             />
           </DialogContent>
+          <DialogContent dividers>
+            <DialogContentText>
+              Also, do you need help with booking this trip? Check all that
+              apply.
+            </DialogContentText>
+            <CheckboxGroup
+              setCheckboxError={value => {
+                this.setState({
+                  checkboxError: value,
+                })
+              }}
+            />
+          </DialogContent>
           <DialogActions>
-            {/* <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button> */}
-            <Button type="submit" onClick={handleClose} color="primary">
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              onClick={handleClose}
+              color="primary"
+              variant="contained"
+              // make sure this is enable when forms are filled in
+              disabled={this.state.checkboxError}
+            >
               Send
             </Button>
           </DialogActions>

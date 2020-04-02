@@ -45,8 +45,8 @@ class CheckoutDialog extends Component {
         >
           <DialogContent dividers>
             <DialogContentText>
-              To receive a copy of your bucket list, please share your email
-              address. Don't worry, it is not used for email marketing.
+              Fill in your email address here to get a printout of your bucket
+              list. Don't worry, it will not be used for email marketing.
             </DialogContentText>
             <TextField
               autoFocus
@@ -60,8 +60,7 @@ class CheckoutDialog extends Component {
           </DialogContent>
           <DialogContent dividers>
             <DialogContentText>
-              Also, do you need help with booking this trip? Check all that
-              apply.
+              Do you need help with booking this trip? Check all that apply.
             </DialogContentText>
             <CheckboxGroup
               setCheckboxError={value => {

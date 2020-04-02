@@ -35,7 +35,14 @@ class CheckoutDialog extends Component {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Vamos, let's go!</DialogTitle>
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={event => {
+            handleSubmit(event)
+            this.setState({
+              checkboxError: true,
+            })
+          }}
+        >
           <DialogContent dividers>
             <DialogContentText>
               To receive a copy of your bucket list, please share your email
@@ -44,8 +51,7 @@ class CheckoutDialog extends Component {
             <TextField
               autoFocus
               margin="dense"
-              id="name"
-              label="Email Address"
+              label="Your Email Address"
               type="email"
               fullWidth
               value={textFieldValue}
@@ -66,16 +72,23 @@ class CheckoutDialog extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button
+              onClick={() => {
+                handleClose()
+                this.setState({
+                  checkboxError: true,
+                })
+              }}
+              color="primary"
+            >
               Cancel
             </Button>
             <Button
               type="submit"
-              onClick={handleClose}
               color="primary"
               variant="contained"
               // make sure this is enable when forms are filled in
-              disabled={this.state.checkboxError}
+              disabled={this.state.checkboxError || textFieldValue === ''}
             >
               Send
             </Button>

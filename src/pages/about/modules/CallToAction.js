@@ -129,7 +129,7 @@ class CallToAction extends React.Component {
               // noBorder
               type="email"
               className={classes.textField}
-              placeholder="Your email"
+              placeholder="Your Email Address"
               value={this.state.textFieldValue}
               onChange={this.handleTextFieldChange}
             />

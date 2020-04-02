@@ -14,18 +14,19 @@ class CheckoutDialog extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      checkboxError: true,
-    }
+    this.state = {}
   }
 
   render() {
     const {
       open,
-      textFieldValue,
-      handleTextFieldChange,
       handleClose,
       handleSubmit,
+      // props for email form
+      textFieldValue,
+      handleTextFieldChange,
+      // props for checkbox form
+      checkboxError,
     } = this.props
 
     return (
@@ -35,14 +36,7 @@ class CheckoutDialog extends Component {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Vamos, let's go!</DialogTitle>
-        <form
-          onSubmit={event => {
-            handleSubmit(event)
-            this.setState({
-              checkboxError: true,
-            })
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <DialogContent dividers>
             <DialogContentText>
               Fill in your email address here to get a printout of your bucket
@@ -63,23 +57,12 @@ class CheckoutDialog extends Component {
               Do you need help with booking this trip? Check all that apply.
             </DialogContentText>
             <CheckboxGroup
-              setCheckboxError={value => {
-                this.setState({
-                  checkboxError: value,
-                })
-              }}
+              // pass on props for the checkboxes in the dialog
+              {...this.props}
             />
           </DialogContent>
           <DialogActions>
-            <Button
-              onClick={() => {
-                handleClose()
-                this.setState({
-                  checkboxError: true,
-                })
-              }}
-              color="primary"
-            >
+            <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
             <Button
@@ -87,7 +70,7 @@ class CheckoutDialog extends Component {
               color="primary"
               variant="contained"
               // make sure this is enable when forms are filled in
-              disabled={this.state.checkboxError || textFieldValue === ''}
+              disabled={checkboxError || textFieldValue === ''}
             >
               Send
             </Button>

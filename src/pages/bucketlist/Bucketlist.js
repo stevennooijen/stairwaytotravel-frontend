@@ -76,7 +76,14 @@ class Bucketlist extends React.Component {
       queryParams: queryString.parse(this.props.location.search),
       showMap: false,
       dialogOpen: false,
+
+      // checkoutDialog features
       textFieldValue: '',
+      flights: false,
+      accomodation: false,
+      localTransport: false,
+      activities: false,
+      none: false,
     }
   }
 
@@ -159,8 +166,23 @@ class Bucketlist extends React.Component {
     })
   }
 
+  handleCheckboxChange = event => {
+    this.setState({ ...this.state, [event.target.name]: event.target.checked })
+  }
+
   render() {
     const { classes } = this.props
+    const {
+      flights,
+      accomodation,
+      localTransport,
+      activities,
+      none,
+    } = this.state
+
+    const checkboxError =
+      [flights, accomodation, localTransport, activities, none].filter(v => v)
+        .length === 0
 
     return (
       <div className={classes.body}>
@@ -246,6 +268,14 @@ class Bucketlist extends React.Component {
                     })
                   this.toggleDialog()
                 }}
+                // props for the checkboxes in the dialog
+                flights={flights}
+                accomodation={accomodation}
+                localTransport={localTransport}
+                activities={activities}
+                none={none}
+                checkboxError={checkboxError}
+                handleCheckboxChange={this.handleCheckboxChange}
               />
             </div>
           ) : (

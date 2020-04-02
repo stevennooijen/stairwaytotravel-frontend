@@ -10,42 +10,7 @@ class CheckboxesGroup extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      flights: false,
-      accomodation: false,
-      localTransport: false,
-      activities: false,
-      none: false,
-      error: true,
-    }
-  }
-
-  handleChange = event => {
-    this.setState(
-      { ...this.state, [event.target.name]: event.target.checked },
-      // use this setState callback to know for sure state is update before handling error
-      () => {
-        this.handleError()
-      },
-    )
-  }
-
-  handleError() {
-    const {
-      flights,
-      accomodation,
-      localTransport,
-      activities,
-      none,
-    } = this.state
-    const error =
-      [flights, accomodation, localTransport, activities, none].filter(v => v)
-        .length === 0
-    this.setState({ error: error })
-    // update props of higher order component
-    if (error) {
-      this.props.setCheckboxError(true)
-    } else this.props.setCheckboxError(false)
+    this.state = {}
   }
 
   render() {
@@ -55,19 +20,20 @@ class CheckboxesGroup extends React.Component {
       localTransport,
       activities,
       none,
-      error,
-    } = this.state
+      handleCheckboxChange,
+      checkboxError,
+    } = this.props
 
     return (
       <div>
-        <FormControl required error={error} component="fieldset">
+        <FormControl required error={checkboxError} component="fieldset">
           <FormHelperText>Select at least one</FormHelperText>
           <FormGroup row>
             <FormControlLabel
               control={
                 <Checkbox
                   checked={flights}
-                  onChange={this.handleChange}
+                  onChange={handleCheckboxChange}
                   name="flights"
                 />
               }
@@ -77,7 +43,7 @@ class CheckboxesGroup extends React.Component {
               control={
                 <Checkbox
                   checked={accomodation}
-                  onChange={this.handleChange}
+                  onChange={handleCheckboxChange}
                   name="accomodation"
                 />
               }
@@ -87,7 +53,7 @@ class CheckboxesGroup extends React.Component {
               control={
                 <Checkbox
                   checked={localTransport}
-                  onChange={this.handleChange}
+                  onChange={handleCheckboxChange}
                   name="localTransport"
                 />
               }
@@ -97,7 +63,7 @@ class CheckboxesGroup extends React.Component {
               control={
                 <Checkbox
                   checked={activities}
-                  onChange={this.handleChange}
+                  onChange={handleCheckboxChange}
                   name="activities"
                 />
               }
@@ -107,7 +73,7 @@ class CheckboxesGroup extends React.Component {
               control={
                 <Checkbox
                   checked={none}
-                  onChange={this.handleChange}
+                  onChange={handleCheckboxChange}
                   name="none"
                 />
               }

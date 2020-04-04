@@ -277,7 +277,11 @@ class Bucketlist extends React.Component {
                     })
                     .then(() => {
                       // An event is posted for permanent storage, plus triggers the campaign automation
-                      postLikesEvent(this.state.textFieldValue, likes)
+                      postLikesEvent(
+                        this.state.textFieldValue,
+                        likes,
+                        bookingPreferences,
+                      )
                     })
                   this.toggleDialog()
                 }}

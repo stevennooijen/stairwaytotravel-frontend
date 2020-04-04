@@ -5,6 +5,7 @@ import queryString from 'query-string'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography, Container } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
+import Snackbar from '@material-ui/core/Snackbar'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import ExploreIcon from '@material-ui/icons/Explore'
 
@@ -76,6 +77,7 @@ class Bucketlist extends React.Component {
       queryParams: queryString.parse(this.props.location.search),
       showMap: false,
       dialogOpen: false,
+      thanksBarOpen: false,
 
       // checkoutDialog features
       textFieldValue: '',
@@ -284,6 +286,7 @@ class Bucketlist extends React.Component {
                       )
                     })
                   this.toggleDialog()
+                  this.setState({ thanksBarOpen: true })
                 }}
                 // props for the checkboxes in the dialog
                 flights={flights}
@@ -293,6 +296,12 @@ class Bucketlist extends React.Component {
                 none={none}
                 checkboxError={checkboxError}
                 handleCheckboxChange={this.handleCheckboxChange}
+              />
+              <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={this.state.thanksBarOpen}
+                onClose={() => this.setState({ thanksBarOpen: false })}
+                message="Thank you! Your bucket list has been sent."
               />
             </div>
           ) : (

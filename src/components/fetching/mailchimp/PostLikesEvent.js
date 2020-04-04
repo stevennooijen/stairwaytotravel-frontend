@@ -1,5 +1,5 @@
 // Function to add liked destinations as a 'Liked destinations' event to a member
-const addLikesEvent = (email, destinations) => {
+const postLikesEvent = (email, destinations) => {
   return fetch(
     process.env.REACT_APP_API_URL +
       '/member/?email=' +
@@ -12,4 +12,4 @@ const addLikesEvent = (email, destinations) => {
   )
 }
 
-export default addLikesEvent
+export default postLikesEvent

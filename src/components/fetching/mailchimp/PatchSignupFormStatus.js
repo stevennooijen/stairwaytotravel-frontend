@@ -1,4 +1,4 @@
-const updateMemberStatus = (email, status) => {
+const patchSignupFormStatus = (email, status) => {
   return fetch(
     process.env.REACT_APP_API_URL +
       '/signup/?email=' +
@@ -11,4 +11,4 @@ const updateMemberStatus = (email, status) => {
   ).then(response => response.json())
 }
 
-export default updateMemberStatus
+export default patchSignupFormStatus

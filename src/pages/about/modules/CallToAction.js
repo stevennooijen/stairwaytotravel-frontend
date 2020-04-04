@@ -10,7 +10,7 @@ import Card from '@material-ui/core/Card'
 import ReactGA from 'react-ga'
 
 import postSignupForm from '../../../components/fetching/mailchimp/PostSignupForm'
-import updateMemberStatus from '../../../components/fetching/mailchimp/UpdateMemberStatus'
+import patchSignupFormStatus from '../../../components/fetching/mailchimp/PatchSignupFormStatus'
 
 const styles = theme => ({
   root: {
@@ -99,7 +99,7 @@ class CallToAction extends React.Component {
       .then(id => {
         // if null returned, the user already exists so we only need to change the member status
         if (id === null) {
-          updateMemberStatus(email_address, 'subscribed')
+          patchSignupFormStatus(email_address, 'subscribed')
         }
       })
       // TODO: maybe return error message if POST not succesfull?

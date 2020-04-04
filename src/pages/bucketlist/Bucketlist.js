@@ -24,8 +24,8 @@ import { pushUrlWithQueryParams } from '../../components/utils'
 import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
 import CheckoutDialog from './CheckoutDialog'
 import postSignupForm from '../../components/fetching/mailchimp/PostSignupForm'
-import addLikesEvent from '../../components/fetching/mailchimp/AddLikesEvent'
-import patchMemberLikesHtml from '../../components/fetching/mailchimp/PatchMemberLikesHtml'
+import postLikesEvent from '../../components/fetching/mailchimp/PostLikesEvent'
+import patchSignupFormLikes from '../../components/fetching/mailchimp/PatchSignupFormLikes'
 
 const MINIMUM_ZOOM = 8
 
@@ -268,7 +268,7 @@ class Bucketlist extends React.Component {
                       // if null returned, the user already exists so we need to patch the member
                       // the LikesHtml field is a temporary utility and will be overwritten each time
                       if (id === null) {
-                        patchMemberLikesHtml(
+                        patchSignupFormLikes(
                           this.state.textFieldValue,
                           likes,
                           bookingPreferences,
@@ -277,7 +277,7 @@ class Bucketlist extends React.Component {
                     })
                     .then(() => {
                       // An event is posted for permanent storage, plus triggers the campaign automation
-                      addLikesEvent(this.state.textFieldValue, likes)
+                      postLikesEvent(this.state.textFieldValue, likes)
                     })
                   this.toggleDialog()
                 }}

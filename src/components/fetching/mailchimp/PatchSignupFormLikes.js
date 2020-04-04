@@ -1,4 +1,4 @@
-const patchMemberLikesHtml = (email, likes, bookingPreferences) => {
+const patchSignupFormLikes = (email, likes, bookingPreferences) => {
   return fetch(
     process.env.REACT_APP_API_URL +
       '/signup/?email=' +
@@ -17,4 +17,4 @@ const patchMemberLikesHtml = (email, likes, bookingPreferences) => {
   ).then(response => response.json())
 }
 
-export default patchMemberLikesHtml
+export default patchSignupFormLikes

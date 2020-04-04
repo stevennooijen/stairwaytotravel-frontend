@@ -184,6 +184,14 @@ class Bucketlist extends React.Component {
       [flights, accommodation, localTransport, activities, none].filter(v => v)
         .length === 0
 
+    const bookingPreferences = [
+      { key: 'flights', value: flights },
+      { key: 'accommodation', value: accommodation },
+      { key: 'local_transport', value: localTransport },
+      { key: 'activities', value: activities },
+      { key: 'none', value: none },
+    ]
+
     return (
       <div className={classes.body}>
         <TopAppBar
@@ -254,13 +262,17 @@ class Bucketlist extends React.Component {
                     'transactional',
                     window.location.pathname,
                     likes,
-                    [flights, accommodation, localTransport, activities, none],
+                    bookingPreferences,
                   )
                     .then(id => {
                       // if null returned, the user already exists so we need to patch the member
                       // the LikesHtml field is a temporary utility and will be overwritten each time
                       if (id === null) {
-                        patchMemberLikesHtml(this.state.textFieldValue, likes)
+                        patchMemberLikesHtml(
+                          this.state.textFieldValue,
+                          likes,
+                          bookingPreferences,
+                        )
                       }
                     })
                     .then(() => {

@@ -16,7 +16,7 @@ class CheckboxesGroup extends React.Component {
   render() {
     const {
       flights,
-      accomodation,
+      accommodation,
       localTransport,
       activities,
       none,
@@ -42,12 +42,12 @@ class CheckboxesGroup extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={accomodation}
+                  checked={accommodation}
                   onChange={handleCheckboxChange}
-                  name="accomodation"
+                  name="accommodation"
                 />
               }
-              label="Accomodation"
+              label="Accommodation"
             />
             <FormControlLabel
               control={

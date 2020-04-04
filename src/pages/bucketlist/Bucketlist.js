@@ -80,7 +80,7 @@ class Bucketlist extends React.Component {
       // checkoutDialog features
       textFieldValue: '',
       flights: false,
-      accomodation: false,
+      accommodation: false,
       localTransport: false,
       activities: false,
       none: false,
@@ -174,14 +174,14 @@ class Bucketlist extends React.Component {
     const { classes } = this.props
     const {
       flights,
-      accomodation,
+      accommodation,
       localTransport,
       activities,
       none,
     } = this.state
 
     const checkboxError =
-      [flights, accomodation, localTransport, activities, none].filter(v => v)
+      [flights, accommodation, localTransport, activities, none].filter(v => v)
         .length === 0
 
     return (
@@ -254,6 +254,7 @@ class Bucketlist extends React.Component {
                     'transactional',
                     window.location.pathname,
                     likes,
+                    [flights, accommodation, localTransport, activities, none],
                   )
                     .then(id => {
                       // if null returned, the user already exists so we need to patch the member
@@ -270,7 +271,7 @@ class Bucketlist extends React.Component {
                 }}
                 // props for the checkboxes in the dialog
                 flights={flights}
-                accomodation={accomodation}
+                accommodation={accommodation}
                 localTransport={localTransport}
                 activities={activities}
                 none={none}

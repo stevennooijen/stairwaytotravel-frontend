@@ -65,7 +65,7 @@ class About extends React.Component {
           imageAlt="A stairway in a forest pointing to the sky"
         >
           <Button
-            color="secondary"
+            color="primary"
             variant="contained"
             size="large"
             onClick={this.scrollToCall2Action}
@@ -82,7 +82,7 @@ class About extends React.Component {
             component={Link}
             to="/explore"
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() => {
               sessionStorage.clear()
             }}
@@ -97,6 +97,7 @@ class About extends React.Component {
           component="section"
           maxWidth={false}
           className={classes.call2ActionRoot}
+          id="signup"
         >
           <CallToAction />
         </Container>
@@ -108,7 +109,7 @@ class About extends React.Component {
             component={Link}
             to="/explore"
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() => {
               sessionStorage.clear()
             }}

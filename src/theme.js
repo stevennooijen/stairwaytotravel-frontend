@@ -16,6 +16,8 @@ const theme = createMuiTheme({
   typography: {
     h2: {
       fontSize: 48,
+      // secondary
+      color: 'rgb(0, 56, 89)',
     },
     h3: {
       fontSize: 32,

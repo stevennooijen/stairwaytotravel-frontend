@@ -10,7 +10,7 @@ import Card from '@material-ui/core/Card'
 import ReactGA from 'react-ga'
 
 import postSignupForm from '../../../components/fetching/mailchimp/PostSignupForm'
-import patchSignupFormStatus from '../../../components/fetching/mailchimp/PatchSignupFormStatus'
+import patchSignupFormMarketing from '../../../components/fetching/mailchimp/PatchSignupFormMarketing'
 
 const styles = theme => ({
   root: {
@@ -95,11 +95,11 @@ class CallToAction extends React.Component {
 
   handleSignup = email_address => {
     // Call signup endpoint that then calls the Mailchimp server
-    postSignupForm(email_address, 'subscribed', window.location.pathname)
+    postSignupForm(email_address, 'subscribed', window.location.pathname, true)
       .then(id => {
         // if null returned, the user already exists so we only need to change the member status
         if (id === null) {
-          patchSignupFormStatus(email_address, 'subscribed')
+          patchSignupFormMarketing(email_address)
         }
       })
       // TODO: maybe return error message if POST not succesfull?
@@ -120,10 +120,12 @@ class CallToAction extends React.Component {
         <Card className={classes.card}>
           <form onSubmit={this.handleSubmit} className={classes.cardContent}>
             <Typography variant="h2" component="h2" gutterBottom>
-              Stay in touch
+              Want to be inspired?
             </Typography>
-            <Typography variant="h5">
-              Follow the developments and be notified of significant changes.
+            <Typography>
+              As true explorers, we track down the world's most beautiful places
+              to show them to you. Please fill in your email address here to
+              subscribe for a regular dose of unique travel inspiration.
             </Typography>
             <TextField
               // noBorder
@@ -135,11 +137,11 @@ class CallToAction extends React.Component {
             />
             <Button
               type="submit"
-              color="secondary"
+              color="primary"
               variant="contained"
               className={classes.button}
             >
-              Keep me updated
+              Sign Me Up!
             </Button>
           </form>
         </Card>

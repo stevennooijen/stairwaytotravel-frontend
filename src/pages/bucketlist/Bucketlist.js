@@ -261,8 +261,9 @@ class Bucketlist extends React.Component {
                   // first signup, then add event as an event needs a member to be registered
                   postSignupForm(
                     this.state.textFieldValue,
-                    'transactional',
+                    'subscribed',
                     window.location.pathname,
+                    false,
                     likes,
                     bookingPreferences,
                   )

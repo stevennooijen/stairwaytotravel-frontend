@@ -53,11 +53,11 @@ class Explore extends React.Component {
 
     this.state = {
       // state for query
+      seed: 1234,
+      nResults: 16,
+      offset: 0,
       queryParams: queryString.parse(this.props.location.search),
-      // continent: sessionStorage.getItem('continent'),
       mapBounds: {},
-      // For testing purposes, could use ExampleList from Constants
-      // destinationList: ExampleList,
       loading: true,
       destinationsFound: true,
       destinationList: [],
@@ -129,7 +129,12 @@ class Explore extends React.Component {
   fetchDestinations(bounds) {
     this.setState({ loading: true, destinationList: [] })
 
-    FetchExploreDestinations(bounds)
+    FetchExploreDestinations(
+      this.state.seed,
+      this.state.nResults,
+      this.state.offset,
+      bounds,
+    )
       .then(response => response.json())
       .then(data => data.Destinations)
       .then(destinationList => {

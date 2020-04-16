@@ -405,7 +405,7 @@ class Explore extends React.Component {
                 </Grid>
               ))}
               <Grid item xs={12} sm={6} md={4}>
-                {!this.state.hasMore && <NothingFoundCard />}
+                {this.state.maxPlacesText === 0 && <NothingFoundCard />}
               </Grid>
             </Album>
             {this.state.isLoading && (
@@ -413,7 +413,6 @@ class Explore extends React.Component {
                 <CircularProgress />
               </Container>
             )}
-            {/* {!this.state.hasMore && <p>The end!!!!</p>} */}
           </React.Fragment>
         )}
       </div>

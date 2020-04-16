@@ -8,12 +8,12 @@ import { withStyles } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '@material-ui/core/Container'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import Typography from '@material-ui/core/Typography'
 
 import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import TopAppBar from '../../components/TopAppBar'
+import ResultsBar from '../../components/ResultsBar'
 import { Mapview } from '../../components/mapview'
 import SearchBox from '../../components/SearchBox'
 import GoogleMap from '../../components/mapview/components/GoogleMap'
@@ -378,12 +378,13 @@ class Explore extends React.Component {
                 />
               )}
             </TopAppBar>
-            {/* <Container className={classes.loaderContainer}> */}
-            <Typography gutterBottom variant="h6" component="h2">
-              Explore {this.state.maxPlacesText} places that match your criteria
-            </Typography>
-            {/* </Container> */}
-
+            <ResultsBar
+              text={
+                this.state.maxPlacesText +
+                (this.state.maxPlacesText === 1 ? ' place' : ' places') +
+                ' to explore'
+              }
+            />
             <Album>
               {this.state.destinationList.map(place => (
                 // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
@@ -412,7 +413,7 @@ class Explore extends React.Component {
                 <CircularProgress />
               </Container>
             )}
-            {!this.state.hasMore && <p>The end!!!!</p>}
+            {/* {!this.state.hasMore && <p>The end!!!!</p>} */}
           </React.Fragment>
         )}
       </div>

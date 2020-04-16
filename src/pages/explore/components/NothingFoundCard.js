@@ -6,7 +6,12 @@ import { withStyles } from '@material-ui/core/styles'
 
 const styles = theme => ({
   card: {
-    margin: '0 15px',
+    // margin: '0 15px',
+    height: '100%',
+    maxWidth: 400,
+    // position needed to show favorite icon on top of card
+    position: 'relative',
+    // boxShadow: 'none',
   },
 })
 

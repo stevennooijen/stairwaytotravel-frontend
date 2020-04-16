@@ -1,12 +1,14 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import queryString from 'query-string'
+import debounce from 'lodash.debounce'
 
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '@material-ui/core/Container'
 import RefreshIcon from '@material-ui/icons/Refresh'
+import Typography from '@material-ui/core/Typography'
 
 import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
@@ -52,20 +54,27 @@ class Explore extends React.Component {
     super(props)
 
     this.state = {
+      // state for infinte scroll
+      maxPlacesText: '',
+      error: false,
+      hasMore: true,
+      isLoading: false,
+
       // state for query
       seed: 1234,
-      nResults: 16,
+      nResults: 12,
       offset: 0,
       queryParams: queryString.parse(this.props.location.search),
-      mapBounds: {},
-      loading: true,
-      destinationsFound: true,
+      mapBounds: null,
+
+      // state to keep places and interactions
       destinationList: [],
       likedDestinations: JSON.parse(
         sessionStorage.getItem('likedDestinations'),
       ),
       newLikes: [],
 
+      // state for mapview
       showMap: false,
       showSearchHere: false,
       // Google mapInstance object
@@ -73,6 +82,32 @@ class Explore extends React.Component {
       mapInstance: null,
       mapApi: null,
     }
+
+    // Binds our scroll event handler
+    window.onscroll = debounce(() => {
+      const {
+        state: { error, isLoading, hasMore },
+      } = this
+
+      // Bails early if:
+      // * there's an error
+      // * it's already loading
+      // * there's nothing left to load
+      if (error || isLoading || !hasMore) return
+
+      // Checks that the page has scrolled to the bottom
+      if (
+        window.innerHeight + document.documentElement.scrollTop ===
+        document.documentElement.offsetHeight
+      ) {
+        this.fetchDestinations(
+          this.state.seed,
+          this.state.nResults,
+          this.state.offset,
+          this.state.mapBounds,
+        )
+      }
+    }, 100)
   }
 
   // Check for state changes in PlaceQuery to update map
@@ -120,61 +155,71 @@ class Explore extends React.Component {
     const itemList = null
 
     if (itemList === null) {
-      this.fetchDestinations(bounds)
+      this.fetchDestinations(
+        this.state.seed,
+        this.state.nResults,
+        this.state.offset,
+        bounds,
+      )
     } else {
       this.setState({ destinationList: itemList })
     }
   }
 
-  fetchDestinations(bounds) {
-    this.setState({ loading: true, destinationList: [] })
+  fetchDestinations(seed, nResults, offset, bounds) {
+    this.setState({ isLoading: true, offset: offset + nResults }, () => {
+      FetchExploreDestinations(seed, nResults, offset, bounds)
+        .then(response => response.json())
+        .then(data => {
+          // retrieve maximum number of places possible
+          this.setState({ maxPlacesText: data.maxPlacesText })
+          const maxPlaces = data.maxPlaces
 
-    FetchExploreDestinations(
-      this.state.seed,
-      this.state.nResults,
-      this.state.offset,
-      bounds,
-    )
-      .then(response => response.json())
-      .then(data => data.Destinations)
-      .then(destinationList => {
-        destinationList.length > 0
-          ? // for each of the fetched destinations in the list do:
-            destinationList.forEach(item => {
-              // 1. retrieve flickr Images
-              GetFlickrImages(item.name)
-                .then(imageUrls => {
-                  return {
-                    ...item,
-                    images: imageUrls,
-                  }
-                })
-                // 2. set liked to true if destination already in likedList
-                .then(item => {
-                  if (this.state.likedDestinations.includes(item.id)) {
+          // check if new places are fetched
+          data.destinations.length > 0
+            ? // for each of the fetched destinations in the list do:
+              data.destinations.forEach(item => {
+                // 1. retrieve flickr Images
+                GetFlickrImages(item.name)
+                  .then(imageUrls => {
                     return {
                       ...item,
-                      liked: true,
+                      images: imageUrls,
                     }
-                  } else {
-                    return item
-                  }
-                })
-                // 3. save fetched destination to state
-                .then(item =>
-                  this.setState({
-                    destinationList: [...this.state.destinationList, item],
-                    loading: false,
-                    destinationsFound: true,
-                  }),
-                )
-            })
-          : this.setState({
-              loading: false,
-              destinationsFound: false,
-            })
-      })
-      .catch(err => console.log(err))
+                  })
+                  // 2. set liked to true if destination already in likedList
+                  .then(item => {
+                    if (this.state.likedDestinations.includes(item.id)) {
+                      return {
+                        ...item,
+                        liked: true,
+                      }
+                    } else {
+                      return item
+                    }
+                  })
+                  // 3. save fetched destination to state
+                  .then(item =>
+                    this.setState({
+                      destinationList: [...this.state.destinationList, item],
+                      hasMore: this.state.destinationList.length < maxPlaces,
+                      isLoading: false,
+                    }),
+                  )
+              })
+            : this.setState({
+                hasMore: false,
+                isLoading: false,
+              })
+        })
+        .catch(err => {
+          // console.log(err)
+          this.setState({
+            error: err.message,
+            isLoading: false,
+          })
+        })
+    })
   }
 
   toggleLike(id) {
@@ -234,7 +279,7 @@ class Explore extends React.Component {
 
   render() {
     const { classes, placeQuery, savePlaceQuery } = this.props
-    const { mapApiLoaded, mapInstance, mapApi } = this.state
+    const { seed, nResults, mapApiLoaded, mapInstance, mapApi } = this.state
 
     return (
       <div>
@@ -256,7 +301,10 @@ class Explore extends React.Component {
                     savePlaceQuery(place)
                     const bounds = extractBoundsFromPlaceObject(place)
                     this.handleBoundsChange(bounds)
-                    this.fetchDestinations(bounds)
+                    // New query, so reset destinationList and offset
+                    this.setState({ offset: 0, destinationList: [] }, () =>
+                      this.fetchDestinations(seed, nResults, 0, bounds),
+                    )
                     // Map centering is triggered by change in placeQuery state in Mapview component
                   }}
                 />
@@ -265,8 +313,17 @@ class Explore extends React.Component {
             {this.state.showSearchHere && (
               <MapFloatingActionButton
                 onClick={() => {
-                  this.setState({ showSearchHere: false })
-                  this.fetchDestinations(this.state.mapBounds)
+                  // New query, so reset destinationList and offset
+                  this.setState(
+                    { showSearchHere: false, offset: 0, destinationList: [] },
+                    () =>
+                      this.fetchDestinations(
+                        seed,
+                        nResults,
+                        0,
+                        this.state.mapBounds,
+                      ),
+                  )
                 }}
               >
                 <RefreshIcon className={classes.extendedIcon} />
@@ -313,44 +370,49 @@ class Explore extends React.Component {
                     savePlaceQuery(place)
                     const bounds = extractBoundsFromPlaceObject(place)
                     this.handleBoundsChange(bounds)
-                    this.fetchDestinations(bounds)
+                    // New query, so reset destinationList and offset
+                    this.setState({ offset: 0, destinationList: [] }, () =>
+                      this.fetchDestinations(seed, nResults, 0, bounds),
+                    )
                   }}
                 />
               )}
             </TopAppBar>
-            {this.state.loading ? (
-              //  show Indeterminate progress indicator while waiting for destinations to load
+            {/* <Container className={classes.loaderContainer}> */}
+            <Typography gutterBottom variant="h6" component="h2">
+              Explore {this.state.maxPlacesText} places that match your criteria
+            </Typography>
+            {/* </Container> */}
+
+            <Album>
+              {this.state.destinationList.map(place => (
+                // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
+                // State blijft zodoende in de Bucketlist component op 'hoog' niveau
+                <Grid item key={place.id} xs={12} sm={6} md={4}>
+                  <DestinationCard
+                    place={place}
+                    toggleLike={id => {
+                      this.toggleLike(id)
+                      this.updateLikedDestinationsList(id)
+                      this.updateNewLikes(id)
+                    }}
+                    onClick={() => {
+                      // send to destination page
+                      this.props.history.push('/explore/' + place.id)
+                    }}
+                  />
+                </Grid>
+              ))}
+              <Grid item xs={12} sm={6} md={4}>
+                {!this.state.hasMore && <NothingFoundCard />}
+              </Grid>
+            </Album>
+            {this.state.isLoading && (
               <Container className={classes.loaderContainer}>
                 <CircularProgress />
               </Container>
-            ) : this.state.destinationsFound ? (
-              // if destinations found
-              <Album>
-                {this.state.destinationList.map(place => (
-                  // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
-                  // State blijft zodoende in de Bucketlist component op 'hoog' niveau
-                  <Grid item key={place.id} xs={12} sm={6} md={4}>
-                    <DestinationCard
-                      place={place}
-                      toggleLike={id => {
-                        this.toggleLike(id)
-                        this.updateLikedDestinationsList(id)
-                        this.updateNewLikes(id)
-                      }}
-                      onClick={() => {
-                        // send to destination page
-                        this.props.history.push('/explore/' + place.id)
-                      }}
-                    />
-                  </Grid>
-                ))}
-              </Album>
-            ) : (
-              // if no destinations found
-              <Album>
-                <NothingFoundCard />
-              </Album>
             )}
+            {!this.state.hasMore && <p>The end!!!!</p>}
           </React.Fragment>
         )}
       </div>

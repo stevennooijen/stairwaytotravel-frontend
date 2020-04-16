@@ -10,6 +10,7 @@
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.2.0",
     "google-map-react": "^1.1.5",
+    "lodash.debounce": "^4.0.8",
     "query-string": "^6.11.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

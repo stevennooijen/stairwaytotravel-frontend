@@ -101,7 +101,8 @@ class Home extends React.Component {
               <SearchBox
                 map={mapsInstance}
                 mapApi={mapsApi}
-                placeName={placeQuery}
+                placeQuery={placeQuery}
+                searchInput={null}
                 handlePlaceChange={place => {
                   savePlaceQuery(place)
                   this.props.history.push('/explore')

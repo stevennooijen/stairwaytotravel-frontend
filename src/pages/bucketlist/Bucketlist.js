@@ -11,6 +11,7 @@ import ExploreIcon from '@material-ui/icons/Explore'
 
 import Album from 'components/Album'
 import DestinationCard from 'components/destinationCard/DestinationCard'
+import ResultsBar from 'components/ResultsBar'
 import WarningCard from './WarningCard'
 import { fetchSingleDestination } from '../../components/fetching'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
@@ -78,6 +79,7 @@ class Bucketlist extends React.Component {
       showMap: false,
       dialogOpen: false,
       thanksBarOpen: false,
+      isLoading: false,
 
       // checkoutDialog features
       textFieldValue: '',
@@ -98,35 +100,38 @@ class Bucketlist extends React.Component {
       sessionStorage.getItem('likedDestinations'),
     )
     // fetch data if likes
-    if (likedDestinationList && likedDestinationList.length > 0) {
-      // for each of the fetched destinations in the list do:
-      likedDestinationList.forEach(id => {
-        // 1. fetch the data
-        fetchSingleDestination(id)
-          .then(response => response.json())
-          .then(item => {
-            // 2. retrieve flickr Images
-            GetFlickrImages(item.name)
-              .then(imageUrls => {
-                return {
-                  ...item,
-                  images: imageUrls,
-                  // 3. set liked to true as we are on bucketlist page
-                  liked: true,
-                }
-              })
-              // 4. save fetched destination to state
-              .then(item =>
-                this.setState({
-                  destinationList: [...this.state.destinationList, item],
-                }),
-              )
-          })
-          .catch(err => console.log(err))
-      })
-    } else {
-      this.setState({ destinationList: null })
-    }
+    this.setState({ isLoading: true }, () => {
+      if (likedDestinationList && likedDestinationList.length > 0) {
+        // for each of the fetched destinations in the list do:
+        likedDestinationList.forEach(id => {
+          // 1. fetch the data
+          fetchSingleDestination(id)
+            .then(response => response.json())
+            .then(item => {
+              // 2. retrieve flickr Images
+              GetFlickrImages(item.name)
+                .then(imageUrls => {
+                  return {
+                    ...item,
+                    images: imageUrls,
+                    // 3. set liked to true as we are on bucketlist page
+                    liked: true,
+                  }
+                })
+                // 4. save fetched destination to state
+                .then(item =>
+                  this.setState({
+                    destinationList: [...this.state.destinationList, item],
+                    isLoading: false,
+                  }),
+                )
+            })
+            .catch(err => console.log(err))
+        })
+      } else {
+        this.setState({ destinationList: [], isLoading: false })
+      }
+    })
   }
 
   removeLike(id) {
@@ -136,7 +141,7 @@ class Bucketlist extends React.Component {
     )
     newDestinationList.length > 0
       ? this.setState({ destinationList: newDestinationList })
-      : this.setState({ destinationList: null })
+      : this.setState({ destinationList: [] })
 
     // removed from liked list in session storage
     const likedDestinations = JSON.parse(
@@ -230,92 +235,103 @@ class Bucketlist extends React.Component {
               />
             </div>
           </React.Fragment>
-        ) : // {/* If no likedDestinations, destinationsList is set to null and warning should be displayed */}
-        this.state.destinationList ? (
-          // Show loading indicator till destinations are fetched
-          this.state.destinationList.length > 0 ? (
-            <div>
-              <Album>
-                {this.state.destinationList.map(place => (
-                  <Grid item key={place.id} xs={12} sm={6} md={4}>
-                    <DestinationCard
-                      place={place}
-                      toggleLike={id => this.removeLike(id)}
-                      onClick={() => {
-                        // send to destination page
-                        this.props.history.push('/explore/' + place.id)
-                      }}
-                    />
+        ) : (
+          // {/* If no likedDestinations, destinationsList is set to null and warning should be displayed */}
+          <React.Fragment>
+            <ResultsBar
+              text={
+                this.state.destinationList.length +
+                (this.state.destinationList.length === 1
+                  ? ' place'
+                  : ' places') +
+                ' to travel to'
+              }
+            />
+            <Album>
+              {this.state.destinationList.map(place => (
+                <Grid item key={place.id} xs={12} sm={6} md={4}>
+                  <DestinationCard
+                    place={place}
+                    toggleLike={id => this.removeLike(id)}
+                    onClick={() => {
+                      // send to destination page
+                      this.props.history.push('/explore/' + place.id)
+                    }}
+                  />
+                </Grid>
+              ))}
+              {/* If 0 likes after loading, show warning card */}
+              {this.state.destinationList.length === 0 &&
+                this.state.isLoading === false && (
+                  <Grid item>
+                    <WarningCard />
                   </Grid>
-                ))}
-              </Album>
+                )}
+            </Album>
+            {this.state.isLoading && (
+              <Container className={classes.loaderContainer}>
+                <CircularProgress />
+              </Container>
+            )}
+            {/* functionality for checkout dialog starts here */}
+            {this.state.destinationList.length > 0 && (
               <FloatingActionButton onClick={() => this.toggleDialog()} />
-              <CheckoutDialog
-                open={this.state.dialogOpen}
-                handleClose={() => this.toggleDialog()}
-                textFieldValue={this.state.textFieldValue}
-                handleTextFieldChange={this.handleTextFieldChange}
-                handleSubmit={event => {
-                  event.preventDefault()
-                  const likes = this.state.destinationList.map(dest => dest.id)
-                  // first signup, then add event as an event needs a member to be registered
-                  postSignupForm(
-                    this.state.textFieldValue,
-                    'subscribed',
-                    window.location.pathname,
-                    false,
-                    likes,
-                    bookingPreferences,
-                  )
-                    .then(id => {
-                      // if null returned, the user already exists so we need to patch the member
-                      // the LikesHtml field is a temporary utility and will be overwritten each time
-                      if (id === null) {
-                        patchSignupFormLikes(
-                          this.state.textFieldValue,
-                          likes,
-                          bookingPreferences,
-                        )
-                      }
-                    })
-                    .then(() => {
-                      // An event is posted for permanent storage, plus triggers the campaign automation
-                      postLikesEvent(
+            )}
+            <CheckoutDialog
+              open={this.state.dialogOpen}
+              handleClose={() => this.toggleDialog()}
+              textFieldValue={this.state.textFieldValue}
+              handleTextFieldChange={this.handleTextFieldChange}
+              handleSubmit={event => {
+                event.preventDefault()
+                const likes = this.state.destinationList.map(dest => dest.id)
+                // first signup, then add event as an event needs a member to be registered
+                postSignupForm(
+                  this.state.textFieldValue,
+                  'subscribed',
+                  window.location.pathname,
+                  false,
+                  likes,
+                  bookingPreferences,
+                )
+                  .then(id => {
+                    // if null returned, the user already exists so we need to patch the member
+                    // the LikesHtml field is a temporary utility and will be overwritten each time
+                    if (id === null) {
+                      patchSignupFormLikes(
                         this.state.textFieldValue,
                         likes,
                         bookingPreferences,
                       )
-                    })
-                  this.toggleDialog()
-                  this.setState({ thanksBarOpen: true })
-                }}
-                // props for the checkboxes in the dialog
-                flights={flights}
-                accommodation={accommodation}
-                localTransport={localTransport}
-                activities={activities}
-                none={none}
-                checkboxError={checkboxError}
-                handleCheckboxChange={this.handleCheckboxChange}
-              />
-              <Snackbar
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={this.state.thanksBarOpen}
-                onClose={() => this.setState({ thanksBarOpen: false })}
-                message="Thank you! Your bucket list has been sent."
-              />
-            </div>
-          ) : (
-            //  show Indeterminate progress indicator while waiting for destinations to load
-            <Container className={classes.loaderContainer}>
-              <CircularProgress />
-            </Container>
-          )
-        ) : (
-          // Provide warning if no liked destinations
-          <Album>
-            <WarningCard />
-          </Album>
+                    }
+                  })
+                  .then(() => {
+                    // An event is posted for permanent storage, plus triggers the campaign automation
+                    postLikesEvent(
+                      this.state.textFieldValue,
+                      likes,
+                      bookingPreferences,
+                    )
+                  })
+                this.toggleDialog()
+                this.setState({ thanksBarOpen: true })
+              }}
+              // props for the checkboxes in the dialog
+              flights={flights}
+              accommodation={accommodation}
+              localTransport={localTransport}
+              activities={activities}
+              none={none}
+              checkboxError={checkboxError}
+              handleCheckboxChange={this.handleCheckboxChange}
+            />
+            <Snackbar
+              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+              open={this.state.thanksBarOpen}
+              onClose={() => this.setState({ thanksBarOpen: false })}
+              message="Thank you! Your bucket list has been sent."
+            />
+          </React.Fragment>
         )}
       </div>
     )

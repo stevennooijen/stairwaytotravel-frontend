@@ -1,13 +1,10 @@
 import React, { Fragment } from 'react'
 import { withRouter } from 'react-router-dom'
-import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
 import NatureIcon from '@material-ui/icons/Nature'
 import LocationCityIcon from '@material-ui/icons/LocationCity'
 import PlaceIcon from '@material-ui/icons/Place'
-
-import DestinationCard from '../../destinationCard/DestinationCard'
 
 const useStyles = makeStyles(theme => ({
   markerStyle: props => ({
@@ -18,10 +15,10 @@ const useStyles = makeStyles(theme => ({
     width: 30,
     padding: 5,
     // Changes when liked
-    backgroundColor: props.place.liked
+    backgroundColor: props.isLiked
       ? `${theme.palette.primary.main}`
       : `${theme.palette.background.paper}`,
-    color: props.place.liked ? 'white' : 'black',
+    color: props.isLiked ? 'white' : 'black',
     zIndex: 10,
   }),
   infoWindowStyle: {
@@ -48,39 +45,18 @@ const DestinationPin = props => {
 
   return (
     <Fragment>
-      {props.place.type === 'park' ? (
+      {props.placeType === 'park' ? (
         <NatureIcon className={classes.markerStyle} />
-      ) : ['guide', 'star'].includes(props.place.status) ? (
+      ) : ['guide', 'star'].includes(props.placeStatus) ? (
         <LocationCityIcon className={classes.markerStyle} />
       ) : (
         <PlaceIcon className={classes.markerStyle} />
       )}
       {props.show && (
-        <div className={classes.infoWindowStyle}>
-          <DestinationCard
-            place={props.place}
-            toggleLike={props.toggleLike}
-            onClick={() => {
-              // send to destination page
-              props.history.push('/explore/' + props.place.id)
-            }}
-          />
-        </div>
+        <div className={classes.infoWindowStyle}>{props.children}</div>
       )}
     </Fragment>
   )
-}
-
-DestinationPin.propTypes = {
-  show: PropTypes.bool.isRequired,
-  place: PropTypes.shape({
-    name: PropTypes.string,
-    formatted_address: PropTypes.string,
-    rating: PropTypes.number,
-    types: PropTypes.array,
-    price_level: PropTypes.number,
-    opening_hours: PropTypes.object,
-  }).isRequired,
 }
 
 export default withRouter(DestinationPin)

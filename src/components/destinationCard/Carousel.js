@@ -65,6 +65,13 @@ export default function TextMobileStepper(props) {
         index={activeStep}
         onChangeIndex={handleStepChange}
         enableMouseEvents
+        // Make sure to 'freeze' the map to disable an `onDrag` event while swiping the carousel.
+        onTouchStart={event => {
+          props.mapGestureHandling && props.mapGestureHandling('none')
+        }}
+        onTouchEnd={event => {
+          props.mapGestureHandling && props.mapGestureHandling('greedy')
+        }}
       >
         {props.imageList.map((step, index) => (
           <div

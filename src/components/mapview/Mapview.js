@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 import GoogleMap from './components/GoogleMap'
 import DestinationPin from './components/DestinationPin'
+import DestinationCard from 'components/destinationCard/DestinationCard'
 import { isEmpty } from '../utils'
 
 const AMSTERDAM_CENTER = [52.3667, 4.8945]
@@ -14,9 +15,9 @@ const styles = theme => ({
   },
 })
 
-function createMapOptions() {
+function createMapOptions(mapGestureHandling) {
   return {
-    gestureHandling: 'greedy', // Will capture all touch events on the map towards map panning
+    gestureHandling: mapGestureHandling, // Will capture all touch events on the map towards map panning
   }
 }
 
@@ -27,6 +28,7 @@ class Mapview extends Component {
     this.state = {
       showPlace: null,
       center: AMSTERDAM_CENTER,
+      mapGestureHandling: 'greedy',
     }
   }
 
@@ -73,12 +75,13 @@ class Mapview extends Component {
   }
 
   render() {
+    const { mapGestureHandling } = this.state
     const { classes, places, toggleLike, apiHasLoaded } = this.props
 
     return (
       <div className={classes.wrapper}>
         <GoogleMap
-          options={createMapOptions}
+          options={createMapOptions(mapGestureHandling)}
           center={this.state.center}
           onChildClick={this.onChildClickCallback}
           onChange={this._onChange}
@@ -95,10 +98,22 @@ class Mapview extends Component {
                 lng={place.lng}
                 // these are passed along to destinationPin
                 show={place.id === this.state.showPlace ? true : false}
-                // place is the object containing all the destination stuff
-                place={place}
-                toggleLike={toggleLike}
-              />
+                isLiked={place.liked}
+                placeType={place.type}
+                placeStatus={place.status}
+              >
+                <DestinationCard
+                  place={place}
+                  toggleLike={toggleLike}
+                  onClick={() => {
+                    // send to destination page
+                    this.props.history.push('/explore/' + this.props.place.id)
+                  }}
+                  mapGestureHandling={value =>
+                    this.setState({ mapGestureHandling: value })
+                  }
+                />
+              </DestinationPin>
             ))}
         </GoogleMap>
       </div>

@@ -55,7 +55,7 @@ class DestinationCard extends Component {
 
   render() {
     // Properties and actions to do with DestinationCard are provided through props
-    const { classes, place, toggleLike, onClick } = this.props
+    const { classes, place, toggleLike, onClick, ...props } = this.props
 
     return (
       <Card
@@ -66,7 +66,7 @@ class DestinationCard extends Component {
           // onClick()
         }}
       >
-        <PhotoCarousel imageList={place.images}>
+        <PhotoCarousel imageList={place.images} {...props}>
           <Box
             component="span"
             className={classes.favoriteCircle}

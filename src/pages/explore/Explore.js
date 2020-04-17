@@ -66,6 +66,7 @@ class Explore extends React.Component {
       offset: 0,
       queryParams: queryString.parse(this.props.location.search),
       mapBounds: null,
+      searchInput: null,
 
       // state to keep places and interactions
       destinationList: [],
@@ -296,14 +297,16 @@ class Explore extends React.Component {
                 <SearchBox
                   map={mapInstance}
                   mapApi={mapApi}
-                  placeName={placeQuery}
+                  placeQuery={placeQuery}
+                  searchInput={this.state.searchInput}
                   handlePlaceChange={place => {
                     savePlaceQuery(place)
                     const bounds = extractBoundsFromPlaceObject(place)
                     this.handleBoundsChange(bounds)
                     // New query, so reset destinationList and offset
-                    this.setState({ offset: 0, destinationList: [] }, () =>
-                      this.fetchDestinations(seed, nResults, 0, bounds),
+                    this.setState(
+                      { offset: 0, destinationList: [], searchInput: null },
+                      () => this.fetchDestinations(seed, nResults, 0, bounds),
                     )
                     // Map centering is triggered by change in placeQuery state in Mapview component
                   }}
@@ -315,7 +318,12 @@ class Explore extends React.Component {
                 onClick={() => {
                   // New query, so reset destinationList and offset
                   this.setState(
-                    { showSearchHere: false, offset: 0, destinationList: [] },
+                    {
+                      showSearchHere: false,
+                      offset: 0,
+                      destinationList: [],
+                      searchInput: 'Selected map area',
+                    },
                     () =>
                       this.fetchDestinations(
                         seed,
@@ -365,14 +373,16 @@ class Explore extends React.Component {
                 <SearchBox
                   map={mapInstance}
                   mapApi={mapApi}
-                  placeName={placeQuery}
+                  placeQuery={placeQuery}
+                  searchInput={this.state.searchInput}
                   handlePlaceChange={place => {
                     savePlaceQuery(place)
                     const bounds = extractBoundsFromPlaceObject(place)
                     this.handleBoundsChange(bounds)
                     // New query, so reset destinationList and offset
-                    this.setState({ offset: 0, destinationList: [] }, () =>
-                      this.fetchDestinations(seed, nResults, 0, bounds),
+                    this.setState(
+                      { offset: 0, destinationList: [], searchInput: null },
+                      () => this.fetchDestinations(seed, nResults, 0, bounds),
                     )
                   }}
                 />

@@ -42,18 +42,30 @@ class SearchBox extends Component {
     this.clearSearchBox = this.clearSearchBox.bind(this)
   }
 
-  componentDidMount({ map, mapApi, placeName } = this.props) {
+  componentDidMount({ map, mapApi, placeQuery, searchInput } = this.props) {
     this.searchBox = new mapApi.places.Autocomplete(this.searchInput, {
       types: ['(regions)'],
     })
-    // Prepopulate search field if there is a placename already
-    if (placeName !== '' && placeName !== undefined) {
-      this.searchInput.value = placeName.formatted_address
+    // Prepopulate searchInput if there is a placeName or placeQuery already
+    if (searchInput !== null) {
+      this.searchInput.value = searchInput
+    } else if (placeQuery !== '' && placeQuery !== undefined) {
+      this.searchInput.value = placeQuery.formatted_address
     }
     // add listener for place changes
     this.searchBox.addListener('place_changed', this.onPlaceChanged)
     // Use bindTo() to bias the results to the map's viewport, even while that viewport changes.
     this.searchBox.bindTo('bounds', map)
+  }
+
+  // make sure to prepopulate searchInput when searchInput is set (e.g. 'selected map area')
+  componentDidUpdate(prevProps) {
+    if (
+      (prevProps.searchInput === null) &
+      (prevProps.searchInput !== this.props.searchInput)
+    ) {
+      this.searchInput.value = this.props.searchInput
+    }
   }
 
   componentWillUnmount({ mapApi } = this.props) {

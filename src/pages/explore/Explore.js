@@ -378,6 +378,8 @@ class Explore extends React.Component {
                       { offset: 0, destinationList: [], searchInput: null },
                       () => this.fetchDestinations(seed, nResults, 0, bounds),
                     )
+                    // make sure scroll is positioned on top
+                    window.scrollTo(0, 0)
                   }}
                 />
               )}

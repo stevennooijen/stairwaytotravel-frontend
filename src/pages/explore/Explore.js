@@ -98,8 +98,8 @@ class Explore extends React.Component {
 
       // Checks that the page has scrolled to the bottom
       if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 72
       ) {
         this.fetchDestinations(
           this.state.seed,

@@ -67,8 +67,15 @@ class AboutCompany extends React.Component {
                 and natural language processing techniques.
               </Typography>
               <Typography paragraph>
-                If you have any questions, suggestions or feedback, feel free to
-                contact us!
+                If you have any questions, suggestions or feedback, feel free to{' '}
+                <Link
+                  href="mailto:steven@stairwaytotravel.com?subject=Question about Stairway to Travel: ..."
+                  variant="subtitle1"
+                  color="secondary"
+                >
+                  contact
+                </Link>{' '}
+                us!
               </Typography>
             </Card>
           </Grid>

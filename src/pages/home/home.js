@@ -94,7 +94,7 @@ class Home extends React.Component {
             variant="h5"
             className={classes.heroText}
           >
-            Create your personalized travel itinerary
+            Discover your ultimate travel adventure
           </Typography>
           <Paper>
             {mapsApiLoaded && (
@@ -124,7 +124,7 @@ class Home extends React.Component {
             }}
             size="large"
           >
-            Search random!
+            Explore The World
           </Button>
         </HeroUnit>
         <Footer />

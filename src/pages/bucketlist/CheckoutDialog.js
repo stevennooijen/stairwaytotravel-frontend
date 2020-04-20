@@ -7,6 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import Divider from '@material-ui/core/Divider'
 
 import CheckboxGroup from './CheckboxGroup'
 
@@ -36,8 +37,9 @@ class CheckoutDialog extends Component {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Vamos, let's go!</DialogTitle>
+        <Divider variant="middle" />
         <form onSubmit={handleSubmit}>
-          <DialogContent dividers>
+          <DialogContent>
             <DialogContentText>
               Fill in your email address here to get a printout of your bucket
               list. Don't worry, it will not be used for email marketing.
@@ -52,7 +54,8 @@ class CheckoutDialog extends Component {
               onChange={handleTextFieldChange}
             />
           </DialogContent>
-          <DialogContent dividers>
+          <Divider variant="middle" />
+          <DialogContent>
             <DialogContentText>
               Do you need help with booking this trip? Check all that apply.
             </DialogContentText>
@@ -61,6 +64,7 @@ class CheckoutDialog extends Component {
               {...this.props}
             />
           </DialogContent>
+          <Divider variant="middle" />
           <DialogActions>
             <Button onClick={handleClose} color="primary">
               Cancel

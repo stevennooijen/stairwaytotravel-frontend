@@ -384,13 +384,15 @@ class Explore extends React.Component {
                 />
               )}
             </TopAppBar>
-            <ResultsBar
-              text={
-                this.state.maxPlacesText +
-                (this.state.maxPlacesText === 1 ? ' place' : ' places') +
-                ' to explore'
-              }
-            />
+            {!this.state.isLoading && (
+              <ResultsBar
+                text={
+                  this.state.maxPlacesText +
+                  (this.state.maxPlacesText === 1 ? ' place' : ' places') +
+                  ' to explore'
+                }
+              />
+            )}
             <Album>
               {this.state.destinationList.map(place => (
                 // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen

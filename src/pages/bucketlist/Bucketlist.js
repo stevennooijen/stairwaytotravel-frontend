@@ -233,15 +233,17 @@ class Bucketlist extends React.Component {
         ) : (
           // {/* If no likedDestinations, destinationsList is set to null and warning should be displayed */}
           <React.Fragment>
-            <ResultsBar
-              text={
-                this.state.destinationList.length +
-                (this.state.destinationList.length === 1
-                  ? ' place'
-                  : ' places') +
-                ' to travel to'
-              }
-            />
+            {!this.state.isLoading && (
+              <ResultsBar
+                text={
+                  this.state.destinationList.length +
+                  (this.state.destinationList.length === 1
+                    ? ' place'
+                    : ' places') +
+                  ' to travel to'
+                }
+              />
+            )}
             <Album>
               {this.state.destinationList.map(place => (
                 <Grid item key={place.id} xs={12} sm={6} md={4}>

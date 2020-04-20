@@ -5,8 +5,6 @@ import debounce from 'lodash.debounce'
 
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Container from '@material-ui/core/Container'
 import RefreshIcon from '@material-ui/icons/Refresh'
 
 import Album from 'components/Album'
@@ -19,6 +17,7 @@ import SearchBox from '../../components/SearchBox'
 import GoogleMap from '../../components/mapview/components/GoogleMap'
 import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
 import NothingFoundCard from './components/NothingFoundCard'
+import Loader from 'components/fetching/Loader'
 import FetchExploreDestinations from '../../components/fetching/FetchExploreDestinations'
 import {
   fitMapToPlace,
@@ -28,11 +27,6 @@ import {
 import { pushUrlWithQueryParams } from '../../components/utils'
 
 const styles = theme => ({
-  loaderContainer: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    justifyContent: 'center',
-  },
   extendedIcon: {
     marginRight: theme.spacing(1),
   },
@@ -414,15 +408,13 @@ class Explore extends React.Component {
                   />
                 </Grid>
               ))}
-              <Grid item xs={12} sm={6} md={4}>
-                {this.state.maxPlacesText === 0 && <NothingFoundCard />}
-              </Grid>
+              {this.state.maxPlacesText === 0 && (
+                <Grid item xs={12} sm={6} md={4}>
+                  <NothingFoundCard />
+                </Grid>
+              )}
             </Album>
-            {this.state.isLoading && (
-              <Container className={classes.loaderContainer}>
-                <CircularProgress />
-              </Container>
-            )}
+            {this.state.isLoading && <Loader />}
           </React.Fragment>
         )}
       </div>

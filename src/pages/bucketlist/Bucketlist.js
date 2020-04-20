@@ -3,10 +3,9 @@ import { withRouter } from 'react-router-dom'
 import queryString from 'query-string'
 
 import { withStyles } from '@material-ui/core/styles'
-import { Typography, Container } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import Snackbar from '@material-ui/core/Snackbar'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import ExploreIcon from '@material-ui/icons/Explore'
 
 import Album from 'components/Album'
@@ -25,6 +24,7 @@ import {
 import { pushUrlWithQueryParams } from '../../components/utils'
 import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
 import CheckoutDialog from './CheckoutDialog'
+import Loader from 'components/fetching/Loader'
 import postSignupForm from '../../components/fetching/mailchimp/PostSignupForm'
 import postLikesEvent from '../../components/fetching/mailchimp/PostLikesEvent'
 import patchSignupFormLikes from '../../components/fetching/mailchimp/PatchSignupFormLikes'
@@ -34,11 +34,6 @@ const MINIMUM_ZOOM = 8
 const styles = theme => ({
   pageTitle: {
     width: '100%',
-  },
-  loaderContainer: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    justifyContent: 'center',
   },
   extendedIcon: {
     marginRight: theme.spacing(1),
@@ -268,11 +263,7 @@ class Bucketlist extends React.Component {
                   </Grid>
                 )}
             </Album>
-            {this.state.isLoading && (
-              <Container className={classes.loaderContainer}>
-                <CircularProgress />
-              </Container>
-            )}
+            {this.state.isLoading && <Loader />}
             {/* functionality for checkout dialog starts here */}
             {this.state.destinationList.length > 0 && (
               <FloatingActionButton onClick={() => this.toggleDialog()} />

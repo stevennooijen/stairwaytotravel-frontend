@@ -55,7 +55,7 @@ class Explore extends React.Component {
       isLoading: false,
 
       // state for query
-      seed: 1234,
+      seed: Math.floor(Math.random() * 100000),
       nResults: 12,
       offset: 0,
       queryParams: queryString.parse(this.props.location.search),

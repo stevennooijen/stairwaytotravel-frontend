@@ -73,6 +73,7 @@ class DestinationCard extends Component {
             boxShadow={3}
           >
             <IconButton
+              disableRipple={true}
               className={classes.favoriteButton}
               aria-label="Add to favorites"
               color="primary"

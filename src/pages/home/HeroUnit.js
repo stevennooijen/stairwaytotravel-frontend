@@ -15,7 +15,8 @@ const styles = theme => ({
     backgroundPosition: 'center',
   },
   logoDiv: {
-    width: '50%',
+    marginTop: theme.spacing(10),
+    width: '70%',
     minWidth: 150,
     maxWidth: 400,
   },

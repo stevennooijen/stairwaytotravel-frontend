@@ -60,7 +60,8 @@ function ProductHowItWorks(props) {
               <Typography>
                 You know <em>what</em> you want to do, but you don’t know{' '}
                 <em>where</em> you can do it? Set your personal travel
-                preferences and find your ideal holiday destination.
+                preferences and we will match your wishes with 20.000 travel
+                destinations around the world.
               </Typography>
             </div>
           </Grid>
@@ -69,9 +70,10 @@ function ProductHowItWorks(props) {
               <Typography variant="h3">2. Explore</Typography>
               <ExploreIcon className={classes.image} fontSize="large" />
               <Typography>
-                We match your wishes with 20&nbsp;000 travel destinations around
-                the world. Take into account weather, activities, prices,
-                flights, and more.
+                Discover your destinations in detail and become excited. Take
+                into account weather, activities, prices, flights, and more.
+                Find places you have never heard of before, but are exactly what
+                you are looking for.
               </Typography>
             </div>
           </Grid>
@@ -80,9 +82,9 @@ function ProductHowItWorks(props) {
               <Typography variant="h3">3. Decide</Typography>
               <FavoriteIcon className={classes.image} fontSize="large" />
               <Typography>
-                Discover your destinations in detail and become excited. Find
-                places you've never heard of before, but are exactly what you’re
-                looking for.
+                Reconsider your liked destinations, and finalise your bucket
+                list! You can let us know if you need help with booking it. If
+                not, no worries, we hope you have composed your dream trip!
               </Typography>
             </div>
           </Grid>

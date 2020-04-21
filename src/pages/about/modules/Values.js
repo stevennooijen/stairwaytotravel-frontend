@@ -12,7 +12,7 @@ import UnbiasedIcon from '@material-ui/icons/Visibility'
 const styles = theme => ({
   root: {
     display: 'flex',
-    marginTop: theme.spacing(10),
+    marginTop: 0,
     marginBottom: theme.spacing(10),
     position: 'relative',
     flexDirection: 'column',
@@ -26,6 +26,7 @@ const styles = theme => ({
     padding: theme.spacing(0, 5),
   },
   title: {
+    marginTop: theme.spacing(10),
     marginBottom: theme.spacing(8),
   },
   image: {
@@ -56,7 +57,7 @@ function ProductValues(props) {
             <Typography>
               We turn the travel industry upside down and ask you what
               <b> you </b>
-              want to do instead of pushing off-the-shelf offers.
+              want to do instead of boring you with off-the-shelf offers.
             </Typography>
           </div>
         </Grid>

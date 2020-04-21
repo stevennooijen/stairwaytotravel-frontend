@@ -57,7 +57,7 @@ class About extends React.Component {
       // Inspired from https://material-ui.com/premium-themes/onepirate/
       <React.Fragment>
         <Jumbotron scrollTo={this.scrollToStepper} />
-        <Container ref={this.stepperRef}>
+        <Container ref={this.stepperRef} id="values">
           <ProductValues />
         </Container>
         <ParralaxBlock

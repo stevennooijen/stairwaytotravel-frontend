@@ -16,6 +16,7 @@ const styles = theme => ({
   cardWrapper: {
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
     padding: theme.spacing(2),
   },
   card: {
@@ -61,8 +62,8 @@ class AboutCompany extends React.Component {
               <Typography paragraph>
                 We believe that travel research should be inspiring, fun and
                 easy. We do this by giving you highly personalized,
-                uncommercial, and trustworthy advice. Also, we aim to surprise
-                you with unique destinations that you would otherwise never have
+                uncommercial, and trustworthy advice. We aim to surprise you
+                with unique destinations that you would otherwise never have
                 thought of. All recommendations are based on machine learning
                 and natural language processing techniques.
               </Typography>

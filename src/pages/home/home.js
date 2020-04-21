@@ -19,7 +19,7 @@ const styles = theme => ({
   },
   heroText: {
     marginBottom: theme.spacing(4),
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(8),
     [theme.breakpoints.down('sm')]: {
       marginLeft: theme.spacing(8),
       marginRight: theme.spacing(8),

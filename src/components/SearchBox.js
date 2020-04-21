@@ -75,6 +75,12 @@ class SearchBox extends Component {
   // whatever needs to happen is passed on from the higher component through handlePlaceChange
   onPlaceChanged = ({ handlePlaceChange } = this.props) => {
     const place = this.searchBox.getPlace()
+    if (!place.geometry) {
+      // User entered the name of a Place that was not suggested and
+      // pressed the Enter key, or the Place Details request failed.
+      // window.alert("No details available for input: '" + place.name + "'")
+      return
+    }
     handlePlaceChange(place)
   }
 

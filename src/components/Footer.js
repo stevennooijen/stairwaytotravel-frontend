@@ -43,7 +43,7 @@ class Footer extends React.Component {
         <ul>
           <li>
             <Link href="/" variant="subtitle1" color="textSecondary">
-              © 2019 Stairway to Travel
+              © 2020 Stairway to Travel
             </Link>
           </li>
           <li>

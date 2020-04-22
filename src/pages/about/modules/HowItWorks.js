@@ -83,7 +83,7 @@ function ProductHowItWorks(props) {
               <FavoriteIcon className={classes.image} fontSize="large" />
               <Typography>
                 Reconsider your liked destinations, and finalise your bucket
-                list! You can let us know if you need help with booking it. If
+                list. You can let us know if you need help with booking it. If
                 not, no worries, we hope you have composed your dream trip!
               </Typography>
             </div>

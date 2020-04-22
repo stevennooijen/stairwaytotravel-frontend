@@ -84,12 +84,11 @@ class CallToAction extends React.Component {
       textFieldValue: '',
     })
 
-    // send google analytics event for the click
+    // send google analytics event
     ReactGA.event({
       category: 'Acquisition',
-      action: 'Signup',
-      label: 'Signup for email updates',
-      value: 5,
+      action: 'Signup for email marketing',
+      value: 500,
     })
   }
 

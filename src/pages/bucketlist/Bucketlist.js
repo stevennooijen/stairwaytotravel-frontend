@@ -1,6 +1,7 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import queryString from 'query-string'
+import ReactGA from 'react-ga'
 
 import { withStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
@@ -268,7 +269,18 @@ class Bucketlist extends React.Component {
             {this.state.isLoading && <Loader />}
             {/* functionality for checkout dialog starts here */}
             {this.state.destinationList.length > 0 && (
-              <FloatingActionButton onClick={() => this.toggleDialog()} />
+              <FloatingActionButton
+                onClick={() => {
+                  this.toggleDialog()
+
+                  // send google analytics event
+                  ReactGA.event({
+                    category: 'Bucket list',
+                    action: 'Start checkout dialog',
+                    value: 50,
+                  })
+                }}
+              />
             )}
             <CheckoutDialog
               open={this.state.dialogOpen}
@@ -308,6 +320,13 @@ class Bucketlist extends React.Component {
                   })
                 this.toggleDialog()
                 this.setState({ thanksBarOpen: true })
+
+                // send google analytics event
+                ReactGA.event({
+                  category: 'Bucket list',
+                  action: 'Complete checkout dialog',
+                  value: 100,
+                })
               }}
               // props for the checkboxes in the dialog
               flights={flights}

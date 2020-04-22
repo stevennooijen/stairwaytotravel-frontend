@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import ReactGA from 'react-ga'
 
 import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -82,6 +83,13 @@ class DestinationCard extends Component {
               onClick={e => {
                 e.stopPropagation()
                 toggleLike(place.id)
+
+                // send google analytics event
+                ReactGA.event({
+                  category: 'Explore',
+                  action: 'Place like',
+                  value: 20,
+                })
               }}
             >
               {place.liked ? <FavoriteIcon /> : <FavoriteBorder />}

@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import ReactGA from 'react-ga'
+
 import { withStyles, fade } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
@@ -82,6 +84,13 @@ class SearchBox extends Component {
       return
     }
     handlePlaceChange(place)
+
+    // send google analytics event
+    ReactGA.event({
+      category: 'Explore',
+      action: 'Place search',
+      value: 10,
+    })
   }
 
   clearSearchBox() {

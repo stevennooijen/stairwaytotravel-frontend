@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import ReactGA from 'react-ga'
 
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -121,6 +122,13 @@ class Home extends React.Component {
             onClick={() => {
               sessionStorage.clear()
               savePlaceQuery('')
+
+              // send google analytics event
+              ReactGA.event({
+                category: 'Explore',
+                action: 'Random search',
+                value: 5,
+              })
             }}
             size="large"
           >

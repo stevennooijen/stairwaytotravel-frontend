@@ -6,7 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 
 import ReactGA from 'react-ga'
 
-ReactGA.initialize('UA-147513609-1')
+ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID)
 ReactGA.pageview(window.location.pathname + window.location.search)
 
 const appStyles = {

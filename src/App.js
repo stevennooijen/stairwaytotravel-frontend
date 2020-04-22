@@ -7,7 +7,6 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import ReactGA from 'react-ga'
 
 ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID)
-ReactGA.pageview(window.location.pathname + window.location.search)
 
 const appStyles = {
   root: {
@@ -21,10 +20,8 @@ const appStyles = {
 // Actual app component
 class App extends Component {
   // Generate GA pageview when route changes
-  componentDidMount = () =>
-    ReactGA.pageview(window.location.pathname + window.location.search)
-  componentDidUpdate = () =>
-    ReactGA.pageview(window.location.pathname + window.location.search)
+  componentDidMount = () => ReactGA.pageview(window.location.pathname) // + window.location.search)
+  componentDidUpdate = () => ReactGA.pageview(window.location.pathname) // + window.location.search)
 
   render() {
     // Use curly brackets to retrieve specific items from an object

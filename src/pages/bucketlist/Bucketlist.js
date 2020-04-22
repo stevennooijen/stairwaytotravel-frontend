@@ -88,6 +88,9 @@ class Bucketlist extends React.Component {
   }
 
   componentDidMount() {
+    // always start on top of page
+    window.scrollTo(0, 0)
+
     // Set defaults based on query string parameters
     if (this.state.queryParams.map === 'true') this.setState({ showMap: true })
 

@@ -20,6 +20,12 @@ const appStyles = {
 
 // Actual app component
 class App extends Component {
+  // Generate GA pageview when route changes
+  componentDidMount = () =>
+    ReactGA.pageview(window.location.pathname + window.location.search)
+  componentDidUpdate = () =>
+    ReactGA.pageview(window.location.pathname + window.location.search)
+
   render() {
     // Use curly brackets to retrieve specific items from an object
     // const { opened } = this.state

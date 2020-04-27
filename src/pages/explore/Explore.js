@@ -128,10 +128,6 @@ class Explore extends React.Component {
     })
   }
 
-  handleBoundsChange = newBounds => {
-    this.setState({ mapBounds: newBounds })
-  }
-
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
     // Set defaults based on query string parameters
@@ -146,7 +142,7 @@ class Explore extends React.Component {
       ? extractBoundsFromPlaceObject(this.props.placeQuery)
       : null
     if (bounds) {
-      this.handleBoundsChange(bounds)
+      this.setState({ mapBounds: bounds })
     }
 
     let country
@@ -309,7 +305,6 @@ class Explore extends React.Component {
                   handlePlaceChange={place => {
                     savePlaceQuery(place)
                     const bounds = extractBoundsFromPlaceObject(place)
-                    this.handleBoundsChange(bounds)
                     // check if PlaceQuery is a country
                     const country = extractCountryFromPlaceObject(place)
                     // New query, so reset destinationList and offset
@@ -318,6 +313,7 @@ class Explore extends React.Component {
                         offset: 0,
                         destinationList: [],
                         searchInput: null,
+                        mapBounds: bounds,
                         country: country,
                       },
                       () =>
@@ -367,8 +363,7 @@ class Explore extends React.Component {
                 apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
                 // Pass on other stuff
                 handleOnChange={newBounds => {
-                  this.handleBoundsChange(newBounds)
-                  this.setState({ showSearchHere: true })
+                  this.setState({ mapBounds: newBounds, showSearchHere: true })
                 }}
                 places={this.state.destinationList}
                 toggleLike={id => {
@@ -401,7 +396,6 @@ class Explore extends React.Component {
                   handlePlaceChange={place => {
                     savePlaceQuery(place)
                     const bounds = extractBoundsFromPlaceObject(place)
-                    this.handleBoundsChange(bounds)
                     // check if PlaceQuery is a country
                     const country = extractCountryFromPlaceObject(place)
                     // New query, so reset destinationList and offset
@@ -410,6 +404,7 @@ class Explore extends React.Component {
                         offset: 0,
                         destinationList: [],
                         searchInput: null,
+                        mapBounds: bounds,
                         country: country,
                       },
                       () =>

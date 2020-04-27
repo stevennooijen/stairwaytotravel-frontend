@@ -70,8 +70,7 @@ function ProductHero(props) {
         variant="h5"
         className={classes.h5}
       >
-        To enable your inner adventurer to discover <br />
-        <i>and</i> experience the beauty of the world
+        Empowering you to discover and experience the beauty of the world
       </Typography>
     </HeroUnitLayout>
   )

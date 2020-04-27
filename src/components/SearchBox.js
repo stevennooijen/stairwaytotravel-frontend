@@ -106,7 +106,7 @@ class SearchBox extends Component {
           <SearchIcon />
         </div>
         <InputBase
-          placeholder="Try &quot;Puglia, Italy&quot;"
+          placeholder="Explore a region/country"
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,

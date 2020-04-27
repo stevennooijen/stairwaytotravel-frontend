@@ -23,6 +23,7 @@ import {
   fitMapToPlace,
   fitMapToBounds,
   extractBoundsFromPlaceObject,
+  extractCountryFromPlaceObject,
 } from '../../components/mapview/utils'
 import { pushUrlWithQueryParams } from '../../components/utils'
 
@@ -60,6 +61,7 @@ class Explore extends React.Component {
       offset: 0,
       queryParams: queryString.parse(this.props.location.search),
       mapBounds: null,
+      country: null,
       searchInput: null,
 
       // state to keep places and interactions
@@ -100,6 +102,7 @@ class Explore extends React.Component {
           this.state.nResults,
           this.state.offset,
           this.state.mapBounds,
+          this.state.country,
         )
       }
     }, 100)
@@ -146,6 +149,15 @@ class Explore extends React.Component {
       this.handleBoundsChange(bounds)
     }
 
+    let country
+    // check if PlaceQuery is a country
+    if (this.props.placeQuery) {
+      country = extractCountryFromPlaceObject(this.props.placeQuery)
+      this.setState({ country: country })
+    } else {
+      country = null
+    }
+
     // const itemList = JSON.parse(sessionStorage.getItem('destinationList'))
     const itemList = null
 
@@ -155,15 +167,16 @@ class Explore extends React.Component {
         this.state.nResults,
         this.state.offset,
         bounds,
+        country,
       )
     } else {
       this.setState({ destinationList: itemList })
     }
   }
 
-  fetchDestinations(seed, nResults, offset, bounds) {
+  fetchDestinations(seed, nResults, offset, bounds, country) {
     this.setState({ isLoading: true, offset: offset + nResults }, () => {
-      FetchExploreDestinations(seed, nResults, offset, bounds)
+      FetchExploreDestinations(seed, nResults, offset, bounds, country)
         .then(response => response.json())
         .then(data => {
           // retrieve maximum number of places possible
@@ -297,10 +310,24 @@ class Explore extends React.Component {
                     savePlaceQuery(place)
                     const bounds = extractBoundsFromPlaceObject(place)
                     this.handleBoundsChange(bounds)
+                    // check if PlaceQuery is a country
+                    const country = extractCountryFromPlaceObject(place)
                     // New query, so reset destinationList and offset
                     this.setState(
-                      { offset: 0, destinationList: [], searchInput: null },
-                      () => this.fetchDestinations(seed, nResults, 0, bounds),
+                      {
+                        offset: 0,
+                        destinationList: [],
+                        searchInput: null,
+                        country: country,
+                      },
+                      () =>
+                        this.fetchDestinations(
+                          seed,
+                          nResults,
+                          0,
+                          bounds,
+                          country,
+                        ),
                     )
                     // Map centering is triggered by change in placeQuery state in Mapview component
                   }}
@@ -317,6 +344,7 @@ class Explore extends React.Component {
                       offset: 0,
                       destinationList: [],
                       searchInput: 'Selected map area',
+                      country: null,
                     },
                     () =>
                       this.fetchDestinations(
@@ -324,6 +352,7 @@ class Explore extends React.Component {
                         nResults,
                         0,
                         this.state.mapBounds,
+                        null,
                       ),
                   )
                 }}
@@ -373,10 +402,24 @@ class Explore extends React.Component {
                     savePlaceQuery(place)
                     const bounds = extractBoundsFromPlaceObject(place)
                     this.handleBoundsChange(bounds)
+                    // check if PlaceQuery is a country
+                    const country = extractCountryFromPlaceObject(place)
                     // New query, so reset destinationList and offset
                     this.setState(
-                      { offset: 0, destinationList: [], searchInput: null },
-                      () => this.fetchDestinations(seed, nResults, 0, bounds),
+                      {
+                        offset: 0,
+                        destinationList: [],
+                        searchInput: null,
+                        country: country,
+                      },
+                      () =>
+                        this.fetchDestinations(
+                          seed,
+                          nResults,
+                          0,
+                          bounds,
+                          country,
+                        ),
                     )
                     // make sure scroll is positioned on top
                     window.scrollTo(0, 0)

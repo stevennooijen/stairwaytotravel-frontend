@@ -5,3 +5,6 @@ export {
 } from './ExtractBoundsFromPlaceObject'
 export { default as getMapBounds } from './GetMapBounds'
 export { default as bindResizeListener } from './BindResizeListener'
+export {
+  default as extractCountryFromPlaceObject,
+} from './ExtractCountryFromPlaceObject'

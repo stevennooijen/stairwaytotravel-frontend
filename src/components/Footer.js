@@ -3,7 +3,6 @@ import { withStyles } from '@material-ui/core/styles'
 
 import Container from '@material-ui/core/Container'
 import Link from '@material-ui/core/Link'
-import { Typography } from '@material-ui/core'
 
 const styles = theme => ({
   '@global': {
@@ -43,14 +42,20 @@ class Footer extends React.Component {
       <Container component="footer" maxWidth={false} className={classes.footer}>
         <ul>
           <li>
-            <Typography variant="subtitle1" color="textSecondary">
-              © 2019 Stairway to Travel
-            </Typography>
+            <Link href="/" variant="subtitle1" color="textSecondary">
+              © 2020 Stairway to Travel
+            </Link>
+          </li>
+          <li>
+            <Link href="/about" variant="subtitle1" color="secondary">
+              About
+            </Link>
           </li>
           <li>
             <Link
-              href="mailto:steven.nooijen@gmail.com?subject=Question about Stairway to Travel: ..."
+              href="mailto:steven@stairwaytotravel.com?subject=Question about Stairway to Travel: ..."
               variant="subtitle1"
+              color="secondary"
             >
               Contact
             </Link>

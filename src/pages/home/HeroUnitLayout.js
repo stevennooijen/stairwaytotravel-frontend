@@ -4,8 +4,6 @@ import clsx from 'clsx'
 import { withStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
-import ExpandMore from '@material-ui/icons/ExpandMore'
-
 const styles = theme => ({
   root: {
     color: theme.palette.common.white,
@@ -46,14 +44,10 @@ const styles = theme => ({
     backgroundRepeat: 'no-repeat',
     zIndex: -2,
   },
-  arrowDown: {
-    position: 'absolute',
-    bottom: theme.spacing(4),
-  },
 })
 
 function HeroUnitLayout(props) {
-  const { backgroundClassName, children, classes, scrollTo } = props
+  const { backgroundClassName, children, classes } = props
 
   return (
     <section className={classes.root}>
@@ -64,13 +58,6 @@ function HeroUnitLayout(props) {
         <div className={classes.backdrop} />
         {/* background image is passed here */}
         <div className={clsx(classes.background, backgroundClassName)} />
-        <ExpandMore
-          className={classes.arrowDown}
-          height="16"
-          width="12"
-          alt="arrow down"
-          onClick={scrollTo}
-        />
       </Container>
     </section>
   )

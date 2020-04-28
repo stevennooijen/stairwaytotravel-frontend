@@ -1,4 +1,4 @@
-# Stairway.travel React front-end
+# Stairway to Travel React front-end
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
@@ -77,7 +77,18 @@ npm run build
 
 To host on Firebase, configure as a single-page app when initializing in the project root directory with `firebase init`. This will create a `firebase.json` file that contains installation specifics for Firebase, like which directory to deploy (in our case the `build` folder)
 
-After createing the build, deploy with:
+We have set up two projects to deploy to, which are defined in `.firebaserc`. Their project aliases are:
+
+- `staging`: releases to Firebase project [`stairwaytotravel-release`](https://stairwaytotravel-release.web.app/)
+- `production`: releases to Firebase project [`stairwaytotravel`](https://stairwaytotravel.com/)
+
+Before deploying make sure the right usage profile is set up using:
+
+```bash
+firebase use <project_alias>
+```
+
+Having activated the right project, you can deploy the build with:
 
 ```bash
 firebase deploy

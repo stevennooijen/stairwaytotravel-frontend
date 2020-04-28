@@ -20,7 +20,7 @@ const styles = theme => ({
     minWidth: 200,
   },
   h5: {
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(8),
     marginTop: theme.spacing(10),
     [theme.breakpoints.down('sm')]: {
       marginLeft: theme.spacing(8),
@@ -31,7 +31,8 @@ const styles = theme => ({
     margin: theme.spacing(2),
   },
   logoDiv: {
-    width: '50%',
+    marginTop: theme.spacing(10),
+    width: '70%',
     minWidth: 150,
     maxWidth: 400,
   },
@@ -69,7 +70,7 @@ function ProductHero(props) {
         variant="h5"
         className={classes.h5}
       >
-        Create your personalized travel itinerary
+        Empowering you to discover and experience the beauty of the world
       </Typography>
     </HeroUnitLayout>
   )

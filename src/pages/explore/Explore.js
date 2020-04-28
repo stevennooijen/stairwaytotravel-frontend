@@ -1,19 +1,44 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
+import queryString from 'query-string'
+import debounce from 'lodash.debounce'
+
 import Grid from '@material-ui/core/Grid'
+import { withStyles } from '@material-ui/core/styles'
+import RefreshIcon from '@material-ui/icons/Refresh'
 
 import Album from 'components/Album'
-import DestinationCard from 'components/destination'
-// import ExampleList from 'assets/Constants'
-import GetFlickrImage from 'components/GetFlickrImage'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import { withStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
+import DestinationCard from 'components/destinationCard/DestinationCard'
+import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
+import TopAppBar from '../../components/TopAppBar'
+import ResultsBar from '../../components/ResultsBar'
+import { Mapview } from '../../components/mapview'
+import SearchBox from '../../components/SearchBox'
+import GoogleMap from '../../components/mapview/components/GoogleMap'
+import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
+import NothingFoundCard from './components/NothingFoundCard'
+import Loader from 'components/fetching/Loader'
+import FetchExploreDestinations from '../../components/fetching/FetchExploreDestinations'
+import {
+  fitMapToPlace,
+  fitMapToBounds,
+  extractBoundsFromPlaceObject,
+  extractCountryFromPlaceObject,
+} from '../../components/mapview/utils'
+import { pushUrlWithQueryParams } from '../../components/utils'
 
 const styles = theme => ({
-  loaderContainer: {
-    marginTop: theme.spacing(8),
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
+  body: {
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    height: '100vh',
+  },
+  // in order to position MapFloatingActionButton in middle of mapview
+  mapContainer: {
+    flexGrow: 1,
   },
 })
 
@@ -24,78 +49,181 @@ class Explore extends React.Component {
     super(props)
 
     this.state = {
-      continent: sessionStorage.getItem('continent'),
-      // For testing purposes, could use ExampleList from Constants
-      // destinationList: ExampleList,
+      // state for infinte scroll
+      maxPlacesText: '',
+      error: false,
+      hasMore: true,
+      isLoading: false,
+
+      // state for query
+      seed: Math.floor(Math.random() * 100000),
+      nResults: 12,
+      offset: 0,
+      queryParams: queryString.parse(this.props.location.search),
+      mapBounds: null,
+      country: null,
+      searchInput: null,
+
+      // state to keep places and interactions
       destinationList: [],
+      likedDestinations: JSON.parse(
+        sessionStorage.getItem('likedDestinations'),
+      ),
+      newLikes: [],
+
+      // state for mapview
+      showMap: false,
+      showSearchHere: false,
+      // Google mapInstance object
+      mapApiLoaded: false,
+      mapInstance: null,
+      mapApi: null,
     }
+
+    // Binds our scroll event handler
+    window.onscroll = debounce(() => {
+      const {
+        state: { error, isLoading, hasMore },
+      } = this
+
+      // Bails early if:
+      // * there's an error
+      // * it's already loading
+      // * there's nothing left to load
+      if (error || isLoading || !hasMore) return
+
+      // Checks that the page has scrolled to the bottom
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 72
+      ) {
+        this.fetchDestinations(
+          this.state.seed,
+          this.state.nResults,
+          this.state.offset,
+          this.state.mapBounds,
+          this.state.country,
+        )
+      }
+    }, 100)
+  }
+
+  // Check for state changes in PlaceQuery to update map
+  // TODO: check with Leon if there is a better way of doing this to separate this logic from SearchBox
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.placeQuery !== this.props.placeQuery) {
+      fitMapToPlace(this.state.mapInstance, this.props.placeQuery)
+    }
+    // This focusses the map on placeQuery when it is loaded again
+    if (prevState.mapInstance !== this.state.mapInstance) {
+      fitMapToBounds(this.state.mapInstance, this.state.mapBounds)
+    }
+  }
+
+  apiHasLoaded = (map, maps) => {
+    this.setState({
+      mapApiLoaded: true,
+      mapInstance: map,
+      mapApi: maps,
+    })
   }
 
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
-    // this._isMounted = true
-    const itemList = JSON.parse(sessionStorage.getItem('destinationList'))
+    // Set defaults based on query string parameters
+    if (this.state.queryParams.map === 'true') this.setState({ showMap: true })
+
+    // If no already liked destinations, set to empty array
+    if (this.state.likedDestinations === null)
+      this.setState({ likedDestinations: [] })
+
+    // retrieve bounds from PlaceQuery
+    const bounds = this.props.placeQuery
+      ? extractBoundsFromPlaceObject(this.props.placeQuery)
+      : null
+    if (bounds) {
+      this.setState({ mapBounds: bounds })
+    }
+
+    let country
+    // check if PlaceQuery is a country
+    if (this.props.placeQuery) {
+      country = extractCountryFromPlaceObject(this.props.placeQuery)
+      this.setState({ country: country })
+    } else {
+      country = null
+    }
+
+    // const itemList = JSON.parse(sessionStorage.getItem('destinationList'))
+    const itemList = null
 
     if (itemList === null) {
-      // First fetch the list of recommended destinations
-      this.fetchDestinations()
-        .then(response => response.json())
-        // Then save this to State to start rendering the cards
-        .then(data => {
-          const destinationList = data.Destinations
-          this.setState(oldState => ({
-            ...oldState,
-            destinationList,
-          }))
-
-          return destinationList
-        })
-        // Then for each destination create promise to fetch an image and set State if resolved
-        .then(destinationList => {
-          destinationList.forEach(item => {
-            this.fetchImage(item.name)
-          })
-        })
-        .catch(err => console.log(err))
+      this.fetchDestinations(
+        this.state.seed,
+        this.state.nResults,
+        this.state.offset,
+        bounds,
+        country,
+      )
     } else {
       this.setState({ destinationList: itemList })
     }
   }
 
-  // Query based on destination name + country_name + (possibly activity filter?) + (geolocation?)
-  fetchImage(destinationName) {
-    // Create promise and setState when resolved through the callback `.then()`
-    GetFlickrImage(destinationName).then(imageUrl => {
-      this.setState(oldState => ({
-        // Posssibly improve this by using a Map type (like a dict) instead of looping over an array
-        // You could then access each item directly: destionationList[i]
-        destinationList: oldState.destinationList.map(item => {
-          if (item.name === destinationName) {
-            return {
-              ...item,
-              image: imageUrl,
-            }
-          } else {
-            return item
-          }
-        }),
-      }))
-    })
-  }
+  fetchDestinations(seed, nResults, offset, bounds, country) {
+    this.setState({ isLoading: true, offset: offset + nResults }, () => {
+      FetchExploreDestinations(seed, nResults, offset, bounds, country)
+        .then(response => response.json())
+        .then(data => {
+          // retrieve maximum number of places possible
+          this.setState({ maxPlacesText: data.maxPlacesText })
+          const maxPlaces = data.maxPlaces
 
-  // Call an API, API_URL is retrieved from .env files
-  fetchDestinations() {
-    // return search as requested by sessionStorage (=Search tab)
-    if (this.state.continent) {
-      return fetch(
-        process.env.REACT_APP_API_URL +
-          '/api/explore/?continent=' +
-          sessionStorage.getItem('continent'),
-      )
-      // return random destination
-    } else {
-      return fetch(process.env.REACT_APP_API_URL + '/api/explore')
-    }
+          // check if new places are fetched
+          data.destinations.length > 0
+            ? // for each of the fetched destinations in the list do:
+              data.destinations.forEach(item => {
+                // 1. retrieve flickr Images
+                GetFlickrImages(item.name)
+                  .then(imageUrls => {
+                    return {
+                      ...item,
+                      images: imageUrls,
+                    }
+                  })
+                  // 2. set liked to true if destination already in likedList
+                  .then(item => {
+                    if (this.state.likedDestinations.includes(item.id)) {
+                      return {
+                        ...item,
+                        liked: true,
+                      }
+                    } else {
+                      return item
+                    }
+                  })
+                  // 3. save fetched destination to state
+                  .then(item =>
+                    this.setState({
+                      destinationList: [...this.state.destinationList, item],
+                      hasMore: this.state.destinationList.length < maxPlaces,
+                      isLoading: false,
+                    }),
+                  )
+              })
+            : this.setState({
+                hasMore: false,
+                isLoading: false,
+              })
+        })
+        .catch(err => {
+          // console.log(err)
+          this.setState({
+            error: err.message,
+            isLoading: false,
+          })
+        })
+    })
   }
 
   toggleLike(id) {
@@ -114,49 +242,226 @@ class Explore extends React.Component {
     this.setState({
       destinationList: newList,
     })
-
-    // hier: api call naar backend. dat wanneer je de pagina refresht en vraagt wat de gelikedte kaarten zijn dat alles weer teurg komt.
-    // beetje state in de front-end en dan veel state in de backend!
-
-    // Hier: Apart lijstje van likes wegschijven naar session/localStorage
-    // Bij like data kopieren van de een naar de lijst met likes. en een update naar de backend
     sessionStorage.setItem('destinationList', JSON.stringify(newList))
   }
 
+  updateLikedDestinationsList(id) {
+    // For bucketlist page: keep track of likes and save in an array to session storage
+    const likedDestinations = this.state.likedDestinations
+    const newLikedDestinations = likedDestinations.includes(id)
+      ? likedDestinations.filter(item => item !== id)
+      : [...likedDestinations, id]
+    this.setState({ likedDestinations: newLikedDestinations })
+    sessionStorage.setItem(
+      'likedDestinations',
+      JSON.stringify(newLikedDestinations),
+    )
+  }
+
+  updateNewLikes(id) {
+    // Same as above, can be turned into generic helper function!
+    const newLikes = this.state.newLikes
+    const newNewLikes = newLikes.includes(id)
+      ? newLikes.filter(item => item !== id)
+      : [...newLikes, id]
+    this.setState({ newLikes: newNewLikes })
+
+    // set newLike for notification dot when there are new likes
+    if (newNewLikes.length > 0) {
+      this.props.setNewLike(true)
+    } else this.props.setNewLike(false)
+  }
+
+  toggleShowMap() {
+    this.setState({ showMap: !this.state.showMap })
+    window.scrollTo(0, 0)
+    // Update query string in url
+    const newQueryParams = this.state.queryParams
+    newQueryParams.map = !this.state.showMap
+    pushUrlWithQueryParams(newQueryParams, this.props)
+  }
+
   render() {
-    const { classes } = this.props
+    const { classes, placeQuery, savePlaceQuery } = this.props
+    const { seed, nResults, mapApiLoaded, mapInstance, mapApi } = this.state
 
     return (
-      <main>
-        {/* check if destinations are loaded, if not display progress */}
-        {this.state.destinationList && this.state.destinationList.length ? (
-          <Album>
-            {this.state.destinationList.map(card => (
-              // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
-              // State blijft zodoende in de Bucketlist component op 'hoog' niveau
-              <Grid item key={card.id} xs={12} sm={6} md={4} lg={3}>
-                <DestinationCard
-                  id={card.id}
-                  title={card.name}
-                  image={card.image}
-                  // image={require('../../assets/beach.jpg')}
-                  text={card.country_name}
-                  liked={card.liked}
-                  toggleLike={id => this.toggleLike(id)}
+      <div>
+        {/* Show map or show stream */}
+        {this.state.showMap ? (
+          // Map - in this case the searchBox uses the same mapInstance as the map itself
+          <div className={classes.body}>
+            <TopAppBar
+              showMap={this.state.showMap}
+              toggleShowMap={() => this.toggleShowMap()}
+            >
+              {/* TODO: see how this can be decoupled from the same mapInstance as the mapview uses */}
+              {mapApiLoaded && (
+                <SearchBox
+                  map={mapInstance}
+                  mapApi={mapApi}
+                  placeQuery={placeQuery}
+                  searchInput={this.state.searchInput}
+                  handlePlaceChange={place => {
+                    savePlaceQuery(place)
+                    const bounds = extractBoundsFromPlaceObject(place)
+                    // check if PlaceQuery is a country
+                    const country = extractCountryFromPlaceObject(place)
+                    // New query, so reset destinationList and offset
+                    this.setState(
+                      {
+                        offset: 0,
+                        destinationList: [],
+                        searchInput: null,
+                        mapBounds: bounds,
+                        country: country,
+                      },
+                      () =>
+                        this.fetchDestinations(
+                          seed,
+                          nResults,
+                          0,
+                          bounds,
+                          country,
+                        ),
+                    )
+                    // Map centering is triggered by change in placeQuery state in Mapview component
+                  }}
                 />
-              </Grid>
-            ))}
-          </Album>
+              )}
+            </TopAppBar>
+            {this.state.showSearchHere && (
+              <MapFloatingActionButton
+                onClick={() => {
+                  // New query, so reset destinationList and offset
+                  this.setState(
+                    {
+                      showSearchHere: false,
+                      offset: 0,
+                      destinationList: [],
+                      searchInput: 'Selected map area',
+                      country: null,
+                    },
+                    () =>
+                      this.fetchDestinations(
+                        seed,
+                        nResults,
+                        0,
+                        this.state.mapBounds,
+                        null,
+                      ),
+                  )
+                }}
+              >
+                <RefreshIcon className={classes.extendedIcon} />
+                Search here
+              </MapFloatingActionButton>
+            )}
+            <div className={classes.mapContainer}>
+              <Mapview
+                // Create Google mapInstance object in Mapview and save in Explore state
+                apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
+                // Pass on other stuff
+                handleOnChange={newBounds => {
+                  this.setState({ mapBounds: newBounds, showSearchHere: true })
+                }}
+                places={this.state.destinationList}
+                toggleLike={id => {
+                  this.toggleLike(id)
+                  this.updateLikedDestinationsList(id)
+                  this.updateNewLikes(id)
+                }}
+              />
+            </div>
+          </div>
         ) : (
-          //  show Indeterminate progress indicator while waiting for destinations to load
-          <Container className={classes.loaderContainer}>
-            {/* <LinearProgress /> */}
-            <CircularProgress />
-          </Container>
+          // Stream - in this case we create a mapInstance for the searchBox only
+          <React.Fragment>
+            <GoogleMap
+              onGoogleApiLoaded={({ map, maps }) => {
+                this.apiHasLoaded(map, maps)
+              }}
+            />
+            <TopAppBar
+              showMap={this.state.showMap}
+              toggleShowMap={() => this.toggleShowMap()}
+            >
+              {/* TODO: load API before already in list view. Cannot wait till map is loaded! */}
+              {mapApiLoaded && (
+                <SearchBox
+                  map={mapInstance}
+                  mapApi={mapApi}
+                  placeQuery={placeQuery}
+                  searchInput={this.state.searchInput}
+                  handlePlaceChange={place => {
+                    savePlaceQuery(place)
+                    const bounds = extractBoundsFromPlaceObject(place)
+                    // check if PlaceQuery is a country
+                    const country = extractCountryFromPlaceObject(place)
+                    // New query, so reset destinationList and offset
+                    this.setState(
+                      {
+                        offset: 0,
+                        destinationList: [],
+                        searchInput: null,
+                        mapBounds: bounds,
+                        country: country,
+                      },
+                      () =>
+                        this.fetchDestinations(
+                          seed,
+                          nResults,
+                          0,
+                          bounds,
+                          country,
+                        ),
+                    )
+                    // make sure scroll is positioned on top
+                    window.scrollTo(0, 0)
+                  }}
+                />
+              )}
+            </TopAppBar>
+            {!this.state.isLoading && (
+              <ResultsBar
+                text={
+                  this.state.maxPlacesText +
+                  (this.state.maxPlacesText === 1 ? ' place' : ' places') +
+                  ' to explore'
+                }
+              />
+            )}
+            <Album>
+              {this.state.destinationList.map(place => (
+                // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
+                // State blijft zodoende in de Bucketlist component op 'hoog' niveau
+                <Grid item key={place.id} xs={12} sm={6} md={4}>
+                  <DestinationCard
+                    place={place}
+                    toggleLike={id => {
+                      this.toggleLike(id)
+                      this.updateLikedDestinationsList(id)
+                      this.updateNewLikes(id)
+                    }}
+                    onClick={() => {
+                      // send to destination page
+                      this.props.history.push('/explore/' + place.id)
+                    }}
+                  />
+                </Grid>
+              ))}
+              {this.state.maxPlacesText === 0 && (
+                <Grid item xs={12} sm={6} md={4}>
+                  <NothingFoundCard />
+                </Grid>
+              )}
+            </Album>
+            {this.state.isLoading && <Loader />}
+          </React.Fragment>
         )}
-      </main>
+      </div>
     )
   }
 }
 
-export default withStyles(styles)(Explore)
+export default withRouter(withStyles(styles)(Explore))

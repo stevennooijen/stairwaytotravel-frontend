@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { withStyles } from '@material-ui/core/styles'
 
-// import SimpleBottomNavigation from 'components/appbar'
+import { withStyles } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 import ReactGA from 'react-ga'
 
-ReactGA.initialize('UA-147513609-1')
-ReactGA.pageview(window.location.pathname + window.location.search)
+ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID)
 
 const appStyles = {
   root: {
@@ -20,6 +19,10 @@ const appStyles = {
 
 // Actual app component
 class App extends Component {
+  // Generate GA pageview when route changes
+  componentDidMount = () => ReactGA.pageview(window.location.pathname) // + window.location.search)
+  componentDidUpdate = () => ReactGA.pageview(window.location.pathname) // + window.location.search)
+
   render() {
     // Use curly brackets to retrieve specific items from an object
     // const { opened } = this.state
@@ -29,8 +32,8 @@ class App extends Component {
     return (
       // className is used to give the div an id
       <div className="App">
+        <CssBaseline />
         {children}
-        {/* <SimpleBottomNavigation /> */}
       </div>
     )
   }

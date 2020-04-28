@@ -26,7 +26,7 @@ class Album extends React.Component {
 
     return (
       <div className={classNames(classes.layout, classes.cardGrid)}>
-        <Grid container spacing={4}>
+        <Grid container align="center" spacing={4}>
           {/* Album passes along children components as provided through props */}
           {this.props.children}
         </Grid>

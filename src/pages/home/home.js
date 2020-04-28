@@ -1,21 +1,17 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import ReactGA from 'react-ga'
+
 import { withStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+import Paper from '@material-ui/core/Paper'
 
-import Container from '@material-ui/core/Container'
-
-import ProductValues from '../about/modules/Values'
-import ProductHowItWorks from '../about/modules/HowItWorks'
-import AboutCompany from '../about/modules/AboutCompany'
-import ParralaxBlock from '../about/modules/ParralaxBlock'
-import CallToAction from '../about/modules/CallToAction'
 import Footer from '../../components/Footer'
 import HeroUnit from './HeroUnit'
-
-// Require() only takes static url variables, so a dynamic (!) imageFolder variable is not allowed
-// https://stackoverflow.com/questions/44991669/react-native-require-with-dynamic-string
-const backgroundImageList = ['forest.jpg', 'city.jpg', 'mountain.jpg'].map(
-  img => require('../../assets/img/used/' + img),
-)
+import SearchBox from '../../components/SearchBox'
+import GoogleMap from '../../components/mapview/components/GoogleMap'
+import FetchExploreDestinations from 'components/fetching/FetchExploreDestinations'
 
 const styles = theme => ({
   stepper: {
@@ -23,9 +19,16 @@ const styles = theme => ({
     paddingBottom: theme.spacing(8),
     backgroundColor: theme.palette.background.paper,
   },
-  call2ActionRoot: {
-    margin: 0,
-    padding: 0,
+  heroText: {
+    marginBottom: theme.spacing(4),
+    marginTop: theme.spacing(8),
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: theme.spacing(8),
+      marginRight: theme.spacing(8),
+    },
+  },
+  more: {
+    margin: theme.spacing(2),
   },
 })
 
@@ -33,13 +36,28 @@ class Home extends React.Component {
   constructor(props) {
     super(props)
     this.stepperRef = React.createRef()
-    this.call2actionRef = React.createRef()
+
+    this.state = {
+      mapsApiLoaded: false,
+      mapsInstance: null,
+      mapsApi: null,
+    }
   }
 
-  // state = {
-  // Check if previous search result still in sessionStorage, if not set as empty
-  // continent: sessionStorage.getItem('continent') || '',
-  // }
+  componentDidMount() {
+    window.scrollTo(0, 0)
+
+    // Do a dummy fetch to warm up the backend when someone lands on the home page
+    FetchExploreDestinations(1234, 1, 0)
+  }
+
+  apiHasLoaded = (map, maps) => {
+    this.setState({
+      mapsApiLoaded: true,
+      mapsInstance: map,
+      mapsApi: maps,
+    })
+  }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value })
@@ -62,45 +80,65 @@ class Home extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { mapsApiLoaded, mapsInstance, mapsApi } = this.state
+    const { classes, placeQuery, savePlaceQuery } = this.props
 
     return (
       <React.Fragment>
+        {/* // Here we create a mapInstance for the searchBox only */}
+        <GoogleMap
+          onGoogleApiLoaded={({ map, maps }) => {
+            this.apiHasLoaded(map, maps)
+          }}
+        />
         {/* Hero unit. Pass along scroller as action for buttons */}
-        <HeroUnit scrollTo={this.scrollToStepper} />
-        <Container ref={this.stepperRef}>
-          <ProductValues />
-        </Container>
+        <HeroUnit>
+          <Typography
+            color="inherit"
+            align="center"
+            variant="h5"
+            className={classes.heroText}
+          >
+            Compose your ultimate travel adventure
+          </Typography>
+          <Paper>
+            {mapsApiLoaded && (
+              <SearchBox
+                map={mapsInstance}
+                mapApi={mapsApi}
+                placeQuery={placeQuery}
+                searchInput={null}
+                handlePlaceChange={place => {
+                  savePlaceQuery(place)
+                  this.props.history.push('/explore')
+                }}
+              />
+            )}
+          </Paper>
+          <Typography variant="body2" color="inherit" className={classes.more}>
+            OR...
+          </Typography>
+          <Button
+            component={Link}
+            to="/explore"
+            variant="outlined"
+            color="inherit"
+            onClick={() => {
+              sessionStorage.clear()
+              savePlaceQuery('')
 
-        <ParralaxBlock
-          imageUrl={backgroundImageList[0]}
-          imageAlt="A stairway in a forest pointing to the sky"
-          scrollTo={this.scrollToCall2Action}
-          buttonText="Stay in touch"
-        />
-        <ProductHowItWorks />
-        <ParralaxBlock
-          imageUrl={backgroundImageList[1]}
-          imageAlt="A stairway going down into a city neighbourhood at sunset hour"
-          scrollTo={this.scrollToCall2Action}
-          buttonText="Keep me updated"
-        />
-        <AboutCompany />
-        <Container
-          ref={this.call2actionRef}
-          component="section"
-          maxWidth={false}
-          className={classes.call2ActionRoot}
-        >
-          <CallToAction />
-        </Container>
-        <ParralaxBlock
-          imageUrl={backgroundImageList[2]}
-          imageAlt="A snowy stairway leading up a mountain"
-          scrollTo={this.scrollToCall2Action}
-          buttonText="Sign me up"
-        />
-        {/* Footer */}
+              // send google analytics event
+              ReactGA.event({
+                category: 'Explore',
+                action: 'Random search',
+                value: 5,
+              })
+            }}
+            size="large"
+          >
+            Explore The World
+          </Button>
+        </HeroUnit>
         <Footer />
       </React.Fragment>
     )

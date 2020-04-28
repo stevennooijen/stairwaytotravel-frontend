@@ -9,14 +9,16 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Card from '@material-ui/core/Card'
 import ReactGA from 'react-ga'
 
+import postSignupForm from '../../../components/fetching/mailchimp/PostSignupForm'
+import patchSignupFormMarketing from '../../../components/fetching/mailchimp/PatchSignupFormMarketing'
+
 const styles = theme => ({
   root: {
-    marginTop: theme.spacing(10),
+    marginTop: 0,
     marginBottom: 0,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: theme.palette.background.default,
   },
   card: {
     // set width and margin equal to width of AboutCompany cards
@@ -24,6 +26,7 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
     margin: theme.spacing(10, 2),
+    backgroundColor: theme.palette.background.paper,
   },
   cardContent: {
     margin: theme.spacing(2),
@@ -72,32 +75,34 @@ class CallToAction extends React.Component {
   }
 
   handleSubmit = event => {
+    // Make sure page is not loaded again after submitting the form
     event.preventDefault()
-    // Call signup endpoint that then calls the Mailchimp server
-    fetch(
-      process.env.REACT_APP_API_URL +
-        '/signup/?email=' +
-        this.state.textFieldValue,
-      {
-        method: 'POST',
-      },
-    )
-    // TODO: maybe return error message if POST not succesfull?
-    // .then(response => response.json())
-    // .catch(err => console.log(err))
+    this.handleSignup(this.state.textFieldValue)
 
     this.setState({
       open: true,
       textFieldValue: '',
     })
 
-    // send google analytics event for the click
+    // send google analytics event
     ReactGA.event({
       category: 'Acquisition',
-      action: 'Signup',
-      label: 'Signup for email updates',
-      value: 5,
+      action: 'Signup for email marketing',
+      value: 500,
     })
+  }
+
+  handleSignup = email_address => {
+    // Call signup endpoint that then calls the Mailchimp server
+    postSignupForm(email_address, 'subscribed', window.location.pathname, true)
+      .then(id => {
+        // if null returned, the user already exists so we only need to change the member status
+        if (id === null) {
+          patchSignupFormMarketing(email_address)
+        }
+      })
+      // TODO: maybe return error message if POST not succesfull?
+      .catch(err => console.log(err))
   }
 
   handleClose = () => {
@@ -114,15 +119,18 @@ class CallToAction extends React.Component {
         <Card className={classes.card}>
           <form onSubmit={this.handleSubmit} className={classes.cardContent}>
             <Typography variant="h2" component="h2" gutterBottom>
-              Stay in touch
+              Want to be inspired?
             </Typography>
-            <Typography variant="h5">
-              Follow the developments and be notified of significant changes.
+            <Typography>
+              As true explorers, we track down the world's most beautiful places
+              to show them to you. Please fill in your email address here to
+              subscribe for a regular dose of unique travel inspiration.
             </Typography>
             <TextField
               // noBorder
+              type="email"
               className={classes.textField}
-              placeholder="Your email"
+              placeholder="Your Email Address"
               value={this.state.textFieldValue}
               onChange={this.handleTextFieldChange}
             />
@@ -132,7 +140,7 @@ class CallToAction extends React.Component {
               variant="contained"
               className={classes.button}
             >
-              Keep me updated
+              Sign Me Up!
             </Button>
           </form>
         </Card>

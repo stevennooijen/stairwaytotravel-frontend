@@ -10,8 +10,14 @@ const AMSTERDAM_CENTER = [52.3667, 4.8945]
 
 const styles = theme => ({
   wrapper: {
-    // This is a hard requirement for GoogleMapReact to display. Don't change!
-    height: '100%',
+    // Important! Always set the container height explicitly. Otherwise it doesn't render in Safari
+    top: `56px`,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    position: 'absolute',
+    width: 'auto',
+    height: 'auto',
   },
 })
 

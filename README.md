@@ -60,6 +60,15 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
+## Testing
+
+### Manual tests
+
+1. Test functionality for both web and mobile by toggling device toolbar
+2. Test responsiveness by changing screen size for various devices
+3. Test different browsers (mainly Chrome and Safari)
+4. Test Mailchimp email workflows
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.<br>

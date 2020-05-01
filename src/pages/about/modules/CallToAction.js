@@ -102,7 +102,7 @@ class CallToAction extends React.Component {
         }
       })
       // TODO: maybe return error message if POST not succesfull?
-      .catch(err => console.log(err))
+      .catch(err => window.console && console.log(err))
   }
 
   handleClose = () => {

@@ -24,6 +24,7 @@ const styles = theme => ({
 function createMapOptions(mapGestureHandling) {
   return {
     gestureHandling: mapGestureHandling, // Will capture all touch events on the map towards map panning
+    disableDoubleClickZoom: true,
   }
 }
 

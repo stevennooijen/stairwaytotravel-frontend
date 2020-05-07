@@ -108,26 +108,6 @@ class Explore extends React.Component {
     }, 100)
   }
 
-  // Check for state changes in PlaceQuery to update map
-  // TODO: check with Leon if there is a better way of doing this to separate this logic from SearchBox
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.placeQuery !== this.props.placeQuery) {
-      fitMapToPlace(this.state.mapInstance, this.props.placeQuery)
-    }
-    // This focusses the map on placeQuery when it is loaded again
-    if (prevState.mapInstance !== this.state.mapInstance) {
-      fitMapToBounds(this.state.mapInstance, this.state.mapBounds)
-    }
-  }
-
-  apiHasLoaded = (map, maps) => {
-    this.setState({
-      mapApiLoaded: true,
-      mapInstance: map,
-      mapApi: maps,
-    })
-  }
-
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
     // Set defaults based on query string parameters
@@ -168,6 +148,26 @@ class Explore extends React.Component {
     } else {
       this.setState({ destinationList: itemList })
     }
+  }
+
+  // Check for state changes in PlaceQuery to update map
+  // TODO: check with Leon if there is a better way of doing this to separate this logic from SearchBox
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.placeQuery !== this.props.placeQuery) {
+      fitMapToPlace(this.state.mapInstance, this.props.placeQuery)
+    }
+    // This focusses the map on placeQuery when it is loaded again
+    if (prevState.mapInstance !== this.state.mapInstance) {
+      fitMapToBounds(this.state.mapInstance, this.state.mapBounds)
+    }
+  }
+
+  apiHasLoaded = (map, maps) => {
+    this.setState({
+      mapApiLoaded: true,
+      mapInstance: map,
+      mapApi: maps,
+    })
   }
 
   fetchDestinations(seed, nResults, offset, bounds, country) {
@@ -268,8 +268,8 @@ class Explore extends React.Component {
 
     // set newLike for notification dot when there are new likes
     if (newNewLikes.length > 0) {
-      this.props.setNewLike(true)
-    } else this.props.setNewLike(false)
+      this.props.setRootState('newLike', true)
+    } else this.props.setRootState('newLike', false)
   }
 
   toggleShowMap() {
@@ -282,7 +282,7 @@ class Explore extends React.Component {
   }
 
   render() {
-    const { classes, placeQuery, savePlaceQuery } = this.props
+    const { classes, placeQuery, setRootState } = this.props
     const { seed, nResults, mapApiLoaded, mapInstance, mapApi } = this.state
 
     return (
@@ -303,7 +303,7 @@ class Explore extends React.Component {
                   placeQuery={placeQuery}
                   searchInput={this.state.searchInput}
                   handlePlaceChange={place => {
-                    savePlaceQuery(place)
+                    setRootState('placeQuery', place)
                     const bounds = extractBoundsFromPlaceObject(place)
                     // check if PlaceQuery is a country
                     const country = extractCountryFromPlaceObject(place)
@@ -394,7 +394,7 @@ class Explore extends React.Component {
                   placeQuery={placeQuery}
                   searchInput={this.state.searchInput}
                   handlePlaceChange={place => {
-                    savePlaceQuery(place)
+                    setRootState('placeQuery', place)
                     const bounds = extractBoundsFromPlaceObject(place)
                     // check if PlaceQuery is a country
                     const country = extractCountryFromPlaceObject(place)

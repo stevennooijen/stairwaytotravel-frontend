@@ -78,7 +78,7 @@ class SimpleBottomNavigation extends Component {
     this.props.history.push(value)
     // Make sure notification dot for new likes is set to false after visiting bucketlist
     if (value === '/bucketlist') {
-      this.props.setNewLike(false)
+      this.props.setRootState('newLike', false)
     }
   }
 

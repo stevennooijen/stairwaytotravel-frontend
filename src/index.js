@@ -25,12 +25,8 @@ class Root extends React.Component {
     }
   }
 
-  savePlaceQuery = place => {
-    this.setState({ placeQuery: place })
-  }
-
-  setNewLike = value => {
-    this.setState({ newLike: value })
+  setRootState = (key, value) => {
+    this.setState({ [key]: value })
   }
 
   render() {
@@ -50,7 +46,7 @@ class Root extends React.Component {
                   <Home
                     {...props}
                     placeQuery={placeQuery}
-                    savePlaceQuery={this.savePlaceQuery}
+                    setRootState={this.setRootState}
                   />
                 )}
               />
@@ -61,8 +57,7 @@ class Root extends React.Component {
                   <Explore
                     {...props}
                     placeQuery={placeQuery}
-                    savePlaceQuery={this.savePlaceQuery}
-                    setNewLike={this.setNewLike}
+                    setRootState={this.setRootState}
                   />
                 )}
               />
@@ -71,7 +66,7 @@ class Root extends React.Component {
               <Route path="/about" render={() => <About />} />
               <SimpleBottomNavigation
                 newLike={newLike}
-                setNewLike={this.setNewLike}
+                setRootState={this.setRootState}
               />
             </App>
           </div>

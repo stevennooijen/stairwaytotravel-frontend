@@ -381,7 +381,7 @@ class Explore extends React.Component {
                 handleOnChange={newBounds => {
                   this.setState({ mapBounds: newBounds, showSearchHere: true })
                 }}
-                places={this.state.destinationList}
+                places={this.state.destinationList.slice(0, nResults)}
                 toggleLike={id => {
                   this.toggleLike(id)
                   this.updateLikedDestinationsList(id)

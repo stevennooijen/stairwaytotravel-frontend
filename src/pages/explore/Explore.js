@@ -56,7 +56,6 @@ class Explore extends React.Component {
       isLoading: false,
 
       // state for query
-      seed: Math.floor(Math.random() * 100000),
       nResults: 12,
       offset: 0,
       queryParams: queryString.parse(this.props.location.search),
@@ -98,7 +97,7 @@ class Explore extends React.Component {
         document.documentElement.offsetHeight - 72
       ) {
         this.fetchDestinations(
-          this.state.seed,
+          this.props.seed,
           this.state.nResults,
           this.state.offset,
           this.state.mapBounds,
@@ -117,32 +116,35 @@ class Explore extends React.Component {
     if (this.state.likedDestinations === null)
       this.setState({ likedDestinations: [] })
 
-    // retrieve bounds from PlaceQuery
-    const bounds = this.props.placeQuery
-      ? extractBoundsFromPlaceObject(this.props.placeQuery)
-      : null
-    if (bounds) {
-      this.setState({ mapBounds: bounds })
-    }
-
+    // Fetch last query params from Root, if none fetch at random.
+    let mapBounds
     let country
-    // check if PlaceQuery is a country
     if (this.props.placeQuery) {
+      mapBounds = extractBoundsFromPlaceObject(this.props.placeQuery)
       country = extractCountryFromPlaceObject(this.props.placeQuery)
-      this.setState({ country: country })
+    } else if (this.props.mapQuery) {
+      mapBounds = this.props.mapQuery
+      country = null
+      this.setState({ searchInput: 'Selected map area' })
     } else {
+      mapBounds = null
       country = null
     }
+
+    this.setState({
+      mapBounds: mapBounds,
+      country: country,
+    })
 
     // const itemList = JSON.parse(sessionStorage.getItem('destinationList'))
     const itemList = null
 
     if (itemList === null) {
       this.fetchDestinations(
-        this.state.seed,
+        this.props.seed,
         this.state.nResults,
         this.state.offset,
-        bounds,
+        mapBounds,
         country,
       )
     } else {
@@ -282,8 +284,8 @@ class Explore extends React.Component {
   }
 
   render() {
-    const { classes, placeQuery, setRootState } = this.props
-    const { seed, nResults, mapApiLoaded, mapInstance, mapApi } = this.state
+    const { seed, placeQuery, setRootState, setNewSeed, classes } = this.props
+    const { nResults, mapApiLoaded, mapInstance, mapApi } = this.state
 
     return (
       <div>
@@ -303,7 +305,11 @@ class Explore extends React.Component {
                   placeQuery={placeQuery}
                   searchInput={this.state.searchInput}
                   handlePlaceChange={place => {
+                    // Update root state
+                    setRootState('mapQuery', null)
                     setRootState('placeQuery', place)
+                    setNewSeed()
+                    // extract bounds
                     const bounds = extractBoundsFromPlaceObject(place)
                     // check if PlaceQuery is a country
                     const country = extractCountryFromPlaceObject(place)
@@ -351,6 +357,10 @@ class Explore extends React.Component {
                         null,
                       ),
                   )
+                  // Update root state
+                  setRootState('mapQuery', this.state.mapBounds)
+                  setRootState('placeQuery', '')
+                  setNewSeed()
                 }}
               >
                 <RefreshIcon className={classes.extendedIcon} />
@@ -394,7 +404,11 @@ class Explore extends React.Component {
                   placeQuery={placeQuery}
                   searchInput={this.state.searchInput}
                   handlePlaceChange={place => {
+                    // Update root state
+                    setRootState('mapQuery', null)
                     setRootState('placeQuery', place)
+                    setNewSeed()
+                    // extract bounds
                     const bounds = extractBoundsFromPlaceObject(place)
                     // check if PlaceQuery is a country
                     const country = extractCountryFromPlaceObject(place)

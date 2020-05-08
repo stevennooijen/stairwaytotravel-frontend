@@ -81,7 +81,7 @@ class Home extends React.Component {
 
   render() {
     const { mapsApiLoaded, mapsInstance, mapsApi } = this.state
-    const { classes, placeQuery, setRootState } = this.props
+    const { classes, placeQuery, setRootState, setNewSeed } = this.props
 
     return (
       <React.Fragment>
@@ -110,6 +110,8 @@ class Home extends React.Component {
                 searchInput={null}
                 handlePlaceChange={place => {
                   setRootState('placeQuery', place)
+                  setRootState('mapQuery', null)
+                  setNewSeed()
                   this.props.history.push('/explore')
                 }}
               />
@@ -126,6 +128,8 @@ class Home extends React.Component {
             onClick={() => {
               sessionStorage.clear()
               setRootState('placeQuery', '')
+              setRootState('mapQuery', null)
+              setNewSeed()
 
               // send google analytics event
               ReactGA.event({

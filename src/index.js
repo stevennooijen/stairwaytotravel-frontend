@@ -20,9 +20,15 @@ class Root extends React.Component {
     super(props)
     // TODO: eventually pass on this global state through url parameters
     this.state = {
+      seed: Math.floor(Math.random() * 100000),
       placeQuery: '',
+      mapQuery: null,
       newLike: false,
     }
+  }
+
+  setNewSeed = () => {
+    this.setState({ seed: Math.floor(Math.random() * 100000) })
   }
 
   setRootState = (key, value) => {
@@ -30,7 +36,7 @@ class Root extends React.Component {
   }
 
   render() {
-    const { placeQuery, newLike } = this.state
+    const { seed, placeQuery, mapQuery, newLike } = this.state
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -47,6 +53,7 @@ class Root extends React.Component {
                     {...props}
                     placeQuery={placeQuery}
                     setRootState={this.setRootState}
+                    setNewSeed={this.setNewSeed}
                   />
                 )}
               />
@@ -56,8 +63,11 @@ class Root extends React.Component {
                 render={props => (
                   <Explore
                     {...props}
+                    seed={seed}
                     placeQuery={placeQuery}
+                    mapQuery={mapQuery}
                     setRootState={this.setRootState}
+                    setNewSeed={this.setNewSeed}
                   />
                 )}
               />

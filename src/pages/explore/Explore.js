@@ -162,6 +162,12 @@ class Explore extends React.Component {
     if (prevState.mapInstance !== this.state.mapInstance) {
       fitMapToBounds(this.state.mapInstance, this.state.mapBounds)
     }
+    // Update state if history changes (browser back / forward button)
+    if (prevProps.location !== this.props.location) {
+      this.setState({
+        showMap: queryString.parse(this.props.location.search).map === 'true',
+      })
+    }
   }
 
   apiHasLoaded = (map, maps) => {

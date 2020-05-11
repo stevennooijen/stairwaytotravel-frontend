@@ -29,6 +29,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    color: theme.palette.secondary.main,
   },
   inputRoot: {
     width: '100%',

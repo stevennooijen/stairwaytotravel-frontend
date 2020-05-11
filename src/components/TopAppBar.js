@@ -103,6 +103,7 @@ class TopAppBar extends React.PureComponent {
                   aria-haspopup="true"
                   //   TODO: add action for mapview
                   onClick={toggleShowMap}
+                  color="secondary"
                 >
                   {showMap ? <ViewStreamIcon /> : <MapIcon />}
                 </IconButton>

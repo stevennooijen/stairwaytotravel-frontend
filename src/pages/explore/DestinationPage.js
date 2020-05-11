@@ -64,7 +64,6 @@ class DestinationPage extends Component {
             )
             // 4. save fetched destination to state
             .then(item => {
-              console.log(item)
               this.setState({
                 placeData: item,
                 isLoading: false,
@@ -98,7 +97,15 @@ class DestinationPage extends Component {
         </Typography>
 
         <Divider variant="middle" />
-        <Typography variant="body">{placeData.info}</Typography>
+        {placeData.info &&
+          // split description in multiple alineas
+          placeData.info.split('\n').map((paragraph, key) => {
+            return (
+              <Typography variant="body2" key={key} paragraph>
+                {paragraph}
+              </Typography>
+            )
+          })}
 
         <Divider variant="middle" />
         <p>destination id = {this.state.destination_id}</p>

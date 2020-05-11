@@ -15,7 +15,7 @@ const fetchWikivoyageInfo = pageid => {
   )
     .then(response => response.json())
     .then(data => {
-      return data.query.pages[pageid].extract.split('== Understand ==')[0]
+      return data.query.pages[pageid].extract.split('==')[0]
     })
 }
 

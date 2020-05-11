@@ -64,7 +64,7 @@ class DestinationCard extends Component {
         // TODO: Remove, temporarily disabled link to destinationPage
         onClick={e => {
           e.stopPropagation()
-          // onClick()
+          onClick()
         }}
       >
         <PhotoCarousel imageList={place.images} {...props}>

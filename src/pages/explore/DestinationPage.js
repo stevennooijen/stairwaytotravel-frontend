@@ -1,44 +1,80 @@
 import React, { Component } from 'react'
 import { fetchSingleDestination } from '../../components/fetching'
 
+import TopAppBar from 'components/TopAppBar'
+import PhotoCarousel from 'components/destinationCard/Carousel'
+import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
+import Loader from 'components/fetching/Loader'
+
 class DestinationPage extends Component {
-  // Constructor can only be called once to define state
   constructor(props) {
     super(props)
-    // Define initial state
     this.state = {
       // destination_id is determined from the url (match is passed through props)
       destination_id: props.match.params.name,
-      // destination_data will fill itself with the API data
-      destination_data: {},
-      // Possibly do something with a loading variable
-      // https://facebook.github.io/react-native/docs/network
-      // isLoading: true,
+      placeData: {},
+      isLoading: true,
+      likedDestinations: JSON.parse(
+        sessionStorage.getItem('likedDestinations'),
+      ),
     }
   }
 
-  // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
-    fetchSingleDestination(this.state.destination_id)
-      .then(response => response.json())
-      .then(destinationJson => this.setdestination(destinationJson))
-      //   TODO: display something when error is found instead of printing to console
-      .catch(err => window.console && console.log(err))
-  }
+    // If no already liked destinations, set to empty array
+    if (this.state.likedDestinations === null)
+      this.setState({ likedDestinations: [] })
 
-  // Change state of variable 'destination_data'
-  setdestination(destination_data) {
-    this.setState(old => ({
-      ...old,
-      destination_data,
-    }))
+    this.setState({ isLoading: true }, () => {
+      fetchSingleDestination(this.state.destination_id)
+        .then(response => response.json())
+        .then(item => {
+          // 1. retrieve flickr Images
+          GetFlickrImages(item.name)
+            .then(imageUrls => {
+              return {
+                ...item,
+                images: imageUrls,
+              }
+            })
+            // 2. set liked to true if destination already in likedList
+            .then(item => {
+              if (this.state.likedDestinations.includes(item.id)) {
+                return {
+                  ...item,
+                  liked: true,
+                }
+              } else {
+                return item
+              }
+            })
+            // 3. save fetched destination to state
+            .then(item =>
+              this.setState({
+                placeData: item,
+                isLoading: false,
+              }),
+            )
+        })
+        //   TODO: display something when error is found instead of printing to console
+        .catch(err => window.console && console.log(err))
+    })
   }
 
   render() {
+    const { placeData } = this.state
+    // const { classes } = this.props
+
     return (
       <div>
+        <TopAppBar />
+        {this.state.isLoading ? (
+          <Loader />
+        ) : (
+          <PhotoCarousel imageList={placeData.images} />
+        )}
         <p>destination id = {this.state.destination_id}</p>
-        <p>name = {this.state.destination_data.name} </p>
+        <p>name = {this.state.placeData.name} </p>
       </div>
     )
   }

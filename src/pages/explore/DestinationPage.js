@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
-import { fetchSingleDestination } from '../../components/fetching'
 
+import Divider from '@material-ui/core/Divider'
+import Typography from '@material-ui/core/Typography'
+
+import { fetchSingleDestination } from 'components/fetching'
 import TopAppBar from 'components/TopAppBar'
 import PhotoCarousel from 'components/destinationCard/Carousel'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import Loader from 'components/fetching/Loader'
+import fetchWikivoyageInfo from 'components/fetching/thirdParties/FetchWikivoyageInfo'
 
 class DestinationPage extends Component {
   constructor(props) {
@@ -25,6 +29,7 @@ class DestinationPage extends Component {
     if (this.state.likedDestinations === null)
       this.setState({ likedDestinations: [] })
 
+    // Fetch place data
     this.setState({ isLoading: true }, () => {
       fetchSingleDestination(this.state.destination_id)
         .then(response => response.json())
@@ -48,13 +53,23 @@ class DestinationPage extends Component {
                 return item
               }
             })
-            // 3. save fetched destination to state
+            // 3. get wikivoyage description
             .then(item =>
+              fetchWikivoyageInfo(item.id).then(info => {
+                return {
+                  ...item,
+                  info: info,
+                }
+              }),
+            )
+            // 4. save fetched destination to state
+            .then(item => {
+              console.log(item)
               this.setState({
                 placeData: item,
                 isLoading: false,
-              }),
-            )
+              })
+            })
         })
         //   TODO: display something when error is found instead of printing to console
         .catch(err => window.console && console.log(err))
@@ -73,6 +88,19 @@ class DestinationPage extends Component {
         ) : (
           <PhotoCarousel imageList={placeData.images} />
         )}
+
+        <Divider variant="middle" />
+        <Typography color="textSecondary" variant="h6" component="h2">
+          {placeData.name}
+        </Typography>
+        <Typography color="textSecondary" variant="body1" component="p">
+          {placeData.country}
+        </Typography>
+
+        <Divider variant="middle" />
+        <Typography variant="body">{placeData.info}</Typography>
+
+        <Divider variant="middle" />
         <p>destination id = {this.state.destination_id}</p>
         <p>name = {this.state.placeData.name} </p>
       </div>

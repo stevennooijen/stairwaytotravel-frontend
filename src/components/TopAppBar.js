@@ -57,7 +57,10 @@ class TopAppBar extends React.PureComponent {
     }
 
     const shouldShow =
-      this.lastScroll !== null ? lastScroll < this.lastScroll : null
+      // lastScroll > 0 makes sure bar doesn't hide on top of screen
+      this.lastScroll !== null && lastScroll > 0
+        ? lastScroll < this.lastScroll
+        : null
 
     if (shouldShow !== this.state.shouldShow) {
       this.setState((prevState, props) => ({

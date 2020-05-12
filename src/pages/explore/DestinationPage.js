@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
+import Link from '@material-ui/core/Link'
 
 import { fetchSingleDestination } from 'components/fetching'
 import TopAppBar from 'components/TopAppBar'
@@ -9,6 +10,7 @@ import PhotoCarousel from 'components/destinationCard/Carousel'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import Loader from 'components/fetching/Loader'
 import fetchWikivoyageInfo from 'components/fetching/thirdParties/FetchWikivoyageInfo'
+import fetchWikivoyageLinks from 'components/fetching/thirdParties/FetchWikivoyageLinks'
 
 class DestinationPage extends Component {
   constructor(props) {
@@ -62,7 +64,16 @@ class DestinationPage extends Component {
                 }
               }),
             )
-            // 4. save fetched destination to state
+            // 4. Fetch wikivoyage attribution links
+            .then(item =>
+              fetchWikivoyageLinks(item.id).then(links => {
+                return {
+                  ...item,
+                  wikiLinks: links,
+                }
+              }),
+            )
+            // 5. save fetched destination to state
             .then(item => {
               this.setState({
                 placeData: item,
@@ -106,6 +117,30 @@ class DestinationPage extends Component {
               </Typography>
             )
           })}
+        {placeData.wikiLinks && (
+          <Typography variant="caption">
+            {' '}
+            <i>
+              Credits to the{' '}
+              <Link
+                href={placeData.wikiLinks.revisionUrl}
+                target="_blank"
+                rel="noopener"
+              >
+                contributors
+              </Link>{' '}
+              of the full{' '}
+              <Link
+                href={placeData.wikiLinks.pageUrl}
+                target="_blank"
+                rel="noopener"
+              >
+                {placeData.name}
+              </Link>{' '}
+              article at Wikivoyage.
+            </i>
+          </Typography>
+        )}
 
         <Divider variant="middle" />
         <p>destination id = {this.state.destination_id}</p>

@@ -33,6 +33,8 @@ const styles = theme => ({
 })
 
 class DestinationPage extends Component {
+  _isMounted = false
+
   constructor(props) {
     super(props)
     this.state = {
@@ -47,6 +49,8 @@ class DestinationPage extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true
+
     // If no already liked destinations, set to empty array
     if (this.state.likedDestinations === null)
       this.setState({ likedDestinations: [] })
@@ -95,15 +99,21 @@ class DestinationPage extends Component {
             )
             // 5. save fetched destination to state
             .then(item => {
-              this.setState({
-                placeData: item,
-                isLoading: false,
-              })
+              if (this._isMounted) {
+                this.setState({
+                  placeData: item,
+                  isLoading: false,
+                })
+              }
             })
         })
         //   TODO: display something when error is found instead of printing to console
         .catch(err => window.console && console.log(err))
     })
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
   }
 
   render() {

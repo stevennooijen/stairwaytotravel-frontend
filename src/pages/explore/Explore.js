@@ -43,7 +43,7 @@ const styles = theme => ({
 })
 
 class Explore extends React.Component {
-  // _isMounted = false
+  _isMounted = false
 
   constructor(props) {
     super(props)
@@ -109,6 +109,8 @@ class Explore extends React.Component {
 
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
+    this._isMounted = true
+
     // Set defaults based on query string parameters
     if (this.state.queryParams.map === 'true') this.setState({ showMap: true })
 
@@ -170,6 +172,10 @@ class Explore extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
   apiHasLoaded = (map, maps) => {
     this.setState({
       mapApiLoaded: true,
@@ -179,59 +185,69 @@ class Explore extends React.Component {
   }
 
   fetchDestinations(seed, nResults, offset, bounds, country) {
-    this.setState({ isLoading: true, offset: offset + nResults }, () => {
-      FetchExploreDestinations(seed, nResults, offset, bounds, country)
-        .then(response => response.json())
-        .then(data => {
-          // retrieve maximum number of places possible
-          this.setState({ maxPlacesText: data.maxPlacesText })
-          const maxPlaces = data.maxPlaces
+    if (this._isMounted) {
+      this.setState({ isLoading: true, offset: offset + nResults }, () => {
+        FetchExploreDestinations(seed, nResults, offset, bounds, country)
+          .then(response => response.json())
+          .then(data => {
+            // retrieve maximum number of places possible
+            if (this._isMounted) {
+              this.setState({ maxPlacesText: data.maxPlacesText })
+            }
+            const maxPlaces = data.maxPlaces
 
-          // check if new places are fetched
-          data.destinations.length > 0
-            ? // for each of the fetched destinations in the list do:
-              data.destinations.forEach(item => {
-                // 1. retrieve flickr Images
-                GetFlickrImages(item.name)
-                  .then(imageUrls => {
-                    return {
-                      ...item,
-                      images: imageUrls,
-                    }
-                  })
-                  // 2. set liked to true if destination already in likedList
-                  .then(item => {
-                    if (this.state.likedDestinations.includes(item.id)) {
+            // check if new places are fetched
+            data.destinations.length > 0
+              ? // for each of the fetched destinations in the list do:
+                data.destinations.forEach(item => {
+                  // 1. retrieve flickr Images
+                  GetFlickrImages(item.name)
+                    .then(imageUrls => {
                       return {
                         ...item,
-                        liked: true,
+                        images: imageUrls,
                       }
-                    } else {
-                      return item
-                    }
-                  })
-                  // 3. save fetched destination to state
-                  .then(item =>
-                    this.setState({
-                      destinationList: [...this.state.destinationList, item],
-                      hasMore: this.state.destinationList.length < maxPlaces,
-                      isLoading: false,
-                    }),
-                  )
-              })
-            : this.setState({
-                hasMore: false,
-                isLoading: false,
-              })
-        })
-        .catch(err => {
-          // console.log(err)
-          this.setState({
-            error: err.message,
-            isLoading: false,
+                    })
+                    // 2. set liked to true if destination already in likedList
+                    .then(item => {
+                      if (this.state.likedDestinations.includes(item.id)) {
+                        return {
+                          ...item,
+                          liked: true,
+                        }
+                      } else {
+                        return item
+                      }
+                    })
+                    // 3. save fetched destination to state
+                    .then(item => {
+                      if (this._isMounted) {
+                        this.setState({
+                          destinationList: [
+                            ...this.state.destinationList,
+                            item,
+                          ],
+                          hasMore:
+                            this.state.destinationList.length < maxPlaces,
+                          isLoading: false,
+                        })
+                      }
+                    })
+                })
+              : this.setState({
+                  hasMore: false,
+                  isLoading: false,
+                })
           })
-        })
-    })
+          .catch(err => {
+            // console.log(err)
+            this.setState({
+              error: err.message,
+              isLoading: false,
+            })
+          })
+      })
+    }
   }
 
   toggleLike(id) {

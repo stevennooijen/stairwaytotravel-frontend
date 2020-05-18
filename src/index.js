@@ -71,7 +71,10 @@ class Root extends React.Component {
                   />
                 )}
               />
-              <Route path="/explore/:name" component={DestinationPage} />
+              <Route
+                path="/explore/:name"
+                render={props => <DestinationPage {...props} />}
+              />
               <Route path="/bucketlist" render={() => <Bucketlist />} />
               <Route path="/about" render={() => <About />} />
               <SimpleBottomNavigation

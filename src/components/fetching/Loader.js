@@ -6,6 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 const styles = theme => ({
   loaderContainer: {
+    marginTop: theme.spacing(3),
     marginBottom: theme.spacing(10),
     display: 'flex',
     justifyContent: 'center',

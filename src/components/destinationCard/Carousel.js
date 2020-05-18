@@ -9,7 +9,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    maxWidth: 400,
+    maxWidth: 600, // 600 = 'sm', 960 = 'md' size
   },
   imageContainer: {
     height: 0,

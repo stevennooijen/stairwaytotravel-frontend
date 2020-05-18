@@ -10,7 +10,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
-import ShareIcon from '@material-ui/icons/Share'
+// import ShareIcon from '@material-ui/icons/Share'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 
@@ -135,13 +135,13 @@ class DestinationPage extends Component {
                 <ArrowBackIosOutlinedIcon />
               </IconButton>
               <div>
-                <IconButton
+                {/* <IconButton
                   aria-label="Share on social media"
                   color="secondary"
                   // onClick={TODO: DoSomething}
                 >
                   <ShareIcon />
-                </IconButton>
+                </IconButton> */}
                 <IconButton
                   edge="end"
                   aria-label="Add to favorites"

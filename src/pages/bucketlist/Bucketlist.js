@@ -22,13 +22,13 @@ import {
   getMapBounds,
   bindResizeListener,
 } from '../../components/mapview/utils'
-import { pushUrlWithQueryParams } from '../../components/utils'
 import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
 import CheckoutDialog from './CheckoutDialog'
 import Loader from 'components/fetching/Loader'
 import postSignupForm from '../../components/fetching/mailchimp/PostSignupForm'
 import postLikesEvent from '../../components/fetching/mailchimp/PostLikesEvent'
 import patchSignupFormLikes from '../../components/fetching/mailchimp/PatchSignupFormLikes'
+import { pushUrlWithQueryParams, updateListItem } from 'components/utils'
 
 const MINIMUM_ZOOM = 8
 
@@ -94,15 +94,14 @@ class Bucketlist extends React.Component {
     // Set defaults based on query string parameters
     if (this.state.queryParams.map === 'true') this.setState({ showMap: true })
 
-    // Initialize destinations and likes if something in sessionStorage
-    const likedDestinationList = JSON.parse(
-      sessionStorage.getItem('likedDestinations'),
-    )
+    // Empty root state of newLikes (to remove notification dot)
+    this.props.setRootState('newLikes', [])
+
     // fetch data if likes
     this.setState({ isLoading: true }, () => {
-      if (likedDestinationList && likedDestinationList.length > 0) {
+      if (this.props.likedPlaces && this.props.likedPlaces.length > 0) {
         // for each of the fetched destinations in the list do:
-        likedDestinationList.forEach(id => {
+        this.props.likedPlaces.forEach(id => {
           // 1. fetch the data
           fetchSingleDestination(id)
             .then(response => response.json())
@@ -142,14 +141,10 @@ class Bucketlist extends React.Component {
       ? this.setState({ destinationList: newDestinationList })
       : this.setState({ destinationList: [] })
 
-    // removed from liked list in session storage
-    const likedDestinations = JSON.parse(
-      sessionStorage.getItem('likedDestinations'),
-    )
-    const newLikedDestinations = likedDestinations.filter(item => item !== id)
-    sessionStorage.setItem(
-      'likedDestinations',
-      JSON.stringify(newLikedDestinations),
+    // update root state of liked places
+    this.props.setRootState(
+      'likedPlaces',
+      updateListItem(this.props.likedPlaces, id),
     )
   }
 

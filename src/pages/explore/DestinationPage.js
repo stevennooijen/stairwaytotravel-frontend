@@ -20,6 +20,7 @@ import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import Loader from 'components/fetching/Loader'
 import fetchWikivoyageInfo from 'components/fetching/thirdParties/FetchWikivoyageInfo'
 import fetchWikivoyageLinks from 'components/fetching/thirdParties/FetchWikivoyageLinks'
+import { updateListItem } from 'components/utils'
 
 const styles = theme => ({
   toolbar: {
@@ -42,9 +43,6 @@ class DestinationPage extends Component {
       destination_id: props.match.params.name,
       placeData: {},
       isLoading: true,
-      likedDestinations: JSON.parse(
-        sessionStorage.getItem('likedDestinations'),
-      ),
     }
   }
 
@@ -70,7 +68,7 @@ class DestinationPage extends Component {
             })
             // 2. set liked to true if destination already in likedList
             .then(item => {
-              if (this.state.likedDestinations.includes(item.id)) {
+              if (this.props.likedPlaces.includes(item.id)) {
                 return {
                   ...item,
                   liked: true,
@@ -116,6 +114,28 @@ class DestinationPage extends Component {
     this._isMounted = false
   }
 
+  updateLikedPlaces(id) {
+    // For bucketlist page: keep track of likes and save in an array to session storage
+    this.props.setRootState(
+      'likedPlaces',
+      updateListItem(this.props.likedPlaces, id),
+    )
+  }
+
+  updateNewLikes(id) {
+    // don't update new likes when visiting destinationPage from bucketlist!
+    if (
+      !(
+        this.props.likedPlaces.includes(id) && !this.props.newLikes.includes(id)
+      )
+    ) {
+      this.props.setRootState(
+        'newLikes',
+        updateListItem(this.props.newLikes, id),
+      )
+    }
+  }
+
   render() {
     const { placeData } = this.state
     const { classes } = this.props
@@ -147,12 +167,16 @@ class DestinationPage extends Component {
                   aria-label="Add to favorites"
                   color="primary"
                   onClick={e => {
+                    // update state
                     this.setState(prevState => ({
                       placeData: {
                         ...placeData,
                         liked: !prevState.placeData.liked,
                       },
                     }))
+                    // update root level state
+                    this.updateLikedPlaces(placeData.id)
+                    this.updateNewLikes(placeData.id)
                     // send google analytics event
                     ReactGA.event({
                       category: 'Explore',

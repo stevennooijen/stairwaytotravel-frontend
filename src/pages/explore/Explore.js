@@ -65,10 +65,6 @@ class Explore extends React.Component {
 
       // state to keep places and interactions
       destinationList: [],
-      likedDestinations: JSON.parse(
-        sessionStorage.getItem('likedDestinations'),
-      ),
-      newLikes: [],
 
       // state for mapview
       showMap: false,
@@ -113,10 +109,6 @@ class Explore extends React.Component {
 
     // Set defaults based on query string parameters
     if (this.state.queryParams.map === 'true') this.setState({ showMap: true })
-
-    // If no already liked destinations, set to empty array
-    if (this.state.likedDestinations === null)
-      this.setState({ likedDestinations: [] })
 
     // Fetch last query params from Root, if none fetch at random.
     let mapBounds
@@ -210,7 +202,7 @@ class Explore extends React.Component {
                     })
                     // 2. set liked to true if destination already in likedList
                     .then(item => {
-                      if (this.state.likedDestinations.includes(item.id)) {
+                      if (this.props.likedPlaces.includes(item.id)) {
                         return {
                           ...item,
                           liked: true,
@@ -269,26 +261,15 @@ class Explore extends React.Component {
     // sessionStorage.setItem('destinationList', JSON.stringify(newList))
   }
 
-  updateLikedDestinationsList(id) {
-    // For bucketlist page: keep track of likes and save in an array to session storage
-    const newLikedDestinations = updateListItem(
-      this.state.likedDestinations,
-      id,
-    )
-    this.setState({ likedDestinations: newLikedDestinations })
-    sessionStorage.setItem(
-      'likedDestinations',
-      JSON.stringify(newLikedDestinations),
+  updateLikedPlaces(id) {
+    this.props.setRootState(
+      'likedPlaces',
+      updateListItem(this.props.likedPlaces, id),
     )
   }
 
   updateNewLikes(id) {
-    const newLikes = updateListItem(this.state.newLikes, id)
-    this.setState({ newLikes: newLikes })
-    // set newLike for notification dot when there are new likes
-    if (newLikes.length > 0) {
-      this.props.setRootState('newLike', true)
-    } else this.props.setRootState('newLike', false)
+    this.props.setRootState('newLikes', updateListItem(this.props.newLikes, id))
   }
 
   toggleShowMap() {
@@ -395,7 +376,7 @@ class Explore extends React.Component {
                 places={this.state.destinationList.slice(0, nResults)}
                 toggleLike={id => {
                   this.toggleLike(id)
-                  this.updateLikedDestinationsList(id)
+                  this.updateLikedPlaces(id)
                   this.updateNewLikes(id)
                 }}
               />
@@ -471,7 +452,7 @@ class Explore extends React.Component {
                     place={place}
                     toggleLike={id => {
                       this.toggleLike(id)
-                      this.updateLikedDestinationsList(id)
+                      this.updateLikedPlaces(id)
                       this.updateNewLikes(id)
                     }}
                     onClick={() => {

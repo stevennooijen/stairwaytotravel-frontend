@@ -23,7 +23,8 @@ class Root extends React.Component {
       seed: Math.floor(Math.random() * 100000),
       placeQuery: '',
       mapQuery: null,
-      newLike: false,
+      likedPlaces: [],
+      newLikes: [],
     }
   }
 
@@ -36,7 +37,8 @@ class Root extends React.Component {
   }
 
   render() {
-    const { seed, placeQuery, mapQuery, newLike } = this.state
+    const { seed, placeQuery, mapQuery, likedPlaces, newLikes } = this.state
+    const newLikesNotificationDot = newLikes.length > 0
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -66,6 +68,8 @@ class Root extends React.Component {
                     seed={seed}
                     placeQuery={placeQuery}
                     mapQuery={mapQuery}
+                    likedPlaces={likedPlaces}
+                    newLikes={newLikes}
                     setRootState={this.setRootState}
                     setNewSeed={this.setNewSeed}
                   />
@@ -73,12 +77,29 @@ class Root extends React.Component {
               />
               <Route
                 path="/explore/:name"
-                render={props => <DestinationPage {...props} />}
+                render={props => (
+                  <DestinationPage
+                    {...props}
+                    likedPlaces={likedPlaces}
+                    newLikes={newLikes}
+                    setRootState={this.setRootState}
+                  />
+                )}
               />
-              <Route path="/bucketlist" render={() => <Bucketlist />} />
+              <Route
+                exact
+                path="/bucketlist"
+                render={props => (
+                  <Bucketlist
+                    {...props}
+                    likedPlaces={likedPlaces}
+                    setRootState={this.setRootState}
+                  />
+                )}
+              />
               <Route path="/about" render={() => <About />} />
               <SimpleBottomNavigation
-                newLike={newLike}
+                newLikesNotificationDot={newLikesNotificationDot}
                 setRootState={this.setRootState}
               />
             </App>

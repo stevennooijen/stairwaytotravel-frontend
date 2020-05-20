@@ -25,7 +25,7 @@ import {
   extractBoundsFromPlaceObject,
   extractCountryFromPlaceObject,
 } from '../../components/mapview/utils'
-import { pushUrlWithQueryParams } from '../../components/utils'
+import { pushUrlWithQueryParams, updateListItem } from 'components/utils'
 
 const styles = theme => ({
   extendedIcon: {
@@ -271,10 +271,10 @@ class Explore extends React.Component {
 
   updateLikedDestinationsList(id) {
     // For bucketlist page: keep track of likes and save in an array to session storage
-    const likedDestinations = this.state.likedDestinations
-    const newLikedDestinations = likedDestinations.includes(id)
-      ? likedDestinations.filter(item => item !== id)
-      : [...likedDestinations, id]
+    const newLikedDestinations = updateListItem(
+      this.state.likedDestinations,
+      id,
+    )
     this.setState({ likedDestinations: newLikedDestinations })
     sessionStorage.setItem(
       'likedDestinations',
@@ -283,15 +283,10 @@ class Explore extends React.Component {
   }
 
   updateNewLikes(id) {
-    // Same as above, can be turned into generic helper function!
-    const newLikes = this.state.newLikes
-    const newNewLikes = newLikes.includes(id)
-      ? newLikes.filter(item => item !== id)
-      : [...newLikes, id]
-    this.setState({ newLikes: newNewLikes })
-
+    const newLikes = updateListItem(this.state.newLikes, id)
+    this.setState({ newLikes: newLikes })
     // set newLike for notification dot when there are new likes
-    if (newNewLikes.length > 0) {
+    if (newLikes.length > 0) {
       this.props.setRootState('newLike', true)
     } else this.props.setRootState('newLike', false)
   }

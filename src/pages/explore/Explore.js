@@ -266,7 +266,7 @@ class Explore extends React.Component {
     this.setState({
       destinationList: newList,
     })
-    sessionStorage.setItem('destinationList', JSON.stringify(newList))
+    // sessionStorage.setItem('destinationList', JSON.stringify(newList))
   }
 
   updateLikedDestinationsList(id) {

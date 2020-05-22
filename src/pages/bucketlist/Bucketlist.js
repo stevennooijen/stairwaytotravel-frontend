@@ -107,20 +107,20 @@ class Bucketlist extends React.Component {
                   this.setState(
                     {
                       destinationList: [...this.state.destinationList, item],
-                      isLoading: false,
                     },
-                    // callbac: fitMapToPlaces when map & all destinations are loaded
+                    // callback: do something when all destinations are loaded
                     () => {
                       itemsProcessed++
-                      if (
-                        itemsProcessed === this.props.likedPlaces.length &&
-                        this.state.mapApiLoaded
-                      ) {
-                        fitMapToPlaces(
-                          this.state.mapInstance,
-                          this.state.mapApi,
-                          this.state.destinationList,
-                        )
+                      if (itemsProcessed === this.props.likedPlaces.length) {
+                        this.setState({ isLoading: false })
+                        // callback: fitMapToPlaces when map & all destinations are loaded
+                        if (this.state.mapApiLoaded) {
+                          fitMapToPlaces(
+                            this.state.mapInstance,
+                            this.state.mapApi,
+                            this.state.destinationList,
+                          )
+                        }
                       }
                     },
                   ),
@@ -247,17 +247,13 @@ class Bucketlist extends React.Component {
         ) : (
           // {/* If no likedDestinations, destinationsList is set to null and warning should be displayed */}
           <React.Fragment>
-            {!this.state.isLoading && (
-              <ResultsBar
-                text={
-                  this.state.destinationList.length +
-                  (this.state.destinationList.length === 1
-                    ? ' place'
-                    : ' places') +
-                  ' to travel to'
-                }
-              />
-            )}
+            <ResultsBar
+              text={
+                this.props.likedPlaces.length +
+                (this.props.likedPlaces.length === 1 ? ' place' : ' places') +
+                ' to travel to'
+              }
+            />
             <Album>
               {this.state.destinationList.map(place => (
                 <Grid item key={place.id} xs={12} sm={6} md={4}>

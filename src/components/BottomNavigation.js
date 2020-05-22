@@ -87,7 +87,8 @@ class SimpleBottomNavigation extends Component {
       // Add transition on the navbar
       <HideOnScroll location={location}>
         <BottomNavigation
-          value={location.pathname}
+          // keep only the part before the second backslash: /explore/:name becomes /explore
+          value={'/' + location.pathname.split('/')[1]}
           onChange={this.handleChange}
           showLabels
           // className is used to give the div an id

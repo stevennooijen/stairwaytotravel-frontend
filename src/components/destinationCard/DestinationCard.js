@@ -44,16 +44,6 @@ const styles = theme => ({
 })
 
 class DestinationCard extends Component {
-  // Constructor can only be called once to define state
-  constructor(props) {
-    super(props)
-
-    // Define initial state
-    this.state = {
-      favorite: false,
-    }
-  }
-
   render() {
     // Properties and actions to do with DestinationCard are provided through props
     const { classes, place, toggleLike, onClick, ...props } = this.props
@@ -64,7 +54,7 @@ class DestinationCard extends Component {
         // TODO: Remove, temporarily disabled link to destinationPage
         onClick={e => {
           e.stopPropagation()
-          // onClick()
+          onClick()
         }}
       >
         <PhotoCarousel imageList={place.images} {...props}>

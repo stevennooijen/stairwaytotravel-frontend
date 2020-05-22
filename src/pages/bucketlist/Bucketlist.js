@@ -18,19 +18,14 @@ import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import FloatingActionButton from './FloatingActionButton'
 import TopAppBar from '../../components/TopAppBar'
 import { Mapview } from '../../components/mapview'
-import {
-  getMapBounds,
-  bindResizeListener,
-} from '../../components/mapview/utils'
-import { pushUrlWithQueryParams } from '../../components/utils'
+import { fitMapToPlaces } from 'components/mapview/utils'
 import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
 import CheckoutDialog from './CheckoutDialog'
 import Loader from 'components/fetching/Loader'
 import postSignupForm from '../../components/fetching/mailchimp/PostSignupForm'
 import postLikesEvent from '../../components/fetching/mailchimp/PostLikesEvent'
 import patchSignupFormLikes from '../../components/fetching/mailchimp/PatchSignupFormLikes'
-
-const MINIMUM_ZOOM = 8
+import { pushUrlWithQueryParams, updateListItem } from 'components/utils'
 
 const styles = theme => ({
   pageTitle: {
@@ -50,21 +45,6 @@ const styles = theme => ({
   },
 })
 
-// Fit map to its bounds after the api is loaded
-const apiIsLoaded = (map, maps, places) => {
-  if (places !== null) {
-    // Get bounds by our places
-    const bounds = getMapBounds(map, maps, places)
-    // Fit map to bounds
-    map.fitBounds(bounds)
-    // Enforce minimal zoom level
-    const zoom = map.getZoom()
-    map.setZoom(zoom > MINIMUM_ZOOM ? MINIMUM_ZOOM : zoom)
-    // Bind the resize listener
-    bindResizeListener(map, maps, bounds)
-  }
-}
-
 class Bucketlist extends React.Component {
   constructor(props) {
     super(props)
@@ -76,6 +56,11 @@ class Bucketlist extends React.Component {
       dialogOpen: false,
       thanksBarOpen: false,
       isLoading: false,
+
+      // Google mapInstance object
+      mapApiLoaded: false,
+      mapInstance: null,
+      mapApi: null,
 
       // checkoutDialog features
       textFieldValue: '',
@@ -94,15 +79,15 @@ class Bucketlist extends React.Component {
     // Set defaults based on query string parameters
     if (this.state.queryParams.map === 'true') this.setState({ showMap: true })
 
-    // Initialize destinations and likes if something in sessionStorage
-    const likedDestinationList = JSON.parse(
-      sessionStorage.getItem('likedDestinations'),
-    )
+    // Empty root state of newLikes (to remove notification dot)
+    this.props.setRootState('newLikes', [])
+
     // fetch data if likes
     this.setState({ isLoading: true }, () => {
-      if (likedDestinationList && likedDestinationList.length > 0) {
+      if (this.props.likedPlaces && this.props.likedPlaces.length > 0) {
+        let itemsProcessed = 0
         // for each of the fetched destinations in the list do:
-        likedDestinationList.forEach(id => {
+        this.props.likedPlaces.forEach(id => {
           // 1. fetch the data
           fetchSingleDestination(id)
             .then(response => response.json())
@@ -119,10 +104,26 @@ class Bucketlist extends React.Component {
                 })
                 // 4. save fetched destination to state
                 .then(item =>
-                  this.setState({
-                    destinationList: [...this.state.destinationList, item],
-                    isLoading: false,
-                  }),
+                  this.setState(
+                    {
+                      destinationList: [...this.state.destinationList, item],
+                    },
+                    // callback: do something when all destinations are loaded
+                    () => {
+                      itemsProcessed++
+                      if (itemsProcessed === this.props.likedPlaces.length) {
+                        this.setState({ isLoading: false })
+                        // callback: fitMapToPlaces when map & all destinations are loaded
+                        if (this.state.mapApiLoaded) {
+                          fitMapToPlaces(
+                            this.state.mapInstance,
+                            this.state.mapApi,
+                            this.state.destinationList,
+                          )
+                        }
+                      }
+                    },
+                  ),
                 )
             })
             .catch(err => window.console && console.log(err))
@@ -142,15 +143,19 @@ class Bucketlist extends React.Component {
       ? this.setState({ destinationList: newDestinationList })
       : this.setState({ destinationList: [] })
 
-    // removed from liked list in session storage
-    const likedDestinations = JSON.parse(
-      sessionStorage.getItem('likedDestinations'),
+    // update root state of liked places
+    this.props.setRootState(
+      'likedPlaces',
+      updateListItem(this.props.likedPlaces, id),
     )
-    const newLikedDestinations = likedDestinations.filter(item => item !== id)
-    sessionStorage.setItem(
-      'likedDestinations',
-      JSON.stringify(newLikedDestinations),
-    )
+  }
+
+  apiHasLoaded = (map, maps) => {
+    this.setState({
+      mapApiLoaded: true,
+      mapInstance: map,
+      mapApi: maps,
+    })
   }
 
   toggleShowMap() {
@@ -224,30 +229,31 @@ class Bucketlist extends React.Component {
             {/* map component */}
             <div className={classes.mapContainer}>
               <Mapview
-                apiHasLoaded={(map, maps) =>
-                  apiIsLoaded(map, maps, this.state.destinationList)
-                }
+                apiHasLoaded={(map, maps) => {
+                  this.apiHasLoaded(map, maps)
+                  // after history.back() from destinationPage, destiantionList is empty at this point
+                  // for that situation, fitMapToPlaces() is called in the componendDidMount()
+                  if (this.state.destinationList.length > 0)
+                    fitMapToPlaces(map, maps, this.state.destinationList)
+                }}
                 places={this.state.destinationList}
                 toggleLike={id => {
                   this.removeLike(id)
                 }}
+                history={this.props.history}
               />
             </div>
           </React.Fragment>
         ) : (
           // {/* If no likedDestinations, destinationsList is set to null and warning should be displayed */}
           <React.Fragment>
-            {!this.state.isLoading && (
-              <ResultsBar
-                text={
-                  this.state.destinationList.length +
-                  (this.state.destinationList.length === 1
-                    ? ' place'
-                    : ' places') +
-                  ' to travel to'
-                }
-              />
-            )}
+            <ResultsBar
+              text={
+                this.props.likedPlaces.length +
+                (this.props.likedPlaces.length === 1 ? ' place' : ' places') +
+                ' to travel to'
+              }
+            />
             <Album>
               {this.state.destinationList.map(place => (
                 <Grid item key={place.id} xs={12} sm={6} md={4}>

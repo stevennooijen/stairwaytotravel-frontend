@@ -30,8 +30,12 @@ class WarningCard extends Component {
           </Typography>
         </CardContent>
         <CardActions>
+          <RedirectButton
+            to_url="/explore"
+            text="Explore"
+            variant="contained"
+          />
           <RedirectButton to_url="/" text="Search" />
-          <RedirectButton to_url="/explore" text="Explore" />
         </CardActions>
       </Card>
     )

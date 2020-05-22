@@ -25,7 +25,7 @@ import {
   extractBoundsFromPlaceObject,
   extractCountryFromPlaceObject,
 } from '../../components/mapview/utils'
-import { pushUrlWithQueryParams } from '../../components/utils'
+import { pushUrlWithQueryParams, updateListItem } from 'components/utils'
 
 const styles = theme => ({
   extendedIcon: {
@@ -43,7 +43,7 @@ const styles = theme => ({
 })
 
 class Explore extends React.Component {
-  // _isMounted = false
+  _isMounted = false
 
   constructor(props) {
     super(props)
@@ -65,10 +65,6 @@ class Explore extends React.Component {
 
       // state to keep places and interactions
       destinationList: [],
-      likedDestinations: JSON.parse(
-        sessionStorage.getItem('likedDestinations'),
-      ),
-      newLikes: [],
 
       // state for mapview
       showMap: false,
@@ -109,12 +105,10 @@ class Explore extends React.Component {
 
   // Pipeline of functions. Result of previous is piped into next function
   componentDidMount() {
+    this._isMounted = true
+
     // Set defaults based on query string parameters
     if (this.state.queryParams.map === 'true') this.setState({ showMap: true })
-
-    // If no already liked destinations, set to empty array
-    if (this.state.likedDestinations === null)
-      this.setState({ likedDestinations: [] })
 
     // Fetch last query params from Root, if none fetch at random.
     let mapBounds
@@ -170,6 +164,10 @@ class Explore extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
   apiHasLoaded = (map, maps) => {
     this.setState({
       mapApiLoaded: true,
@@ -179,59 +177,69 @@ class Explore extends React.Component {
   }
 
   fetchDestinations(seed, nResults, offset, bounds, country) {
-    this.setState({ isLoading: true, offset: offset + nResults }, () => {
-      FetchExploreDestinations(seed, nResults, offset, bounds, country)
-        .then(response => response.json())
-        .then(data => {
-          // retrieve maximum number of places possible
-          this.setState({ maxPlacesText: data.maxPlacesText })
-          const maxPlaces = data.maxPlaces
+    if (this._isMounted) {
+      this.setState({ isLoading: true, offset: offset + nResults }, () => {
+        FetchExploreDestinations(seed, nResults, offset, bounds, country)
+          .then(response => response.json())
+          .then(data => {
+            // retrieve maximum number of places possible
+            if (this._isMounted) {
+              this.setState({ maxPlacesText: data.maxPlacesText })
+            }
+            const maxPlaces = data.maxPlaces
 
-          // check if new places are fetched
-          data.destinations.length > 0
-            ? // for each of the fetched destinations in the list do:
-              data.destinations.forEach(item => {
-                // 1. retrieve flickr Images
-                GetFlickrImages(item.name)
-                  .then(imageUrls => {
-                    return {
-                      ...item,
-                      images: imageUrls,
-                    }
-                  })
-                  // 2. set liked to true if destination already in likedList
-                  .then(item => {
-                    if (this.state.likedDestinations.includes(item.id)) {
+            // check if new places are fetched
+            data.destinations.length > 0
+              ? // for each of the fetched destinations in the list do:
+                data.destinations.forEach(item => {
+                  // 1. retrieve flickr Images
+                  GetFlickrImages(item.name)
+                    .then(imageUrls => {
                       return {
                         ...item,
-                        liked: true,
+                        images: imageUrls,
                       }
-                    } else {
-                      return item
-                    }
-                  })
-                  // 3. save fetched destination to state
-                  .then(item =>
-                    this.setState({
-                      destinationList: [...this.state.destinationList, item],
-                      hasMore: this.state.destinationList.length < maxPlaces,
-                      isLoading: false,
-                    }),
-                  )
-              })
-            : this.setState({
-                hasMore: false,
-                isLoading: false,
-              })
-        })
-        .catch(err => {
-          // console.log(err)
-          this.setState({
-            error: err.message,
-            isLoading: false,
+                    })
+                    // 2. set liked to true if destination already in likedList
+                    .then(item => {
+                      if (this.props.likedPlaces.includes(item.id)) {
+                        return {
+                          ...item,
+                          liked: true,
+                        }
+                      } else {
+                        return item
+                      }
+                    })
+                    // 3. save fetched destination to state
+                    .then(item => {
+                      if (this._isMounted) {
+                        this.setState({
+                          destinationList: [
+                            ...this.state.destinationList,
+                            item,
+                          ],
+                          hasMore:
+                            this.state.destinationList.length < maxPlaces,
+                          isLoading: false,
+                        })
+                      }
+                    })
+                })
+              : this.setState({
+                  hasMore: false,
+                  isLoading: false,
+                })
           })
-        })
-    })
+          .catch(err => {
+            // console.log(err)
+            this.setState({
+              error: err.message,
+              isLoading: false,
+            })
+          })
+      })
+    }
   }
 
   toggleLike(id) {
@@ -250,34 +258,18 @@ class Explore extends React.Component {
     this.setState({
       destinationList: newList,
     })
-    sessionStorage.setItem('destinationList', JSON.stringify(newList))
+    // sessionStorage.setItem('destinationList', JSON.stringify(newList))
   }
 
-  updateLikedDestinationsList(id) {
-    // For bucketlist page: keep track of likes and save in an array to session storage
-    const likedDestinations = this.state.likedDestinations
-    const newLikedDestinations = likedDestinations.includes(id)
-      ? likedDestinations.filter(item => item !== id)
-      : [...likedDestinations, id]
-    this.setState({ likedDestinations: newLikedDestinations })
-    sessionStorage.setItem(
-      'likedDestinations',
-      JSON.stringify(newLikedDestinations),
+  updateLikedPlaces(id) {
+    this.props.setRootState(
+      'likedPlaces',
+      updateListItem(this.props.likedPlaces, id),
     )
   }
 
   updateNewLikes(id) {
-    // Same as above, can be turned into generic helper function!
-    const newLikes = this.state.newLikes
-    const newNewLikes = newLikes.includes(id)
-      ? newLikes.filter(item => item !== id)
-      : [...newLikes, id]
-    this.setState({ newLikes: newNewLikes })
-
-    // set newLike for notification dot when there are new likes
-    if (newNewLikes.length > 0) {
-      this.props.setRootState('newLike', true)
-    } else this.props.setRootState('newLike', false)
+    this.props.setRootState('newLikes', updateListItem(this.props.newLikes, id))
   }
 
   toggleShowMap() {
@@ -384,9 +376,10 @@ class Explore extends React.Component {
                 places={this.state.destinationList.slice(0, nResults)}
                 toggleLike={id => {
                   this.toggleLike(id)
-                  this.updateLikedDestinationsList(id)
+                  this.updateLikedPlaces(id)
                   this.updateNewLikes(id)
                 }}
+                history={this.props.history}
               />
             </div>
           </div>
@@ -460,7 +453,7 @@ class Explore extends React.Component {
                     place={place}
                     toggleLike={id => {
                       this.toggleLike(id)
-                      this.updateLikedDestinationsList(id)
+                      this.updateLikedPlaces(id)
                       this.updateNewLikes(id)
                     }}
                     onClick={() => {

@@ -77,20 +77,18 @@ class SimpleBottomNavigation extends Component {
     // https://stackoverflow.com/questions/48907932/material-ui-app-bar-w-react-router
     this.props.history.push(value)
     // Make sure notification dot for new likes is set to false after visiting bucketlist
-    if (value === '/bucketlist') {
-      this.props.setRootState('newLike', false)
-    }
   }
 
   render() {
     const { location } = this.state
-    const { classes, newLike } = this.props
+    const { classes, newLikesNotificationDot } = this.props
 
     return (
       // Add transition on the navbar
       <HideOnScroll location={location}>
         <BottomNavigation
-          value={location.pathname}
+          // keep only the part before the second backslash: /explore/:name becomes /explore
+          value={'/' + location.pathname.split('/')[1]}
           onChange={this.handleChange}
           showLabels
           // className is used to give the div an id
@@ -110,7 +108,11 @@ class SimpleBottomNavigation extends Component {
             label="Bucket List"
             value="/bucketlist"
             icon={
-              <Badge color="primary" variant="dot" invisible={!newLike}>
+              <Badge
+                color="primary"
+                variant="dot"
+                invisible={!newLikesNotificationDot}
+              >
                 <FavoriteBorderIcon />
               </Badge>
             }

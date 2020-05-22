@@ -48,6 +48,19 @@ They will not be included in the production build so you can use them for things
 
 ESLint and Prettier are applied to the project.
 
+### Git
+
+We stick to the branching model as [outlined here](https://nvie.com/posts/a-successful-git-branching-model/).
+This means we have the two major branches of `master` and `develop`, and can have additional branches for features
+or hotfixes. To keep track of branch history, we use the `--no-ff` flag when merging between the two:
+
+```bash
+(on branch development)$ git merge master
+(resolve any merge conflicts if there are any)
+git checkout master
+git merge --no-ff development
+```
+
 ## Developing
 
 In the project directory, you can run:

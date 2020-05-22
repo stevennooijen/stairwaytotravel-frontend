@@ -1,4 +1,5 @@
 export { default as fitMapToPlace } from './FitMapToPlace'
+export { default as fitMapToPlaces } from './FitMapToPlaces'
 export { default as fitMapToBounds } from './FitMapToBounds'
 export {
   default as extractBoundsFromPlaceObject,

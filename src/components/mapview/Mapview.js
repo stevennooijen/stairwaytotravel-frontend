@@ -83,7 +83,7 @@ class Mapview extends Component {
 
   render() {
     const { mapGestureHandling } = this.state
-    const { classes, places, toggleLike, apiHasLoaded } = this.props
+    const { classes, places, toggleLike, apiHasLoaded, history } = this.props
 
     return (
       <div className={classes.wrapper}>
@@ -114,7 +114,7 @@ class Mapview extends Component {
                   toggleLike={toggleLike}
                   onClick={() => {
                     // send to destination page
-                    this.props.history.push('/explore/' + this.props.place.id)
+                    history.push('/explore/' + place.id)
                   }}
                   mapGestureHandling={value =>
                     this.setState({ mapGestureHandling: value })

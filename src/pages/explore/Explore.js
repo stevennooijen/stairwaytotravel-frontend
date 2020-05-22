@@ -379,6 +379,7 @@ class Explore extends React.Component {
                   this.updateLikedPlaces(id)
                   this.updateNewLikes(id)
                 }}
+                history={this.props.history}
               />
             </div>
           </div>

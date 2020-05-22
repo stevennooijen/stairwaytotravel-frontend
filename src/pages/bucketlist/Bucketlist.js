@@ -18,10 +18,7 @@ import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import FloatingActionButton from './FloatingActionButton'
 import TopAppBar from '../../components/TopAppBar'
 import { Mapview } from '../../components/mapview'
-import {
-  getMapBounds,
-  bindResizeListener,
-} from '../../components/mapview/utils'
+import { fitMapToPlaces } from 'components/mapview/utils'
 import MapFloatingActionButton from '../../components/mapview/components/MapFloatingActionButton'
 import CheckoutDialog from './CheckoutDialog'
 import Loader from 'components/fetching/Loader'
@@ -29,8 +26,6 @@ import postSignupForm from '../../components/fetching/mailchimp/PostSignupForm'
 import postLikesEvent from '../../components/fetching/mailchimp/PostLikesEvent'
 import patchSignupFormLikes from '../../components/fetching/mailchimp/PatchSignupFormLikes'
 import { pushUrlWithQueryParams, updateListItem } from 'components/utils'
-
-const MINIMUM_ZOOM = 8
 
 const styles = theme => ({
   pageTitle: {
@@ -50,21 +45,6 @@ const styles = theme => ({
   },
 })
 
-// Fit map to its bounds after the api is loaded
-const apiIsLoaded = (map, maps, places) => {
-  if (places !== null) {
-    // Get bounds by our places
-    const bounds = getMapBounds(map, maps, places)
-    // Fit map to bounds
-    map.fitBounds(bounds)
-    // Enforce minimal zoom level
-    const zoom = map.getZoom()
-    map.setZoom(zoom > MINIMUM_ZOOM ? MINIMUM_ZOOM : zoom)
-    // Bind the resize listener
-    bindResizeListener(map, maps, bounds)
-  }
-}
-
 class Bucketlist extends React.Component {
   constructor(props) {
     super(props)
@@ -76,6 +56,11 @@ class Bucketlist extends React.Component {
       dialogOpen: false,
       thanksBarOpen: false,
       isLoading: false,
+
+      // Google mapInstance object
+      mapApiLoaded: false,
+      mapInstance: null,
+      mapApi: null,
 
       // checkoutDialog features
       textFieldValue: '',
@@ -100,6 +85,7 @@ class Bucketlist extends React.Component {
     // fetch data if likes
     this.setState({ isLoading: true }, () => {
       if (this.props.likedPlaces && this.props.likedPlaces.length > 0) {
+        let itemsProcessed = 0
         // for each of the fetched destinations in the list do:
         this.props.likedPlaces.forEach(id => {
           // 1. fetch the data
@@ -118,10 +104,26 @@ class Bucketlist extends React.Component {
                 })
                 // 4. save fetched destination to state
                 .then(item =>
-                  this.setState({
-                    destinationList: [...this.state.destinationList, item],
-                    isLoading: false,
-                  }),
+                  this.setState(
+                    {
+                      destinationList: [...this.state.destinationList, item],
+                      isLoading: false,
+                    },
+                    // callbac: fitMapToPlaces when map & all destinations are loaded
+                    () => {
+                      itemsProcessed++
+                      if (
+                        itemsProcessed === this.props.likedPlaces.length &&
+                        this.state.mapApiLoaded
+                      ) {
+                        fitMapToPlaces(
+                          this.state.mapInstance,
+                          this.state.mapApi,
+                          this.state.destinationList,
+                        )
+                      }
+                    },
+                  ),
                 )
             })
             .catch(err => window.console && console.log(err))
@@ -146,6 +148,14 @@ class Bucketlist extends React.Component {
       'likedPlaces',
       updateListItem(this.props.likedPlaces, id),
     )
+  }
+
+  apiHasLoaded = (map, maps) => {
+    this.setState({
+      mapApiLoaded: true,
+      mapInstance: map,
+      mapApi: maps,
+    })
   }
 
   toggleShowMap() {
@@ -219,9 +229,13 @@ class Bucketlist extends React.Component {
             {/* map component */}
             <div className={classes.mapContainer}>
               <Mapview
-                apiHasLoaded={(map, maps) =>
-                  apiIsLoaded(map, maps, this.state.destinationList)
-                }
+                apiHasLoaded={(map, maps) => {
+                  this.apiHasLoaded(map, maps)
+                  // after history.back() from destinationPage, destiantionList is empty at this point
+                  // for that situation, fitMapToPlaces() is called in the componendDidMount()
+                  if (this.state.destinationList.length > 0)
+                    fitMapToPlaces(map, maps, this.state.destinationList)
+                }}
                 places={this.state.destinationList}
                 toggleLike={id => {
                   this.removeLike(id)

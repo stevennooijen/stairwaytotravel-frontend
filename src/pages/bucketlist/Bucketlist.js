@@ -226,6 +226,7 @@ class Bucketlist extends React.Component {
                 toggleLike={id => {
                   this.removeLike(id)
                 }}
+                history={this.props.history}
               />
             </div>
           </React.Fragment>

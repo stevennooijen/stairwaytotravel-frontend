@@ -53,8 +53,6 @@ const styles = theme => ({
     // posssibly, set through theme: theme.palette.background.default
     // backgroundColor: '#fcfcfc',
     borderTop: `1px solid ${theme.palette.divider}`,
-    // elevation required for nabar on mobile to pop up above browser navbar
-    elevation: 5,
     zIndex: 100,
   },
 })
@@ -91,7 +89,6 @@ class SimpleBottomNavigation extends Component {
           value={'/' + location.pathname.split('/')[1]}
           onChange={this.handleChange}
           showLabels
-          // className is used to give the div an id
           className={classes.stickToBottom}
         >
           <BottomNavigationAction

@@ -3,11 +3,11 @@ import { withRouter } from 'react-router-dom'
 import queryString from 'query-string'
 import debounce from 'lodash.debounce'
 
-import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 import RefreshIcon from '@material-ui/icons/Refresh'
 
 import Album from 'components/Album'
+import AlbumItem from 'components/AlbumItem'
 import DestinationCard from 'components/destinationCard/DestinationCard'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import TopAppBar from '../../components/TopAppBar'
@@ -40,6 +40,9 @@ const styles = theme => ({
   mapContainer: {
     flexGrow: 1,
   },
+  // gridItem: {
+  //   padding: theme.spacing(1),
+  // },
 })
 
 class Explore extends React.Component {
@@ -448,7 +451,7 @@ class Explore extends React.Component {
               {this.state.destinationList.map(place => (
                 // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
                 // State blijft zodoende in de Bucketlist component op 'hoog' niveau
-                <Grid item key={place.id} xs={12} sm={6} md={4}>
+                <AlbumItem key={place.id}>
                   <DestinationCard
                     place={place}
                     toggleLike={id => {
@@ -461,13 +464,9 @@ class Explore extends React.Component {
                       this.props.history.push('/explore/' + place.id)
                     }}
                   />
-                </Grid>
+                </AlbumItem>
               ))}
-              {this.state.maxPlacesText === 0 && (
-                <Grid item xs={12} sm={6} md={4}>
-                  <NothingFoundCard />
-                </Grid>
-              )}
+              {this.state.maxPlacesText === 0 && <NothingFoundCard />}
             </Album>
             {this.state.isLoading && <Loader />}
           </React.Fragment>

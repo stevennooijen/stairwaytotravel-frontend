@@ -5,11 +5,11 @@ import ReactGA from 'react-ga'
 
 import { withStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
-import Grid from '@material-ui/core/Grid'
 import Snackbar from '@material-ui/core/Snackbar'
 import ExploreIcon from '@material-ui/icons/Explore'
 
 import Album from 'components/Album'
+import AlbumItem from 'components/AlbumItem'
 import DestinationCard from 'components/destinationCard/DestinationCard'
 import ResultsBar from 'components/ResultsBar'
 import WarningCard from './WarningCard'
@@ -256,7 +256,7 @@ class Bucketlist extends React.Component {
             />
             <Album>
               {this.state.destinationList.map(place => (
-                <Grid item key={place.id} xs={12} sm={6} md={4}>
+                <AlbumItem key={place.id}>
                   <DestinationCard
                     place={place}
                     toggleLike={id => this.removeLike(id)}
@@ -265,15 +265,11 @@ class Bucketlist extends React.Component {
                       this.props.history.push('/explore/' + place.id)
                     }}
                   />
-                </Grid>
+                </AlbumItem>
               ))}
               {/* If 0 likes after loading, show warning card */}
               {this.state.destinationList.length === 0 &&
-                this.state.isLoading === false && (
-                  <Grid item>
-                    <WarningCard />
-                  </Grid>
-                )}
+                this.state.isLoading === false && <WarningCard />}
             </Album>
             {this.state.isLoading && <Loader />}
             {/* functionality for checkout dialog starts here */}

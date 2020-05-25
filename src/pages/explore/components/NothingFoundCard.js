@@ -6,12 +6,9 @@ import { withStyles } from '@material-ui/core/styles'
 
 const styles = theme => ({
   card: {
-    // margin: '0 15px',
-    height: '100%',
     maxWidth: 400,
-    // position needed to show favorite icon on top of card
-    position: 'relative',
-    // boxShadow: 'none',
+    // apply margin left and right
+    margin: `0 ${theme.spacing(3)}px`,
   },
 })
 
@@ -20,7 +17,7 @@ class NothingFoundCard extends Component {
     const { classes } = this.props
 
     return (
-      <Card className={classes.card}>
+      <Card className={classes.card} align="center">
         <CardContent>
           <Typography gutterBottom variant="h6" component="h2">
             No destinations found.

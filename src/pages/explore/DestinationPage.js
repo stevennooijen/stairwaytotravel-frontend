@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactGA from 'react-ga'
+import { Redirect } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
 // import Divider from '@material-ui/core/Divider'
@@ -43,6 +44,7 @@ class DestinationPage extends Component {
       destination_id: props.match.params.name,
       placeData: {},
       isLoading: true,
+      redirect: false,
     }
   }
 
@@ -58,55 +60,64 @@ class DestinationPage extends Component {
       fetchSingleDestination(this.state.destination_id)
         .then(response => response.json())
         .then(item => {
-          // 1. retrieve flickr Images
-          GetFlickrImages(item.name)
-            .then(imageUrls => {
-              return {
-                ...item,
-                images: imageUrls,
-              }
+          // if no place fetched, redirect to /explore
+          if (item === null) {
+            this.setState({
+              redirect: true,
             })
-            // 2. set liked to true if destination already in likedList
-            .then(item => {
-              if (this.props.likedPlaces.includes(item.id)) {
+          } else {
+            // 1. retrieve flickr Images
+            GetFlickrImages(item.name)
+              .then(imageUrls => {
                 return {
                   ...item,
-                  liked: true,
+                  images: imageUrls,
                 }
-              } else {
-                return item
-              }
-            })
-            // 3. get wikivoyage description
-            .then(item =>
-              fetchWikivoyageInfo(item.id).then(info => {
-                return {
-                  ...item,
-                  info: info,
+              })
+              // 2. set liked to true if destination already in likedList
+              .then(item => {
+                if (this.props.likedPlaces.includes(item.id)) {
+                  return {
+                    ...item,
+                    liked: true,
+                  }
+                } else {
+                  return item
                 }
-              }),
-            )
-            // 4. Fetch wikivoyage attribution links
-            .then(item =>
-              fetchWikivoyageLinks(item.id).then(links => {
-                return {
-                  ...item,
-                  wikiLinks: links,
+              })
+              // 3. get wikivoyage description
+              .then(item =>
+                fetchWikivoyageInfo(item.id).then(info => {
+                  return {
+                    ...item,
+                    info: info,
+                  }
+                }),
+              )
+              // 4. Fetch wikivoyage attribution links
+              .then(item =>
+                fetchWikivoyageLinks(item.id).then(links => {
+                  return {
+                    ...item,
+                    wikiLinks: links,
+                  }
+                }),
+              )
+              // 5. save fetched destination to state
+              .then(item => {
+                if (this._isMounted) {
+                  this.setState({
+                    placeData: item,
+                    isLoading: false,
+                  })
                 }
-              }),
-            )
-            // 5. save fetched destination to state
-            .then(item => {
-              if (this._isMounted) {
-                this.setState({
-                  placeData: item,
-                  isLoading: false,
-                })
-              }
-            })
+              })
+          }
         })
         //   TODO: display something when error is found instead of printing to console
-        .catch(err => window.console && console.log(err))
+        .catch(err => {
+          window.console && console.log(err)
+        })
     })
   }
 
@@ -136,12 +147,19 @@ class DestinationPage extends Component {
     }
   }
 
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to="/explore" />
+    }
+  }
+
   render() {
     const { placeData } = this.state
     const { classes } = this.props
 
     return (
       <div>
+        {this.renderRedirect()}
         {/* Top app bar */}
         <AppBar position="fixed" color="default">
           <Container maxWidth="md">

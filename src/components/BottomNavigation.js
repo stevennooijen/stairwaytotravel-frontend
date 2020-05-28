@@ -10,7 +10,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import ExploreIcon from '@material-ui/icons/Explore'
 import Badge from '@material-ui/core/Badge'
 
-import HideOnScroll from 'components/utils/HideOnScroll'
+// import HideOnScroll from 'components/utils/HideOnScroll'
 
 const PAGES = ['/explore', '/bucketlist']
 
@@ -60,38 +60,38 @@ class SimpleBottomNavigation extends Component {
       // Show navbar only on some pages
       PAGES.includes(pathRoot) &&
       queryParams.map !== 'true' && (
-        <HideOnScroll>
-          <BottomNavigation
-            value={pathRoot}
-            onChange={this.handleChange}
-            showLabels
-            className={classes.stickToBottom}
-          >
-            <BottomNavigationAction
-              label="Search"
-              value="/"
-              icon={<SearchIcon />}
-            />
-            <BottomNavigationAction
-              label="Explore"
-              value="/explore"
-              icon={<ExploreIcon />}
-            />
-            <BottomNavigationAction
-              label="Bucket List"
-              value="/bucketlist"
-              icon={
-                <Badge
-                  color="primary"
-                  variant="dot"
-                  invisible={!newLikesNotificationDot}
-                >
-                  <FavoriteBorderIcon />
-                </Badge>
-              }
-            />
-          </BottomNavigation>
-        </HideOnScroll>
+        // <HideOnScroll>
+        <BottomNavigation
+          value={pathRoot}
+          onChange={this.handleChange}
+          showLabels
+          className={classes.stickToBottom}
+        >
+          <BottomNavigationAction
+            label="Search"
+            value="/"
+            icon={<SearchIcon />}
+          />
+          <BottomNavigationAction
+            label="Explore"
+            value="/explore"
+            icon={<ExploreIcon />}
+          />
+          <BottomNavigationAction
+            label="Bucket List"
+            value="/bucketlist"
+            icon={
+              <Badge
+                color="primary"
+                variant="dot"
+                invisible={!newLikesNotificationDot}
+              >
+                <FavoriteBorderIcon />
+              </Badge>
+            }
+          />
+        </BottomNavigation>
+        // </HideOnScroll>
       )
     )
   }

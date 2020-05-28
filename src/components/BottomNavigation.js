@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import queryString from 'query-string'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -9,37 +8,11 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import SearchIcon from '@material-ui/icons/Search'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import ExploreIcon from '@material-ui/icons/Explore'
-import useScrollTrigger from '@material-ui/core/useScrollTrigger'
-import Slide from '@material-ui/core/Slide'
 import Badge from '@material-ui/core/Badge'
 
-// Taken from hidden app-bar example: https://material-ui.com/components/app-bar/
-function HideOnScroll(props) {
-  const { children, location } = props
-  const trigger = useScrollTrigger()
-  const pages = ['/', '/about']
-  const queryParams = queryString.parse(location.search)
+import HideOnScroll from 'components/utils/HideOnScroll'
 
-  return (
-    <Slide
-      appear={false}
-      direction="up"
-      // make sure appbar doesn't display when on top of certain pages, or when map is open
-      in={
-        pages.includes(location.pathname) ||
-        (queryParams.map === 'true' && window.pageYOffset === 0)
-          ? false
-          : !trigger
-      }
-    >
-      {children}
-    </Slide>
-  )
-}
-
-HideOnScroll.propTypes = {
-  children: PropTypes.element.isRequired,
-}
+const PAGES = ['/explore', '/bucketlist']
 
 // definieer 1 javaobject = statisch ding kan je niks aan veranderen
 // const styles = {
@@ -72,50 +45,54 @@ class SimpleBottomNavigation extends Component {
   handleChange = (event, value) => {
     this.setState({ value })
     // change history programatically when value changes
-    // https://stackoverflow.com/questions/48907932/material-ui-app-bar-w-react-router
     this.props.history.push(value)
-    // Make sure notification dot for new likes is set to false after visiting bucketlist
   }
 
   render() {
     const { location } = this.state
     const { classes, newLikesNotificationDot } = this.props
 
+    // keep only the part before the second backslash: /explore/:name becomes /explore
+    const pathRoot = '/' + location.pathname.split('/')[1]
+    const queryParams = queryString.parse(location.search)
+
     return (
-      // Add transition on the navbar
-      <HideOnScroll location={location}>
-        <BottomNavigation
-          // keep only the part before the second backslash: /explore/:name becomes /explore
-          value={'/' + location.pathname.split('/')[1]}
-          onChange={this.handleChange}
-          showLabels
-          className={classes.stickToBottom}
-        >
-          <BottomNavigationAction
-            label="Search"
-            value="/"
-            icon={<SearchIcon />}
-          />
-          <BottomNavigationAction
-            label="Explore"
-            value="/explore"
-            icon={<ExploreIcon />}
-          />
-          <BottomNavigationAction
-            label="Bucket List"
-            value="/bucketlist"
-            icon={
-              <Badge
-                color="primary"
-                variant="dot"
-                invisible={!newLikesNotificationDot}
-              >
-                <FavoriteBorderIcon />
-              </Badge>
-            }
-          />
-        </BottomNavigation>
-      </HideOnScroll>
+      // Show navbar only on some pages
+      PAGES.includes(pathRoot) &&
+      queryParams.map !== 'true' && (
+        <HideOnScroll>
+          <BottomNavigation
+            value={pathRoot}
+            onChange={this.handleChange}
+            showLabels
+            className={classes.stickToBottom}
+          >
+            <BottomNavigationAction
+              label="Search"
+              value="/"
+              icon={<SearchIcon />}
+            />
+            <BottomNavigationAction
+              label="Explore"
+              value="/explore"
+              icon={<ExploreIcon />}
+            />
+            <BottomNavigationAction
+              label="Bucket List"
+              value="/bucketlist"
+              icon={
+                <Badge
+                  color="primary"
+                  variant="dot"
+                  invisible={!newLikesNotificationDot}
+                >
+                  <FavoriteBorderIcon />
+                </Badge>
+              }
+            />
+          </BottomNavigation>
+        </HideOnScroll>
+      )
     )
   }
 }

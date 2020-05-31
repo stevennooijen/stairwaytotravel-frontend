@@ -19,6 +19,7 @@ import { fetchSingleDestination } from 'components/fetching'
 import PhotoCarousel from 'components/destinationCard/Carousel'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import Loader from 'components/fetching/Loader'
+import ConsecutiveSnackbars from 'components/ConsecutiveSnackbars'
 import fetchWikivoyageInfo from 'components/fetching/thirdParties/FetchWikivoyageInfo'
 import fetchWikivoyageLinks from 'components/fetching/thirdParties/FetchWikivoyageLinks'
 import { updateListItem } from 'components/utils'
@@ -45,6 +46,10 @@ class DestinationPage extends Component {
       placeData: {},
       isLoading: true,
       redirect: false,
+
+      // state for like/dislike snackbar message
+      snackbarMessage: null,
+      snackbarPlaceId: null,
     }
   }
 
@@ -125,6 +130,26 @@ class DestinationPage extends Component {
     this._isMounted = false
   }
 
+  toggleLike(id) {
+    // update state
+    this.setState(prevState => ({
+      placeData: {
+        ...this.state.placeData,
+        liked: !prevState.placeData.liked,
+      },
+    }))
+    // update root level state
+    this.updateLikedPlaces(id)
+    this.updateNewLikes(id)
+    this.updateSnackbarMessage(id)
+    // send google analytics event
+    ReactGA.event({
+      category: 'Explore',
+      action: 'Place like',
+      value: 20,
+    })
+  }
+
   updateLikedPlaces(id) {
     // For bucketlist page: keep track of likes and save in an array to session storage
     this.props.setRootState(
@@ -145,6 +170,18 @@ class DestinationPage extends Component {
         updateListItem(this.props.newLikes, id),
       )
     }
+  }
+
+  updateSnackbarMessage(id) {
+    this.setState(
+      {
+        snackbarMessage: this.props.likedPlaces.includes(id)
+          ? 'Removed from your bucket list'
+          : 'Saved to your bucket list',
+        snackbarPlaceId: id,
+      },
+      () => this.setState({ snackbarMessage: null }),
+    )
   }
 
   renderRedirect = () => {
@@ -184,24 +221,7 @@ class DestinationPage extends Component {
                   edge="end"
                   aria-label="Add to favorites"
                   color="primary"
-                  onClick={e => {
-                    // update state
-                    this.setState(prevState => ({
-                      placeData: {
-                        ...placeData,
-                        liked: !prevState.placeData.liked,
-                      },
-                    }))
-                    // update root level state
-                    this.updateLikedPlaces(placeData.id)
-                    this.updateNewLikes(placeData.id)
-                    // send google analytics event
-                    ReactGA.event({
-                      category: 'Explore',
-                      action: 'Place like',
-                      value: 20,
-                    })
-                  }}
+                  onClick={() => this.toggleLike(placeData.id)}
                 >
                   {placeData.liked ? <FavoriteIcon /> : <FavoriteBorder />}
                 </IconButton>
@@ -272,8 +292,13 @@ class DestinationPage extends Component {
             <br />
             <br />
             <br />
+            <br />
           </Container>
         )}
+        <ConsecutiveSnackbars
+          snackbarMessage={this.state.snackbarMessage}
+          handleUndo={() => this.toggleLike(this.state.snackbarPlaceId)}
+        />
       </div>
     )
   }

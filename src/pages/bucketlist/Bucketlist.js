@@ -12,6 +12,7 @@ import Album from 'components/Album'
 import AlbumItem from 'components/AlbumItem'
 import DestinationCard from 'components/destinationCard/DestinationCard'
 import ResultsBar from 'components/ResultsBar'
+import ConsecutiveSnackbars from 'components/ConsecutiveSnackbars'
 import WarningCard from './WarningCard'
 import { fetchSingleDestination } from '../../components/fetching'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
@@ -69,6 +70,10 @@ class Bucketlist extends React.Component {
       localTransport: false,
       activities: false,
       none: false,
+
+      // state for like/dislike snackbar message
+      snackbarMessage: null,
+      snackbarPlaceId: null,
     }
   }
 
@@ -134,19 +139,56 @@ class Bucketlist extends React.Component {
     })
   }
 
-  removeLike(id) {
-    // remove from destination list
-    const newDestinationList = this.state.destinationList.filter(
-      destination => destination.id !== id,
-    )
-    newDestinationList.length > 0
-      ? this.setState({ destinationList: newDestinationList })
-      : this.setState({ destinationList: [] })
+  toggleLike(id) {
+    // updateDestinationList also re-fits the map
+    this.updateDestinationList(id)
+    this.updateLikedPlaces(id)
+    this.updateSnackbarMessage(id)
+  }
 
-    // update root state of liked places
+  updateDestinationList(id) {
+    // https://www.robinwieruch.de/react-state-array-add-update-remove/
+    const newList = this.state.destinationList.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          liked: !item.liked,
+        }
+      } else {
+        return item
+      }
+    })
+
+    this.setState({
+      destinationList: newList,
+    })
+    // sessionStorage.setItem('destinationList', JSON.stringify(newList))
+
+    // re-fit map if its open
+    this.state.mapInstance &&
+      fitMapToPlaces(
+        this.state.mapInstance,
+        this.state.mapApi,
+        newList.filter(place => place.liked === true),
+      )
+  }
+
+  updateLikedPlaces(id) {
     this.props.setRootState(
       'likedPlaces',
       updateListItem(this.props.likedPlaces, id),
+    )
+  }
+
+  updateSnackbarMessage(id) {
+    this.setState(
+      {
+        snackbarMessage: this.props.likedPlaces.includes(id)
+          ? 'Removed from your bucket list'
+          : 'Saved to your bucket list',
+        snackbarPlaceId: id,
+      },
+      () => this.setState({ snackbarMessage: null }),
     )
   }
 
@@ -191,6 +233,10 @@ class Bucketlist extends React.Component {
       none,
     } = this.state
 
+    const DestinationListLikes = this.state.destinationList.filter(
+      place => place.liked === true,
+    )
+
     const checkboxError =
       [flights, accommodation, localTransport, activities, none].filter(v => v)
         .length === 0
@@ -233,13 +279,11 @@ class Bucketlist extends React.Component {
                   this.apiHasLoaded(map, maps)
                   // after history.back() from destinationPage, destiantionList is empty at this point
                   // for that situation, fitMapToPlaces() is called in the componendDidMount()
-                  if (this.state.destinationList.length > 0)
-                    fitMapToPlaces(map, maps, this.state.destinationList)
+                  if (DestinationListLikes.length > 0)
+                    fitMapToPlaces(map, maps, DestinationListLikes)
                 }}
-                places={this.state.destinationList}
-                toggleLike={id => {
-                  this.removeLike(id)
-                }}
+                places={DestinationListLikes}
+                toggleLike={id => this.toggleLike(id)}
                 history={this.props.history}
               />
             </div>
@@ -255,11 +299,11 @@ class Bucketlist extends React.Component {
               }
             />
             <Album>
-              {this.state.destinationList.map(place => (
+              {DestinationListLikes.map(place => (
                 <AlbumItem key={place.id}>
                   <DestinationCard
                     place={place}
-                    toggleLike={id => this.removeLike(id)}
+                    toggleLike={id => this.toggleLike(id)}
                     onClick={() => {
                       // send to destination page
                       this.props.history.push('/explore/' + place.id)
@@ -350,6 +394,10 @@ class Bucketlist extends React.Component {
             />
           </React.Fragment>
         )}
+        <ConsecutiveSnackbars
+          snackbarMessage={this.state.snackbarMessage}
+          handleUndo={() => this.toggleLike(this.state.snackbarPlaceId)}
+        />
       </div>
     )
   }

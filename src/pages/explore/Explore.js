@@ -12,6 +12,7 @@ import DestinationCard from 'components/destinationCard/DestinationCard'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import TopAppBar from '../../components/TopAppBar'
 import ResultsBar from '../../components/ResultsBar'
+import ConsecutiveSnackbars from 'components/ConsecutiveSnackbars'
 import { Mapview } from '../../components/mapview'
 import SearchBox from '../../components/SearchBox'
 import GoogleMap from '../../components/mapview/components/GoogleMap'
@@ -76,6 +77,10 @@ class Explore extends React.Component {
       mapApiLoaded: false,
       mapInstance: null,
       mapApi: null,
+
+      // state for like/dislike snackbar message
+      snackbarMessage: null,
+      snackbarPlaceId: null,
     }
 
     // Binds our scroll event handler
@@ -246,6 +251,13 @@ class Explore extends React.Component {
   }
 
   toggleLike(id) {
+    this.updateDestinationList(id)
+    this.updateLikedPlaces(id)
+    this.updateNewLikes(id)
+    this.updateSnackbarMessage(id)
+  }
+
+  updateDestinationList(id) {
     // https://www.robinwieruch.de/react-state-array-add-update-remove/
     const newList = this.state.destinationList.map(item => {
       if (item.id === id) {
@@ -273,6 +285,18 @@ class Explore extends React.Component {
 
   updateNewLikes(id) {
     this.props.setRootState('newLikes', updateListItem(this.props.newLikes, id))
+  }
+
+  updateSnackbarMessage(id) {
+    this.setState(
+      {
+        snackbarMessage: this.props.likedPlaces.includes(id)
+          ? 'Removed from your bucket list'
+          : 'Saved to your bucket list',
+        snackbarPlaceId: id,
+      },
+      () => this.setState({ snackbarMessage: null }),
+    )
   }
 
   toggleShowMap() {
@@ -377,11 +401,7 @@ class Explore extends React.Component {
                   this.setState({ mapBounds: newBounds, showSearchHere: true })
                 }}
                 places={this.state.destinationList.slice(0, nResults)}
-                toggleLike={id => {
-                  this.toggleLike(id)
-                  this.updateLikedPlaces(id)
-                  this.updateNewLikes(id)
-                }}
+                toggleLike={id => this.toggleLike(id)}
                 history={this.props.history}
               />
             </div>
@@ -454,11 +474,7 @@ class Explore extends React.Component {
                 <AlbumItem key={place.id}>
                   <DestinationCard
                     place={place}
-                    toggleLike={id => {
-                      this.toggleLike(id)
-                      this.updateLikedPlaces(id)
-                      this.updateNewLikes(id)
-                    }}
+                    toggleLike={id => this.toggleLike(id)}
                     onClick={() => {
                       // send to destination page
                       this.props.history.push('/explore/' + place.id)
@@ -469,6 +485,10 @@ class Explore extends React.Component {
               {this.state.maxPlacesText === 0 && <NothingFoundCard />}
             </Album>
             {this.state.isLoading && <Loader />}
+            <ConsecutiveSnackbars
+              snackbarMessage={this.state.snackbarMessage}
+              handleUndo={() => this.toggleLike(this.state.snackbarPlaceId)}
+            />
           </React.Fragment>
         )}
       </div>

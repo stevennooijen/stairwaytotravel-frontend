@@ -1,5 +1,6 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
+import { Link as RouterLink } from 'react-router-dom'
 
 import Container from '@material-ui/core/Container'
 import Link from '@material-ui/core/Link'
@@ -42,12 +43,23 @@ class Footer extends React.Component {
       <Container component="footer" maxWidth={false} className={classes.footer}>
         <ul>
           <li>
-            <Link href="/" variant="subtitle1" color="textSecondary">
+            <Link
+              component={RouterLink}
+              to="/"
+              variant="subtitle1"
+              color="textSecondary"
+              onClick={() => window.scrollTo(0, 0)}
+            >
               © 2020 Stairway to Travel
             </Link>
           </li>
           <li>
-            <Link href="/about" variant="subtitle1" color="secondary">
+            <Link
+              component={RouterLink}
+              to="/about"
+              variant="subtitle1"
+              color="secondary"
+            >
               About
             </Link>
           </li>

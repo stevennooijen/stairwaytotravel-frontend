@@ -1,6 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './theme.js'
@@ -47,57 +52,60 @@ class Root extends React.Component {
           <div>
             {/* Start of actual app, App is the top level component */}
             <App>
-              <Route
-                exact
-                path="/"
-                render={props => (
-                  <Home
-                    {...props}
-                    placeQuery={placeQuery}
-                    setRootState={this.setRootState}
-                    setNewSeed={this.setNewSeed}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/explore"
-                render={props => (
-                  <Explore
-                    {...props}
-                    seed={seed}
-                    placeQuery={placeQuery}
-                    mapQuery={mapQuery}
-                    likedPlaces={likedPlaces}
-                    newLikes={newLikes}
-                    setRootState={this.setRootState}
-                    setNewSeed={this.setNewSeed}
-                  />
-                )}
-              />
-              <Route
-                path="/explore/:name"
-                render={props => (
-                  <DestinationPage
-                    {...props}
-                    likedPlaces={likedPlaces}
-                    newLikes={newLikes}
-                    setRootState={this.setRootState}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/bucketlist"
-                render={props => (
-                  <Bucketlist
-                    {...props}
-                    likedPlaces={likedPlaces}
-                    setRootState={this.setRootState}
-                  />
-                )}
-              />
-              <Route path="/about" render={() => <About />} />
+              <Switch>
+                <Route
+                  exact
+                  path="/"
+                  render={props => (
+                    <Home
+                      {...props}
+                      placeQuery={placeQuery}
+                      setRootState={this.setRootState}
+                      setNewSeed={this.setNewSeed}
+                    />
+                  )}
+                />
+                <Route
+                  exact
+                  path="/explore"
+                  render={props => (
+                    <Explore
+                      {...props}
+                      seed={seed}
+                      placeQuery={placeQuery}
+                      mapQuery={mapQuery}
+                      likedPlaces={likedPlaces}
+                      newLikes={newLikes}
+                      setRootState={this.setRootState}
+                      setNewSeed={this.setNewSeed}
+                    />
+                  )}
+                />
+                <Route
+                  path="/explore/:name"
+                  render={props => (
+                    <DestinationPage
+                      {...props}
+                      likedPlaces={likedPlaces}
+                      newLikes={newLikes}
+                      setRootState={this.setRootState}
+                    />
+                  )}
+                />
+                <Route
+                  exact
+                  path="/bucketlist"
+                  render={props => (
+                    <Bucketlist
+                      {...props}
+                      likedPlaces={likedPlaces}
+                      setRootState={this.setRootState}
+                    />
+                  )}
+                />
+                <Route path="/about" render={() => <About />} />
+                <Route render={() => <Redirect to="/" />} />
+              </Switch>
               <SimpleBottomNavigation
                 newLikesNotificationDot={newLikesNotificationDot}
                 setRootState={this.setRootState}

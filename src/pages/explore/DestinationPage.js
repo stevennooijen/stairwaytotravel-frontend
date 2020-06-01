@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactGA from 'react-ga'
+import { Redirect } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
 // import Divider from '@material-ui/core/Divider'
@@ -18,6 +19,7 @@ import { fetchSingleDestination } from 'components/fetching'
 import PhotoCarousel from 'components/destinationCard/Carousel'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import Loader from 'components/fetching/Loader'
+import ConsecutiveSnackbars from 'components/ConsecutiveSnackbars'
 import fetchWikivoyageInfo from 'components/fetching/thirdParties/FetchWikivoyageInfo'
 import fetchWikivoyageLinks from 'components/fetching/thirdParties/FetchWikivoyageLinks'
 import { updateListItem } from 'components/utils'
@@ -43,6 +45,11 @@ class DestinationPage extends Component {
       destination_id: props.match.params.name,
       placeData: {},
       isLoading: true,
+      redirect: false,
+
+      // state for like/dislike snackbar message
+      snackbarMessage: null,
+      snackbarPlaceId: null,
     }
   }
 
@@ -58,60 +65,89 @@ class DestinationPage extends Component {
       fetchSingleDestination(this.state.destination_id)
         .then(response => response.json())
         .then(item => {
-          // 1. retrieve flickr Images
-          GetFlickrImages(item.name)
-            .then(imageUrls => {
-              return {
-                ...item,
-                images: imageUrls,
-              }
+          // if no place fetched, redirect to /explore
+          if (item === null) {
+            this.setState({
+              redirect: true,
             })
-            // 2. set liked to true if destination already in likedList
-            .then(item => {
-              if (this.props.likedPlaces.includes(item.id)) {
+          } else {
+            // 1. retrieve flickr Images
+            GetFlickrImages(item.name)
+              .then(imageUrls => {
                 return {
                   ...item,
-                  liked: true,
+                  images: imageUrls,
                 }
-              } else {
-                return item
-              }
-            })
-            // 3. get wikivoyage description
-            .then(item =>
-              fetchWikivoyageInfo(item.id).then(info => {
-                return {
-                  ...item,
-                  info: info,
+              })
+              // 2. set liked to true if destination already in likedList
+              .then(item => {
+                if (this.props.likedPlaces.includes(item.id)) {
+                  return {
+                    ...item,
+                    liked: true,
+                  }
+                } else {
+                  return item
                 }
-              }),
-            )
-            // 4. Fetch wikivoyage attribution links
-            .then(item =>
-              fetchWikivoyageLinks(item.id).then(links => {
-                return {
-                  ...item,
-                  wikiLinks: links,
+              })
+              // 3. get wikivoyage description
+              .then(item =>
+                fetchWikivoyageInfo(item.id).then(info => {
+                  return {
+                    ...item,
+                    info: info,
+                  }
+                }),
+              )
+              // 4. Fetch wikivoyage attribution links
+              .then(item =>
+                fetchWikivoyageLinks(item.id).then(links => {
+                  return {
+                    ...item,
+                    wikiLinks: links,
+                  }
+                }),
+              )
+              // 5. save fetched destination to state
+              .then(item => {
+                if (this._isMounted) {
+                  this.setState({
+                    placeData: item,
+                    isLoading: false,
+                  })
                 }
-              }),
-            )
-            // 5. save fetched destination to state
-            .then(item => {
-              if (this._isMounted) {
-                this.setState({
-                  placeData: item,
-                  isLoading: false,
-                })
-              }
-            })
+              })
+          }
         })
         //   TODO: display something when error is found instead of printing to console
-        .catch(err => window.console && console.log(err))
+        .catch(err => {
+          window.console && console.log(err)
+        })
     })
   }
 
   componentWillUnmount() {
     this._isMounted = false
+  }
+
+  toggleLike(id) {
+    // update state
+    this.setState(prevState => ({
+      placeData: {
+        ...this.state.placeData,
+        liked: !prevState.placeData.liked,
+      },
+    }))
+    // update root level state
+    this.updateLikedPlaces(id)
+    this.updateNewLikes(id)
+    this.updateSnackbarMessage(id)
+    // send google analytics event
+    ReactGA.event({
+      category: 'Explore',
+      action: 'Place like',
+      value: 20,
+    })
   }
 
   updateLikedPlaces(id) {
@@ -136,12 +172,31 @@ class DestinationPage extends Component {
     }
   }
 
+  updateSnackbarMessage(id) {
+    this.setState(
+      {
+        snackbarMessage: this.props.likedPlaces.includes(id)
+          ? 'Removed from your bucket list'
+          : 'Saved to your bucket list',
+        snackbarPlaceId: id,
+      },
+      () => this.setState({ snackbarMessage: null }),
+    )
+  }
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to="/explore" />
+    }
+  }
+
   render() {
     const { placeData } = this.state
     const { classes } = this.props
 
     return (
       <div>
+        {this.renderRedirect()}
         {/* Top app bar */}
         <AppBar position="fixed" color="default">
           <Container maxWidth="md">
@@ -166,24 +221,7 @@ class DestinationPage extends Component {
                   edge="end"
                   aria-label="Add to favorites"
                   color="primary"
-                  onClick={e => {
-                    // update state
-                    this.setState(prevState => ({
-                      placeData: {
-                        ...placeData,
-                        liked: !prevState.placeData.liked,
-                      },
-                    }))
-                    // update root level state
-                    this.updateLikedPlaces(placeData.id)
-                    this.updateNewLikes(placeData.id)
-                    // send google analytics event
-                    ReactGA.event({
-                      category: 'Explore',
-                      action: 'Place like',
-                      value: 20,
-                    })
-                  }}
+                  onClick={() => this.toggleLike(placeData.id)}
                 >
                   {placeData.liked ? <FavoriteIcon /> : <FavoriteBorder />}
                 </IconButton>
@@ -254,8 +292,13 @@ class DestinationPage extends Component {
             <br />
             <br />
             <br />
+            <br />
           </Container>
         )}
+        <ConsecutiveSnackbars
+          snackbarMessage={this.state.snackbarMessage}
+          handleUndo={() => this.toggleLike(this.state.snackbarPlaceId)}
+        />
       </div>
     )
   }

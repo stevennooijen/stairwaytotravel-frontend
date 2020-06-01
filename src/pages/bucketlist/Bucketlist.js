@@ -262,16 +262,17 @@ class Bucketlist extends React.Component {
         {this.state.showMap ? (
           <React.Fragment>
             {/* if no destinations show FAB on map to start exploring */}
-            {this.state.destinationList === null && (
-              <MapFloatingActionButton
-                onClick={() => {
-                  this.props.history.push('/explore')
-                }}
-              >
-                <ExploreIcon className={classes.extendedIcon} />
-                Start exploring
-              </MapFloatingActionButton>
-            )}
+            {DestinationListLikes.length === 0 &&
+              this.state.isLoading === false && (
+                <MapFloatingActionButton
+                  onClick={() => {
+                    this.props.history.push('/explore')
+                  }}
+                >
+                  <ExploreIcon className={classes.extendedIcon} />
+                  Start exploring
+                </MapFloatingActionButton>
+              )}
             {/* map component */}
             <div className={classes.mapContainer}>
               <Mapview
@@ -279,8 +280,7 @@ class Bucketlist extends React.Component {
                   this.apiHasLoaded(map, maps)
                   // after history.back() from destinationPage, destiantionList is empty at this point
                   // for that situation, fitMapToPlaces() is called in the componendDidMount()
-                  if (DestinationListLikes.length > 0)
-                    fitMapToPlaces(map, maps, DestinationListLikes)
+                  fitMapToPlaces(map, maps, DestinationListLikes)
                 }}
                 places={DestinationListLikes}
                 toggleLike={id => this.toggleLike(id)}
@@ -312,12 +312,12 @@ class Bucketlist extends React.Component {
                 </AlbumItem>
               ))}
               {/* If 0 likes after loading, show warning card */}
-              {this.state.destinationList.length === 0 &&
+              {DestinationListLikes.length === 0 &&
                 this.state.isLoading === false && <WarningCard />}
             </Album>
             {this.state.isLoading && <Loader />}
             {/* functionality for checkout dialog starts here */}
-            {this.state.destinationList.length > 0 && (
+            {DestinationListLikes.length > 0 && (
               <FloatingActionButton
                 onClick={() => {
                   this.toggleDialog()
@@ -338,7 +338,7 @@ class Bucketlist extends React.Component {
               handleTextFieldChange={this.handleTextFieldChange}
               handleSubmit={event => {
                 event.preventDefault()
-                const likes = this.state.destinationList.map(dest => dest.id)
+                const likes = DestinationListLikes.map(dest => dest.id)
                 // first signup, then add event as an event needs a member to be registered
                 postSignupForm(
                   this.state.textFieldValue,

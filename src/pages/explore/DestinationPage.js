@@ -92,7 +92,7 @@ class DestinationPage extends Component {
               })
               // 3. get wikivoyage description
               .then(item =>
-                fetchWikivoyageInfo(item.id).then(info => {
+                fetchWikivoyageInfo(item.wiki_id).then(info => {
                   return {
                     ...item,
                     info: info,
@@ -101,7 +101,7 @@ class DestinationPage extends Component {
               )
               // 4. Fetch wikivoyage attribution links
               .then(item =>
-                fetchWikivoyageLinks(item.id).then(links => {
+                fetchWikivoyageLinks(item.wiki_id).then(links => {
                   return {
                     ...item,
                     wikiLinks: links,

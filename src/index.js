@@ -34,7 +34,9 @@ class Root extends React.Component {
   }
 
   setNewSeed = () => {
-    this.setState({ seed: Math.floor(Math.random() * 100000) })
+    const newSeed = Math.floor(Math.random() * 100000)
+    this.setState({ seed: newSeed })
+    return newSeed
   }
 
   setRootState = (key, value) => {

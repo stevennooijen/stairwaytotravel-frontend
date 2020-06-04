@@ -333,7 +333,7 @@ class Explore extends React.Component {
                     // Update root state
                     setRootState('mapQuery', null)
                     setRootState('placeQuery', place)
-                    setNewSeed()
+                    const newSeed = setNewSeed()
                     // extract bounds
                     const bounds = extractBoundsFromPlaceObject(place)
                     // check if PlaceQuery is a country
@@ -349,7 +349,7 @@ class Explore extends React.Component {
                       },
                       () =>
                         this.fetchDestinations(
-                          seed,
+                          newSeed,
                           nResults,
                           0,
                           bounds,
@@ -364,6 +364,10 @@ class Explore extends React.Component {
             {this.state.showSearchHere && (
               <MapFloatingActionButton
                 onClick={() => {
+                  // Update root state
+                  setRootState('mapQuery', this.state.mapBounds)
+                  setRootState('placeQuery', '')
+                  const newSeed = setNewSeed()
                   // New query, so reset destinationList and offset
                   this.setState(
                     {
@@ -375,17 +379,13 @@ class Explore extends React.Component {
                     },
                     () =>
                       this.fetchDestinations(
-                        seed,
+                        newSeed,
                         nResults,
                         0,
                         this.state.mapBounds,
                         null,
                       ),
                   )
-                  // Update root state
-                  setRootState('mapQuery', this.state.mapBounds)
-                  setRootState('placeQuery', '')
-                  setNewSeed()
                 }}
               >
                 <RefreshIcon className={classes.extendedIcon} />
@@ -429,7 +429,7 @@ class Explore extends React.Component {
                     // Update root state
                     setRootState('mapQuery', null)
                     setRootState('placeQuery', place)
-                    setNewSeed()
+                    const newSeed = setNewSeed()
                     // extract bounds
                     const bounds = extractBoundsFromPlaceObject(place)
                     // check if PlaceQuery is a country
@@ -445,7 +445,7 @@ class Explore extends React.Component {
                       },
                       () =>
                         this.fetchDestinations(
-                          seed,
+                          newSeed,
                           nResults,
                           0,
                           bounds,

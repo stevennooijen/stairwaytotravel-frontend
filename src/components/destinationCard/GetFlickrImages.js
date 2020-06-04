@@ -79,6 +79,11 @@ const getFlickrImageURL = item => {
   )
 }
 
+// assemble an attribution link from fetched photos.search result
+const getFlickrAttributionLink = item => {
+  return 'https://www.flickr.com/photos/' + item.owner + '/' + item.id
+}
+
 // Create JavaScript Promise by returning the call to `fetch()`
 const GetFlickrImages = text => {
   return fetch(
@@ -93,6 +98,7 @@ const GetFlickrImages = text => {
       // '&license=1,2,3,4,5,6,7,8,9,10' + // adding non-commercial licenses
       '&content_type=1' +
       '&media=photos' +
+      '&extras=owner_name' +
       '&text=' +
       text +
       // exclude the following words from the text search:
@@ -106,6 +112,8 @@ const GetFlickrImages = text => {
           return {
             label: photo.title,
             imgPath: getFlickrImageURL(photo),
+            owner: photo.ownername,
+            attributionLink: getFlickrAttributionLink(photo),
           }
         })
       } else {

@@ -6,6 +6,8 @@ import MobileStepper from '@material-ui/core/MobileStepper'
 import Button from '@material-ui/core/Button'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
+import Typography from '@material-ui/core/Typography'
+import Link from '@material-ui/core/Link'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,6 +62,8 @@ export default function TextMobileStepper(props) {
     setActiveStep(step)
   }
 
+  const activeImage = props.imageList[activeStep]
+
   return (
     <div className={classes.root}>
       <SwipeableViews
@@ -97,6 +101,21 @@ export default function TextMobileStepper(props) {
         ))}
       </SwipeableViews>
       {props.children}
+      {props.showAttribution && (
+        <Typography variant="caption">
+          <i>
+            {activeImage.label && '"' + activeImage.label + '" - '}
+            Photo by{' '}
+            <Link
+              href={activeImage.attributionLink}
+              target="_blank"
+              rel="noopener"
+            >
+              {activeImage.owner}
+            </Link>
+          </i>
+        </Typography>
+      )}
       <MobileStepper
         variant="dots"
         steps={maxSteps}

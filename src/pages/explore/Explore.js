@@ -309,7 +309,7 @@ class Explore extends React.Component {
   }
 
   render() {
-    const { seed, placeQuery, setRootState, setNewSeed, classes } = this.props
+    const { placeQuery, setRootState, setNewSeed, classes } = this.props
     const {
       destinationList,
       maxPlacesText,

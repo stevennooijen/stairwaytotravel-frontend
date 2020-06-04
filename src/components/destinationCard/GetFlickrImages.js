@@ -127,11 +127,11 @@ const GetFlickrImages = text => {
         })
       } else {
         return [
-          {
-            label: 'No images found for this destination',
-            imgPath:
-              'https://i5.walmartimages.com/asr/149cba03-f389-471b-bf4e-a00235d08b58_1.08ec992f931fa4be05c41bc664fdc6b1.jpeg',
-          },
+          // {
+          //   label: 'No images found for this destination',
+          //   imgPath:
+          //     'https://i5.walmartimages.com/asr/149cba03-f389-471b-bf4e-a00235d08b58_1.08ec992f931fa4be05c41bc664fdc6b1.jpeg',
+          // },
         ]
       }
     })

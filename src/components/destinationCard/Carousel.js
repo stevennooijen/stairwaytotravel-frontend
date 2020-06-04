@@ -12,17 +12,19 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 600, // 600 = 'sm', 960 = 'md' size
   },
   imageContainer: {
-    height: 0,
-    paddingTop: '75%', // 4:3
-    overflow: 'hidden',
+    width: '100%',
+    paddingBottom: '75%', // 4:3
     position: 'relative',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.default,
+    // for centering standing images
+    display: 'flex',
+    justifyContent: 'center',
   },
   img: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
     height: '100%',
+    top: 0,
   },
   favoriteCircle: {
     position: 'absolute',

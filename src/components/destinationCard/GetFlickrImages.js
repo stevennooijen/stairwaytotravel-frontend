@@ -1,5 +1,7 @@
 const api_key = '5858b1c4c74d4d00bd389247affb51ff'
 // api: https://www.flickr.com/services/api/flickr.photos.search.html
+const IMAGES_PER_PAGE = 25
+
 const api_base =
   'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key='
 const forbiddenWords = [
@@ -90,7 +92,8 @@ const GetFlickrImages = text => {
     api_base +
       api_key +
       '&format=json&nojsoncallback=1' +
-      '&per_page=5' +
+      '&per_page=' +
+      IMAGES_PER_PAGE +
       '&page=1' +
       '&sort=interestingness-desc' +
       '&safe_search=1' +

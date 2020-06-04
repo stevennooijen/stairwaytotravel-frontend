@@ -39,9 +39,6 @@ const useStyles = makeStyles(theme => ({
   favoriteButton: {
     padding: 4,
   },
-  dotActive: {
-    backgroundColor: theme.palette.secondary.main,
-  },
 }))
 
 export default function TextMobileStepper(props) {
@@ -117,12 +114,11 @@ export default function TextMobileStepper(props) {
         </Typography>
       )}
       <MobileStepper
-        variant="dots"
+        variant="text"
         steps={maxSteps}
         position="static"
         activeStep={activeStep}
         className={classes.root}
-        classes={{ dotActive: classes.dotActive }}
         nextButton={
           <Button
             size="small"

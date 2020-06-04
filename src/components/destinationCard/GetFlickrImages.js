@@ -1,9 +1,7 @@
-const api_key = '5858b1c4c74d4d00bd389247affb51ff'
-// api: https://www.flickr.com/services/api/flickr.photos.search.html
 const IMAGES_PER_PAGE = 25
 
 const api_base =
-  'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key='
+  'https://api.flickr.com/services/rest/?method=flickr.photos.search'
 const forbiddenWords = [
   'police',
   'car',
@@ -90,7 +88,8 @@ const getFlickrAttributionLink = item => {
 const GetFlickrImages = text => {
   return fetch(
     api_base +
-      api_key +
+      '&api_key=' +
+      process.env.REACT_APP_FLICKR_API_KEY +
       '&format=json&nojsoncallback=1' +
       '&per_page=' +
       IMAGES_PER_PAGE +

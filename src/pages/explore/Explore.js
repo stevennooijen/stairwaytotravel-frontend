@@ -503,6 +503,9 @@ class Explore extends React.Component {
               {this.state.maxPlacesText === 0 && <NothingFoundCard />}
             </Album>
             {this.state.isLoading && <Loader />}
+            <br />
+            <br />
+            <br />
             <ConsecutiveSnackbars
               snackbarMessage={this.state.snackbarMessage}
               handleUndo={() => this.toggleLike(this.state.snackbarPlaceId)}

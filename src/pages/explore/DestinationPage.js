@@ -72,7 +72,7 @@ class DestinationPage extends Component {
             })
           } else {
             // 1. retrieve flickr Images
-            GetFlickrImages(item.name)
+            GetFlickrImages(item.name + ' ' + item.country)
               .then(imageUrls => {
                 return {
                   ...item,

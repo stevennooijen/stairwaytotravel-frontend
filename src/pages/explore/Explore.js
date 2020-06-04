@@ -201,7 +201,7 @@ class Explore extends React.Component {
               ? // for each of the fetched destinations in the list do:
                 data.destinations.forEach(item => {
                   // 1. retrieve flickr Images
-                  GetFlickrImages(item.name)
+                  GetFlickrImages(item.name + ' ' + item.country)
                     .then(imageUrls => {
                       return {
                         ...item,

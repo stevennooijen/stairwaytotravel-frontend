@@ -6,23 +6,27 @@ import MobileStepper from '@material-ui/core/MobileStepper'
 import Button from '@material-ui/core/Button'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
+import Typography from '@material-ui/core/Typography'
+import Link from '@material-ui/core/Link'
 
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 600, // 600 = 'sm', 960 = 'md' size
   },
   imageContainer: {
-    height: 0,
-    paddingTop: '75%', // 4:3
-    overflow: 'hidden',
+    width: '100%',
+    paddingBottom: '75%', // 4:3
     position: 'relative',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.default,
+    // for centering standing images
+    display: 'flex',
+    justifyContent: 'center',
   },
   img: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
     height: '100%',
+    top: 0,
   },
   favoriteCircle: {
     position: 'absolute',
@@ -34,9 +38,6 @@ const useStyles = makeStyles(theme => ({
   },
   favoriteButton: {
     padding: 4,
-  },
-  dotActive: {
-    backgroundColor: theme.palette.secondary.main,
   },
 }))
 
@@ -57,6 +58,8 @@ export default function TextMobileStepper(props) {
   function handleStepChange(step) {
     setActiveStep(step)
   }
+
+  const activeImage = props.imageList[activeStep]
 
   return (
     <div className={classes.root}>
@@ -95,13 +98,27 @@ export default function TextMobileStepper(props) {
         ))}
       </SwipeableViews>
       {props.children}
+      {props.showAttribution && (
+        <Typography variant="caption">
+          <i>
+            {activeImage.label && '"' + activeImage.label + '" - '}
+            Photo by{' '}
+            <Link
+              href={activeImage.attributionLink}
+              target="_blank"
+              rel="noopener"
+            >
+              {activeImage.owner}
+            </Link>
+          </i>
+        </Typography>
+      )}
       <MobileStepper
-        variant="dots"
+        variant="text"
         steps={maxSteps}
         position="static"
         activeStep={activeStep}
         className={classes.root}
-        classes={{ dotActive: classes.dotActive }}
         nextButton={
           <Button
             size="small"

@@ -316,6 +316,9 @@ class Bucketlist extends React.Component {
                 this.state.isLoading === false && <WarningCard />}
             </Album>
             {this.state.isLoading && <Loader />}
+            <br />
+            <br />
+            <br />
             {/* functionality for checkout dialog starts here */}
             {DestinationListLikes.length > 0 && (
               <FloatingActionButton

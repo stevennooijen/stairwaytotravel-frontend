@@ -201,7 +201,7 @@ class Explore extends React.Component {
               ? // for each of the fetched destinations in the list do:
                 data.destinations.forEach(item => {
                   // 1. retrieve flickr Images
-                  GetFlickrImages(item.name)
+                  GetFlickrImages(item.name + ' ' + item.country)
                     .then(imageUrls => {
                       return {
                         ...item,
@@ -309,8 +309,26 @@ class Explore extends React.Component {
   }
 
   render() {
-    const { seed, placeQuery, setRootState, setNewSeed, classes } = this.props
-    const { nResults, mapApiLoaded, mapInstance, mapApi } = this.state
+    const { placeQuery, setRootState, setNewSeed, classes } = this.props
+    const {
+      destinationList,
+      maxPlacesText,
+      nResults,
+      mapApiLoaded,
+      mapInstance,
+      mapApi,
+    } = this.state
+
+    // only show places with at least one image
+    const placesWithImages = destinationList.filter(
+      place => place.images.length > 0,
+    )
+    // subtract number of places without images from the total number reported
+    const maxPlaces =
+      maxPlacesText[maxPlacesText.length - 1] === '+'
+        ? maxPlacesText
+        : maxPlacesText * 1 -
+          destinationList.filter(place => place.images.length === 0).length
 
     return (
       <div>
@@ -333,7 +351,7 @@ class Explore extends React.Component {
                     // Update root state
                     setRootState('mapQuery', null)
                     setRootState('placeQuery', place)
-                    setNewSeed()
+                    const newSeed = setNewSeed()
                     // extract bounds
                     const bounds = extractBoundsFromPlaceObject(place)
                     // check if PlaceQuery is a country
@@ -349,7 +367,7 @@ class Explore extends React.Component {
                       },
                       () =>
                         this.fetchDestinations(
-                          seed,
+                          newSeed,
                           nResults,
                           0,
                           bounds,
@@ -364,6 +382,10 @@ class Explore extends React.Component {
             {this.state.showSearchHere && (
               <MapFloatingActionButton
                 onClick={() => {
+                  // Update root state
+                  setRootState('mapQuery', this.state.mapBounds)
+                  setRootState('placeQuery', '')
+                  const newSeed = setNewSeed()
                   // New query, so reset destinationList and offset
                   this.setState(
                     {
@@ -375,17 +397,13 @@ class Explore extends React.Component {
                     },
                     () =>
                       this.fetchDestinations(
-                        seed,
+                        newSeed,
                         nResults,
                         0,
                         this.state.mapBounds,
                         null,
                       ),
                   )
-                  // Update root state
-                  setRootState('mapQuery', this.state.mapBounds)
-                  setRootState('placeQuery', '')
-                  setNewSeed()
                 }}
               >
                 <RefreshIcon className={classes.extendedIcon} />
@@ -400,7 +418,7 @@ class Explore extends React.Component {
                 handleOnChange={newBounds => {
                   this.setState({ mapBounds: newBounds, showSearchHere: true })
                 }}
-                places={this.state.destinationList.slice(0, nResults)}
+                places={placesWithImages.slice(0, nResults)}
                 toggleLike={id => this.toggleLike(id)}
                 history={this.props.history}
               />
@@ -429,7 +447,7 @@ class Explore extends React.Component {
                     // Update root state
                     setRootState('mapQuery', null)
                     setRootState('placeQuery', place)
-                    setNewSeed()
+                    const newSeed = setNewSeed()
                     // extract bounds
                     const bounds = extractBoundsFromPlaceObject(place)
                     // check if PlaceQuery is a country
@@ -445,7 +463,7 @@ class Explore extends React.Component {
                       },
                       () =>
                         this.fetchDestinations(
-                          seed,
+                          newSeed,
                           nResults,
                           0,
                           bounds,
@@ -461,14 +479,14 @@ class Explore extends React.Component {
             {!this.state.isLoading && (
               <ResultsBar
                 text={
-                  this.state.maxPlacesText +
-                  (this.state.maxPlacesText === 1 ? ' place' : ' places') +
+                  maxPlaces +
+                  (maxPlaces === 1 ? ' place' : ' places') +
                   ' to explore'
                 }
               />
             )}
             <Album>
-              {this.state.destinationList.map(place => (
+              {placesWithImages.map(place => (
                 // Grid en DestinationCard zijn "domme" componenten die zelf geen state bijhouden en alleen UI doen
                 // State blijft zodoende in de Bucketlist component op 'hoog' niveau
                 <AlbumItem key={place.id}>
@@ -485,6 +503,9 @@ class Explore extends React.Component {
               {this.state.maxPlacesText === 0 && <NothingFoundCard />}
             </Album>
             {this.state.isLoading && <Loader />}
+            <br />
+            <br />
+            <br />
             <ConsecutiveSnackbars
               snackbarMessage={this.state.snackbarMessage}
               handleUndo={() => this.toggleLike(this.state.snackbarPlaceId)}

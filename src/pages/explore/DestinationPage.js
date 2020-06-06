@@ -72,7 +72,7 @@ class DestinationPage extends Component {
             })
           } else {
             // 1. retrieve flickr Images
-            GetFlickrImages(item.name)
+            GetFlickrImages(item.name + ' ' + item.country)
               .then(imageUrls => {
                 return {
                   ...item,
@@ -247,7 +247,10 @@ class DestinationPage extends Component {
 
             {/* Place photos */}
             <div align="center">
-              <PhotoCarousel imageList={placeData.images} />
+              <PhotoCarousel
+                imageList={placeData.images}
+                showAttribution={true}
+              />
             </div>
 
             {/* Place description */}
@@ -264,7 +267,6 @@ class DestinationPage extends Component {
                 })}
               {placeData.wikiLinks && (
                 <Typography variant="caption">
-                  {' '}
                   <i>
                     Credits to the{' '}
                     <Link

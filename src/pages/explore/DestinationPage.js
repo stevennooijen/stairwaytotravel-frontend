@@ -14,6 +14,7 @@ import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 // import ShareIcon from '@material-ui/icons/Share'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
+import Chip from '@material-ui/core/Chip'
 
 import { fetchSingleDestination } from 'components/fetching'
 import PhotoCarousel from 'components/destinationCard/Carousel'
@@ -32,6 +33,16 @@ const styles = theme => ({
   ContainerItem: {
     paddingTop: theme.spacing(1.5),
     paddingBottom: theme.spacing(1.5),
+  },
+  ChipContainer: {
+    paddingTop: theme.spacing(0.5),
+    paddingBottom: theme.spacing(0.5),
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
   },
 })
 
@@ -244,7 +255,6 @@ class DestinationPage extends Component {
                 {placeData.country}
               </Typography>
             </div>
-
             {/* Place photos */}
             <div align="center">
               <PhotoCarousel
@@ -252,9 +262,18 @@ class DestinationPage extends Component {
                 showAttribution={true}
               />
             </div>
+            {/* Features */}
+            {/* <Divider variant="middle" light={true} /> */}
+            <div className={classes.ChipContainer}>
+              {placeData.features &&
+                // split description in multiple alineas
+                placeData.features.map((feature, key) => {
+                  return <Chip label={feature} color="secondary" key={key} />
+                })}
+            </div>
 
             {/* Place description */}
-            {/* <Divider variant="middle" /> */}
+            {/* <Divider variant="middle" light={true} /> */}
             <div className={classes.ContainerItem}>
               {placeData.info &&
                 // split description in multiple alineas
@@ -289,7 +308,6 @@ class DestinationPage extends Component {
                 </Typography>
               )}
             </div>
-
             <br />
             <br />
             <br />

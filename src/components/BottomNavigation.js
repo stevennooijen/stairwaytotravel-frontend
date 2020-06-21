@@ -5,7 +5,7 @@ import queryString from 'query-string'
 import { withStyles } from '@material-ui/core/styles'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
-import SearchIcon from '@material-ui/icons/Search'
+import HomeIcon from '@material-ui/icons/Home'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import ExploreIcon from '@material-ui/icons/Explore'
 import Badge from '@material-ui/core/Badge'
@@ -67,11 +67,7 @@ class SimpleBottomNavigation extends Component {
           showLabels
           className={classes.stickToBottom}
         >
-          <BottomNavigationAction
-            label="Search"
-            value="/"
-            icon={<SearchIcon />}
-          />
+          <BottomNavigationAction label="Home" value="/" icon={<HomeIcon />} />
           <BottomNavigationAction
             label="Explore"
             value="/explore"

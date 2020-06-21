@@ -12,6 +12,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 import Box from '@material-ui/core/Box'
 
 import PhotoCarousel from './Carousel'
+import ChipContainer from 'components/destinationCard/ChipContainer'
 
 const styles = theme => ({
   card: {
@@ -87,12 +88,18 @@ class DestinationCard extends Component {
           </Box>
         </PhotoCarousel>
         <CardContent className={classes.cardContent} align="center">
-          <Typography color="textSecondary" variant="h6" component="h2">
+          <Typography color="secondary" variant="h6" component="h2">
             {place.name}
           </Typography>
           <Typography color="textSecondary" variant="body1" component="p">
             {place.country}
           </Typography>
+          {/* Features */}
+          <ChipContainer
+            features={place.features}
+            color="default"
+            size="small"
+          />
         </CardContent>
       </Card>
     )

@@ -14,7 +14,6 @@ import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 // import ShareIcon from '@material-ui/icons/Share'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
-import Chip from '@material-ui/core/Chip'
 
 import { fetchSingleDestination } from 'components/fetching'
 import PhotoCarousel from 'components/destinationCard/Carousel'
@@ -24,6 +23,7 @@ import ConsecutiveSnackbars from 'components/ConsecutiveSnackbars'
 import fetchWikivoyageInfo from 'components/fetching/thirdParties/FetchWikivoyageInfo'
 import fetchWikivoyageLinks from 'components/fetching/thirdParties/FetchWikivoyageLinks'
 import { updateListItem } from 'components/utils'
+import ChipContainer from 'components/destinationCard/ChipContainer'
 
 const styles = theme => ({
   toolbar: {
@@ -33,16 +33,6 @@ const styles = theme => ({
   ContainerItem: {
     paddingTop: theme.spacing(1.5),
     paddingBottom: theme.spacing(1.5),
-  },
-  ChipContainer: {
-    paddingTop: theme.spacing(0.5),
-    paddingBottom: theme.spacing(0.5),
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    '& > *': {
-      margin: theme.spacing(0.5),
-    },
   },
 })
 
@@ -248,7 +238,7 @@ class DestinationPage extends Component {
           <Container maxWidth="sm">
             {/* Place title */}
             <div className={classes.ContainerItem} align="center">
-              <Typography color="textSecondary" variant="h6" component="h2">
+              <Typography color="secondary" variant="h6" component="h2">
                 {placeData.name}
               </Typography>
               <Typography color="textSecondary" variant="body1" component="p">
@@ -264,13 +254,11 @@ class DestinationPage extends Component {
             </div>
             {/* Features */}
             {/* <Divider variant="middle" light={true} /> */}
-            <div className={classes.ChipContainer}>
-              {placeData.features &&
-                // split description in multiple alineas
-                placeData.features.map((feature, key) => {
-                  return <Chip label={feature} color="secondary" key={key} />
-                })}
-            </div>
+            <ChipContainer
+              features={placeData.features}
+              color="default"
+              size="medium"
+            />
 
             {/* Place description */}
             {/* <Divider variant="middle" light={true} /> */}

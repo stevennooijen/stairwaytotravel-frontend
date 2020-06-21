@@ -69,6 +69,8 @@ const forbiddenWords = [
   'galaxy',
   'astronomy',
   'stars',
+  'cat',
+  'dog',
 ]
 
 // assemble image URL from fetched photos.search result

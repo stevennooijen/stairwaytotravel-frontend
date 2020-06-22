@@ -5,7 +5,6 @@ import debounce from 'lodash.debounce'
 
 import { withStyles } from '@material-ui/core/styles'
 import RefreshIcon from '@material-ui/icons/Refresh'
-import Chip from '@material-ui/core/Chip'
 
 import Album from 'components/Album'
 import AlbumItem from 'components/AlbumItem'
@@ -28,6 +27,7 @@ import {
   extractCountryFromPlaceObject,
 } from '../../components/mapview/utils'
 import { pushUrlWithQueryParams, updateListItem } from 'components/utils'
+import FilterChip from 'pages/explore/components/FilterChip'
 
 const styles = theme => ({
   extendedIcon: {
@@ -42,10 +42,7 @@ const styles = theme => ({
   mapContainer: {
     flexGrow: 1,
   },
-  filterChip: {
-    marginLeft: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-  },
+
   // gridItem: {
   //   padding: theme.spacing(1),
   // },
@@ -490,15 +487,12 @@ class Explore extends React.Component {
                   ' to explore'
                 }
               >
-                <Chip
-                  label="Filters"
-                  className={classes.filterChip}
+                <FilterChip
                   color={this.state.filtersOn ? 'secondary' : 'default'}
                   variant={this.state.filtersOn ? 'default' : 'outlined'}
                   onClick={() =>
                     this.setState({ filtersOn: !this.state.filtersOn })
                   }
-                  alt="Filter buttton"
                 />
               </ResultsBar>
             )}

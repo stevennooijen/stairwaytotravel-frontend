@@ -5,6 +5,8 @@ import debounce from 'lodash.debounce'
 
 import { withStyles } from '@material-ui/core/styles'
 import RefreshIcon from '@material-ui/icons/Refresh'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 
 import Album from 'components/Album'
 import AlbumItem from 'components/AlbumItem'
@@ -28,6 +30,8 @@ import {
 } from '../../components/mapview/utils'
 import { pushUrlWithQueryParams, updateListItem } from 'components/utils'
 import FilterChip from 'pages/explore/components/FilterChip'
+import FilterDialog from 'pages/explore/components/FilterDialog'
+import CheckboxGroup from 'pages/explore/components/CheckboxGroup'
 
 const styles = theme => ({
   extendedIcon: {
@@ -47,6 +51,8 @@ const styles = theme => ({
   //   padding: theme.spacing(1),
   // },
 })
+
+const profiles = ['nature', 'city', 'active', 'culture', 'relax']
 
 class Explore extends React.Component {
   _isMounted = false
@@ -68,7 +74,9 @@ class Explore extends React.Component {
       mapBounds: null,
       country: null,
       searchInput: null,
-      filtersOn: false,
+      filtersOpen: false,
+      profilesFilter: [],
+      profilesQuery: [],
 
       // state to keep places and interactions
       destinationList: [],
@@ -311,6 +319,31 @@ class Explore extends React.Component {
     pushUrlWithQueryParams(newQueryParams, this.props)
   }
 
+  toggleCheckbox = event => {
+    this.setState({
+      profilesFilter: updateListItem(
+        this.state.profilesFilter,
+        event.target.name,
+      ),
+    })
+  }
+
+  createCheckbox = label => (
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={this.state.profilesFilter.includes(label)}
+          onChange={this.toggleCheckbox}
+          name={label}
+        />
+      }
+      label={label}
+      key={label}
+    />
+  )
+
+  createCheckboxes = () => profiles.map(this.createCheckbox)
+
   render() {
     const { placeQuery, setRootState, setNewSeed, classes } = this.props
     const {
@@ -332,6 +365,8 @@ class Explore extends React.Component {
         ? maxPlacesText
         : maxPlacesText * 1 -
           destinationList.filter(place => place.images.length === 0).length
+
+    const filtersOn = this.state.profilesQuery.length > 0
 
     return (
       <div>
@@ -488,10 +523,12 @@ class Explore extends React.Component {
                 }
               >
                 <FilterChip
-                  color={this.state.filtersOn ? 'secondary' : 'default'}
-                  variant={this.state.filtersOn ? 'default' : 'outlined'}
+                  color={filtersOn ? 'secondary' : 'default'}
+                  variant={filtersOn ? 'default' : 'outlined'}
                   onClick={() =>
-                    this.setState({ filtersOn: !this.state.filtersOn })
+                    this.setState({
+                      filtersOpen: true,
+                    })
                   }
                 />
               </ResultsBar>
@@ -523,6 +560,32 @@ class Explore extends React.Component {
             />
           </React.Fragment>
         )}
+        <FilterDialog
+          open={this.state.filtersOpen}
+          handleClose={() => {
+            this.setState({
+              filtersOpen: false,
+              profilesFilter: this.state.profilesQuery,
+            })
+          }}
+          handleSubmit={event => {
+            event.preventDefault()
+            this.setState({
+              filtersOpen: false,
+              profilesQuery: this.state.profilesFilter,
+            })
+            // fire new query
+            console.log('fire!', this.state.profilesFilter)
+          }}
+          // disable submit button if no query changes
+          submitDisabled={
+            this.state.profilesQuery.sort() === this.state.profilesFilter.sort()
+              ? true
+              : false
+          }
+        >
+          <CheckboxGroup>{this.createCheckboxes()}</CheckboxGroup>
+        </FilterDialog>
       </div>
     )
   }

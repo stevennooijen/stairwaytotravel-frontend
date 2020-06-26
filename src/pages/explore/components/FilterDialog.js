@@ -30,12 +30,12 @@ class CheckoutDialog extends Component {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Activity filters</DialogTitle>
+        <DialogTitle id="form-dialog-title">Sort by</DialogTitle>
         <Divider variant="middle" />
         <form onSubmit={handleSubmit}>
           <DialogContent>
             <DialogContentText>
-              What type of holiday are you looking for?
+              What type of places do you want to see first?
             </DialogContentText>
             {children}
           </DialogContent>

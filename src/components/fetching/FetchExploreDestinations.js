@@ -1,5 +1,12 @@
 // Call an API, API_URL is retrieved from .env files
-const FetchExploreDestinations = (seed, nResults, offset, bounds, country) => {
+const FetchExploreDestinations = (
+  seed,
+  nResults,
+  offset,
+  bounds,
+  country,
+  profiles,
+) => {
   let query =
     process.env.REACT_APP_API_URL +
     '/api/explore/?' +
@@ -25,7 +32,9 @@ const FetchExploreDestinations = (seed, nResults, offset, bounds, country) => {
       '&sw_lng=' +
       bounds.sw.lng
   }
-
+  if (profiles && profiles.length > 0) {
+    query = query + '&profiles=' + profiles.join('&profiles=')
+  }
   return fetch(query)
 }
 

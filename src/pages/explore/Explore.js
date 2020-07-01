@@ -52,7 +52,13 @@ const styles = theme => ({
   // },
 })
 
-const profiles = ['nature', 'city', 'active', 'culture', 'beach'] // 'relax',
+const profiles = [
+  { label: 'Nature', value: 'nature' },
+  { label: 'City', value: 'city' },
+  { label: 'Active', value: 'active' },
+  { label: 'Culture', value: 'culture' },
+  { label: 'Beach', value: 'beach' },
+] // 'relax',
 
 class Explore extends React.Component {
   _isMounted = false
@@ -337,17 +343,17 @@ class Explore extends React.Component {
     })
   }
 
-  createCheckbox = label => (
+  createCheckbox = profile => (
     <FormControlLabel
       control={
         <Checkbox
-          checked={this.state.profilesFilter.includes(label)}
+          checked={this.state.profilesFilter.includes(profile.value)}
           onChange={this.toggleCheckbox}
-          name={label}
+          name={profile.value}
         />
       }
-      label={label}
-      key={label}
+      label={profile.label}
+      key={profile.value}
     />
   )
 
@@ -535,7 +541,7 @@ class Explore extends React.Component {
                 }
               >
                 <FilterChip
-                  color={filtersOn ? 'secondary' : 'default'}
+                  color="secondary"
                   variant={filtersOn ? 'default' : 'outlined'}
                   onClick={() =>
                     this.setState({

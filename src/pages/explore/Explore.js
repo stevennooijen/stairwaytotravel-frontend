@@ -82,7 +82,6 @@ class Explore extends React.Component {
       searchInput: null,
       filtersOpen: false,
       profilesFilter: [],
-      profilesQuery: [],
 
       // state to keep places and interactions
       destinationList: [],
@@ -123,7 +122,7 @@ class Explore extends React.Component {
           this.state.offset,
           this.state.mapBounds,
           this.state.country,
-          this.state.profilesQuery,
+          this.props.profilesQuery,
         )
       }
     }, 100)
@@ -166,7 +165,7 @@ class Explore extends React.Component {
         this.state.offset,
         mapBounds,
         country,
-        this.state.profilesQuery,
+        this.props.profilesQuery,
       )
     } else {
       this.setState({ destinationList: itemList })
@@ -381,7 +380,7 @@ class Explore extends React.Component {
         : maxPlacesText * 1 -
           destinationList.filter(place => place.images.length === 0).length
 
-    const filtersOn = this.state.profilesQuery.length > 0
+    const filtersOn = this.props.profilesQuery.length > 0
 
     return (
       <div>
@@ -425,7 +424,7 @@ class Explore extends React.Component {
                           0,
                           bounds,
                           country,
-                          this.state.profilesQuery,
+                          this.props.profilesQuery,
                         ),
                     )
                     // Map centering is triggered by change in placeQuery state in Mapview component
@@ -456,7 +455,7 @@ class Explore extends React.Component {
                         0,
                         this.state.mapBounds,
                         null,
-                        this.state.profilesQuery,
+                        this.props.profilesQuery,
                       ),
                   )
                 }}
@@ -523,7 +522,7 @@ class Explore extends React.Component {
                           0,
                           bounds,
                           country,
-                          this.state.profilesQuery,
+                          this.props.profilesQuery,
                         ),
                     )
                     // make sure scroll is positioned on top
@@ -583,17 +582,17 @@ class Explore extends React.Component {
           handleClose={() => {
             this.setState({
               filtersOpen: false,
-              profilesFilter: this.state.profilesQuery,
+              profilesFilter: this.props.profilesQuery,
             })
           }}
           handleSubmit={event => {
             event.preventDefault()
             // fire new query
             const newSeed = setNewSeed()
+            setRootState('profilesQuery', this.state.profilesFilter)
             this.setState(
               {
                 filtersOpen: false,
-                profilesQuery: this.state.profilesFilter,
                 // for query
                 offset: 0,
                 destinationList: [],
@@ -611,7 +610,7 @@ class Explore extends React.Component {
           }}
           // disable submit button if no query changes
           submitDisabled={
-            this.state.profilesQuery.sort() === this.state.profilesFilter.sort()
+            this.props.profilesQuery.sort() === this.state.profilesFilter.sort()
               ? true
               : false
           }

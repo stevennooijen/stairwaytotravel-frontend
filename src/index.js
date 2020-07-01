@@ -97,6 +97,7 @@ class Root extends React.Component {
                   render={props => (
                     <DestinationPage
                       {...props}
+                      profilesQuery={profilesQuery}
                       likedPlaces={likedPlaces}
                       newLikes={newLikes}
                       setRootState={this.setRootState}

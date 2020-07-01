@@ -63,7 +63,10 @@ class DestinationPage extends Component {
 
     // Fetch place data
     this.setState({ isLoading: true }, () => {
-      fetchSingleDestination(this.state.destination_id)
+      fetchSingleDestination(
+        this.state.destination_id,
+        this.props.profilesQuery,
+      )
         .then(response => response.json())
         .then(item => {
           // if no place fetched, redirect to /explore

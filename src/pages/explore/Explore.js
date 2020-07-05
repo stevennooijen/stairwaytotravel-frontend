@@ -429,7 +429,7 @@ class Explore extends React.Component {
                 />
               )}
             </TopAppBar>
-            {this.state.isLoading && <Loader />}
+            {this.state.isLoading && <Loader shadow={1} />}
             {this.state.showSearchHere && (
               <MapFloatingActionButton
                 onClick={() => {
@@ -562,7 +562,7 @@ class Explore extends React.Component {
               ))}
               {this.state.maxPlacesText === 0 && <NothingFoundCard />}
             </Album>
-            {this.state.isLoading && <Loader />}
+            {this.state.isLoading && <Loader shadow={0} />}
             <br />
             <br />
             <br />

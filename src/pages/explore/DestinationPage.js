@@ -236,7 +236,7 @@ class DestinationPage extends Component {
         <Toolbar />
         {/* Actual page */}
         {this.state.isLoading ? (
-          <Loader />
+          <Loader shadow={0} />
         ) : (
           <Container maxWidth="sm">
             {/* Place title */}

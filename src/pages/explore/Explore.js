@@ -81,7 +81,7 @@ class Explore extends React.Component {
       country: null,
       searchInput: null,
       filtersOpen: false,
-      profilesFilter: [],
+      profilesFilter: this.props.profilesQuery,
 
       // state to keep places and interactions
       destinationList: [],

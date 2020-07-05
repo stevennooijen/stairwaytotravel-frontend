@@ -99,7 +99,7 @@ class Home extends React.Component {
             variant="h5"
             className={classes.heroText}
           >
-            Compose your ultimate travel adventure
+            Discover unique places to travel to
           </Typography>
           <Paper>
             {mapsApiLoaded && (

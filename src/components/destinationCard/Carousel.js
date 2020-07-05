@@ -98,21 +98,23 @@ export default function TextMobileStepper(props) {
         ))}
       </SwipeableViews>
       {props.children}
-      {props.showAttribution && (
-        <Typography variant="caption">
-          <i>
-            {activeImage.label && '"' + activeImage.label + '" - '}
-            Photo by{' '}
-            <Link
-              href={activeImage.attributionLink}
-              target="_blank"
-              rel="noopener"
-            >
-              {activeImage.owner}
-            </Link>
-          </i>
-        </Typography>
-      )}
+      {props.showAttribution &&
+        // in case of no owner, don't display caption
+        activeImage.owner && (
+          <Typography variant="caption">
+            <i>
+              {activeImage.label && '"' + activeImage.label + '" - '}
+              Photo by{' '}
+              <Link
+                href={activeImage.attributionLink}
+                target="_blank"
+                rel="noopener"
+              >
+                {activeImage.owner}
+              </Link>
+            </i>
+          </Typography>
+        )}
       <MobileStepper
         variant="text"
         steps={maxSteps}

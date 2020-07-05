@@ -369,10 +369,11 @@ class Explore extends React.Component {
       mapApi,
     } = this.state
 
-    // only show places with at least one image
+    // only show places with at least two images (image not found could be the only one)
     const placesWithImages = destinationList.filter(
-      place => place.images.length > 0,
+      place => place.images.length > 1,
     )
+
     // subtract number of places without images from the total number reported
     const maxPlaces =
       maxPlacesText[maxPlacesText.length - 1] === '+'

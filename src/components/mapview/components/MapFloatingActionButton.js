@@ -1,6 +1,8 @@
 import React from 'react'
+
 import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
+import RefreshIcon from '@material-ui/icons/Refresh'
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -11,6 +13,9 @@ const useStyles = makeStyles(theme => ({
     left: '50%',
     transform: 'translate(-50%)',
   },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
 }))
 
 export default function FloatingActionButtons(props) {
@@ -20,11 +25,12 @@ export default function FloatingActionButtons(props) {
     <Fab
       variant="extended"
       color="secondary"
-      size="small"
+      size="medium"
       className={classes.fab}
       onClick={props.onClick}
     >
-      {props.children}
+      <RefreshIcon className={classes.extendedIcon} />
+      Search here
     </Fab>
   )
 }

@@ -98,7 +98,7 @@ class Bucketlist extends React.Component {
             .then(response => response.json())
             .then(item => {
               // 2. retrieve flickr Images
-              GetFlickrImages(item.name)
+              GetFlickrImages(item.name + ' ' + item.country)
                 .then(imageUrls => {
                   return {
                     ...item,

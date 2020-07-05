@@ -4,7 +4,6 @@ import queryString from 'query-string'
 import debounce from 'lodash.debounce'
 
 import { withStyles } from '@material-ui/core/styles'
-import RefreshIcon from '@material-ui/icons/Refresh'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 
@@ -34,9 +33,6 @@ import FilterDialog from 'pages/explore/components/FilterDialog'
 import CheckboxGroup from 'pages/explore/components/CheckboxGroup'
 
 const styles = theme => ({
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-  },
   body: {
     display: 'flex',
     flexDirection: 'column',
@@ -433,6 +429,7 @@ class Explore extends React.Component {
                 />
               )}
             </TopAppBar>
+            {this.state.isLoading && <Loader />}
             {this.state.showSearchHere && (
               <MapFloatingActionButton
                 onClick={() => {
@@ -460,10 +457,7 @@ class Explore extends React.Component {
                       ),
                   )
                 }}
-              >
-                <RefreshIcon className={classes.extendedIcon} />
-                Search here
-              </MapFloatingActionButton>
+              />
             )}
             <div className={classes.mapContainer}>
               <Mapview

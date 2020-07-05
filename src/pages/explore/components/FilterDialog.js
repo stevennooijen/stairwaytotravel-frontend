@@ -30,12 +30,12 @@ class CheckoutDialog extends Component {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Sort by</DialogTitle>
+        <DialogTitle id="form-dialog-title">Filters</DialogTitle>
         <Divider variant="middle" />
         <form onSubmit={handleSubmit}>
           <DialogContent>
             <DialogContentText>
-              What type of places do you want to see first?
+              What type of places are you looking for?
             </DialogContentText>
             {children}
           </DialogContent>

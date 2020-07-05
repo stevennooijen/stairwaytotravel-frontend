@@ -16,10 +16,10 @@ class FilterChip extends Component {
 
     return (
       <Chip
-        label="Sort by"
+        label="Filters"
         className={classes.filterChip}
         {...props}
-        alt="Sort by buttton"
+        alt="Filter buttton"
       />
     )
   }

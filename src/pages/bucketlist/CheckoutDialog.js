@@ -36,13 +36,13 @@ class CheckoutDialog extends Component {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Vamos, let's go!</DialogTitle>
+        <DialogTitle id="form-dialog-title">Save your bucket list</DialogTitle>
         <Divider variant="middle" />
         <form onSubmit={handleSubmit}>
           <DialogContent>
             <DialogContentText>
-              Fill in your email address here to get a printout of your bucket
-              list. Don't worry, it will not be used for email marketing.
+              Fill in your email address to receive a copy of your bucket list.
+              Don't worry, it will not be used for email marketing.
             </DialogContentText>
             <TextField
               autoFocus

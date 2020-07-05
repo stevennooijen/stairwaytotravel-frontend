@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import { withStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
-import FlightTakeoffIcon from '@material-ui/icons/FlightTakeoff'
+import EmailIcon from '@material-ui/icons/Email'
 
 const styles = theme => ({
   fab: {
@@ -18,6 +18,9 @@ const styles = theme => ({
       transform: 'translateX(-50%)',
     },
   },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
 })
 
 class FloatingActionButton extends Component {
@@ -27,11 +30,13 @@ class FloatingActionButton extends Component {
     return (
       <Fab
         color="primary"
-        aria-label="book it"
+        aria-label="Save your bucket list"
         className={classes.fab}
         onClick={onClick}
+        variant="extended"
       >
-        <FlightTakeoffIcon />
+        <EmailIcon className={classes.extendedIcon} />
+        Save
       </Fab>
     )
   }

@@ -413,6 +413,7 @@ class Explore extends React.Component {
                         searchInput: null,
                         mapBounds: bounds,
                         country: country,
+                        showSearchHere: false,
                       },
                       () =>
                         this.fetchDestinations(
@@ -430,42 +431,50 @@ class Explore extends React.Component {
               )}
             </TopAppBar>
             {this.state.isLoading && <Loader shadow={1} />}
-            {this.state.showSearchHere && (
-              <MapFloatingActionButton
-                onClick={() => {
-                  // Update root state
-                  setRootState('mapQuery', this.state.mapBounds)
-                  setRootState('placeQuery', '')
-                  const newSeed = setNewSeed()
-                  // New query, so reset destinationList and offset
-                  this.setState(
-                    {
-                      showSearchHere: false,
-                      offset: 0,
-                      destinationList: [],
-                      searchInput: 'Selected map area',
-                      country: null,
-                    },
-                    () =>
-                      this.fetchDestinations(
-                        newSeed,
-                        nResults,
-                        0,
-                        this.state.mapBounds,
-                        null,
-                        this.props.profilesQuery,
-                      ),
-                  )
-                }}
-              />
-            )}
+            {!this.state.isLoading &&
+              this.state.showSearchHere && (
+                <MapFloatingActionButton
+                  onClick={() => {
+                    // Update root state
+                    setRootState('mapQuery', this.state.mapBounds)
+                    setRootState('placeQuery', '')
+                    const newSeed = setNewSeed()
+                    // New query, so reset destinationList and offset
+                    this.setState(
+                      {
+                        showSearchHere: false,
+                        offset: 0,
+                        destinationList: [],
+                        searchInput: 'Selected map area',
+                        country: null,
+                      },
+                      () =>
+                        this.fetchDestinations(
+                          newSeed,
+                          nResults,
+                          0,
+                          this.state.mapBounds,
+                          null,
+                          this.props.profilesQuery,
+                        ),
+                    )
+                  }}
+                />
+              )}
             <div className={classes.mapContainer}>
               <Mapview
                 // Create Google mapInstance object in Mapview and save in Explore state
                 apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
                 // Pass on other stuff
                 handleOnChange={newBounds => {
-                  this.setState({ mapBounds: newBounds, showSearchHere: true })
+                  if (this.state.isLoading) {
+                    this.setState({ mapBounds: newBounds })
+                  } else {
+                    this.setState({
+                      mapBounds: newBounds,
+                      showSearchHere: true,
+                    })
+                  }
                 }}
                 places={placesWithImages.slice(0, nResults)}
                 toggleLike={id => this.toggleLike(id)}

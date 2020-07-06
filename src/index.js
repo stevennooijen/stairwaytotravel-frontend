@@ -28,6 +28,7 @@ class Root extends React.Component {
       seed: Math.floor(Math.random() * 100000),
       placeQuery: '',
       mapQuery: null,
+      profilesQuery: [],
       likedPlaces: [],
       newLikes: [],
     }
@@ -44,7 +45,14 @@ class Root extends React.Component {
   }
 
   render() {
-    const { seed, placeQuery, mapQuery, likedPlaces, newLikes } = this.state
+    const {
+      seed,
+      placeQuery,
+      mapQuery,
+      profilesQuery,
+      likedPlaces,
+      newLikes,
+    } = this.state
     const newLikesNotificationDot = newLikes.length > 0
 
     return (
@@ -76,6 +84,7 @@ class Root extends React.Component {
                       seed={seed}
                       placeQuery={placeQuery}
                       mapQuery={mapQuery}
+                      profilesQuery={profilesQuery}
                       likedPlaces={likedPlaces}
                       newLikes={newLikes}
                       setRootState={this.setRootState}
@@ -88,6 +97,7 @@ class Root extends React.Component {
                   render={props => (
                     <DestinationPage
                       {...props}
+                      profilesQuery={profilesQuery}
                       likedPlaces={likedPlaces}
                       newLikes={newLikes}
                       setRootState={this.setRootState}

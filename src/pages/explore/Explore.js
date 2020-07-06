@@ -4,7 +4,8 @@ import queryString from 'query-string'
 import debounce from 'lodash.debounce'
 
 import { withStyles } from '@material-ui/core/styles'
-import RefreshIcon from '@material-ui/icons/Refresh'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 
 import Album from 'components/Album'
 import AlbumItem from 'components/AlbumItem'
@@ -27,11 +28,11 @@ import {
   extractCountryFromPlaceObject,
 } from '../../components/mapview/utils'
 import { pushUrlWithQueryParams, updateListItem } from 'components/utils'
+import FilterChip from 'pages/explore/components/FilterChip'
+import FilterDialog from 'pages/explore/components/FilterDialog'
+import CheckboxGroup from 'pages/explore/components/CheckboxGroup'
 
 const styles = theme => ({
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-  },
   body: {
     display: 'flex',
     flexDirection: 'column',
@@ -41,10 +42,19 @@ const styles = theme => ({
   mapContainer: {
     flexGrow: 1,
   },
+
   // gridItem: {
   //   padding: theme.spacing(1),
   // },
 })
+
+const profiles = [
+  { label: 'Nature', value: 'nature' },
+  { label: 'City', value: 'city' },
+  { label: 'Active', value: 'active' },
+  { label: 'Culture', value: 'culture' },
+  { label: 'Beach', value: 'beach' },
+] // 'relax',
 
 class Explore extends React.Component {
   _isMounted = false
@@ -66,6 +76,8 @@ class Explore extends React.Component {
       mapBounds: null,
       country: null,
       searchInput: null,
+      filtersOpen: false,
+      profilesFilter: this.props.profilesQuery,
 
       // state to keep places and interactions
       destinationList: [],
@@ -106,6 +118,7 @@ class Explore extends React.Component {
           this.state.offset,
           this.state.mapBounds,
           this.state.country,
+          this.props.profilesQuery,
         )
       }
     }, 100)
@@ -148,6 +161,7 @@ class Explore extends React.Component {
         this.state.offset,
         mapBounds,
         country,
+        this.props.profilesQuery,
       )
     } else {
       this.setState({ destinationList: itemList })
@@ -184,10 +198,17 @@ class Explore extends React.Component {
     })
   }
 
-  fetchDestinations(seed, nResults, offset, bounds, country) {
+  fetchDestinations(seed, nResults, offset, bounds, country, profiles) {
     if (this._isMounted) {
       this.setState({ isLoading: true, offset: offset + nResults }, () => {
-        FetchExploreDestinations(seed, nResults, offset, bounds, country)
+        FetchExploreDestinations(
+          seed,
+          nResults,
+          offset,
+          bounds,
+          country,
+          profiles,
+        )
           .then(response => response.json())
           .then(data => {
             // retrieve maximum number of places possible
@@ -308,6 +329,31 @@ class Explore extends React.Component {
     pushUrlWithQueryParams(newQueryParams, this.props)
   }
 
+  toggleCheckbox = event => {
+    this.setState({
+      profilesFilter: updateListItem(
+        this.state.profilesFilter,
+        event.target.name,
+      ),
+    })
+  }
+
+  createCheckbox = profile => (
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={this.state.profilesFilter.includes(profile.value)}
+          onChange={this.toggleCheckbox}
+          name={profile.value}
+        />
+      }
+      label={profile.label}
+      key={profile.value}
+    />
+  )
+
+  createCheckboxes = () => profiles.map(this.createCheckbox)
+
   render() {
     const { placeQuery, setRootState, setNewSeed, classes } = this.props
     const {
@@ -319,16 +365,19 @@ class Explore extends React.Component {
       mapApi,
     } = this.state
 
-    // only show places with at least one image
+    // only show places with at least two images (image not found could be the only one)
     const placesWithImages = destinationList.filter(
-      place => place.images.length > 0,
+      place => place.images.length > 1,
     )
+
     // subtract number of places without images from the total number reported
     const maxPlaces =
       maxPlacesText[maxPlacesText.length - 1] === '+'
         ? maxPlacesText
         : maxPlacesText * 1 -
           destinationList.filter(place => place.images.length === 0).length
+
+    const filtersOn = this.props.profilesQuery.length > 0
 
     return (
       <div>
@@ -364,6 +413,7 @@ class Explore extends React.Component {
                         searchInput: null,
                         mapBounds: bounds,
                         country: country,
+                        showSearchHere: false,
                       },
                       () =>
                         this.fetchDestinations(
@@ -372,6 +422,7 @@ class Explore extends React.Component {
                           0,
                           bounds,
                           country,
+                          this.props.profilesQuery,
                         ),
                     )
                     // Map centering is triggered by change in placeQuery state in Mapview component
@@ -379,44 +430,51 @@ class Explore extends React.Component {
                 />
               )}
             </TopAppBar>
-            {this.state.showSearchHere && (
-              <MapFloatingActionButton
-                onClick={() => {
-                  // Update root state
-                  setRootState('mapQuery', this.state.mapBounds)
-                  setRootState('placeQuery', '')
-                  const newSeed = setNewSeed()
-                  // New query, so reset destinationList and offset
-                  this.setState(
-                    {
-                      showSearchHere: false,
-                      offset: 0,
-                      destinationList: [],
-                      searchInput: 'Selected map area',
-                      country: null,
-                    },
-                    () =>
-                      this.fetchDestinations(
-                        newSeed,
-                        nResults,
-                        0,
-                        this.state.mapBounds,
-                        null,
-                      ),
-                  )
-                }}
-              >
-                <RefreshIcon className={classes.extendedIcon} />
-                Search here
-              </MapFloatingActionButton>
-            )}
+            {this.state.isLoading && <Loader shadow={1} />}
+            {!this.state.isLoading &&
+              this.state.showSearchHere && (
+                <MapFloatingActionButton
+                  onClick={() => {
+                    // Update root state
+                    setRootState('mapQuery', this.state.mapBounds)
+                    setRootState('placeQuery', '')
+                    const newSeed = setNewSeed()
+                    // New query, so reset destinationList and offset
+                    this.setState(
+                      {
+                        showSearchHere: false,
+                        offset: 0,
+                        destinationList: [],
+                        searchInput: 'Selected map area',
+                        country: null,
+                      },
+                      () =>
+                        this.fetchDestinations(
+                          newSeed,
+                          nResults,
+                          0,
+                          this.state.mapBounds,
+                          null,
+                          this.props.profilesQuery,
+                        ),
+                    )
+                  }}
+                />
+              )}
             <div className={classes.mapContainer}>
               <Mapview
                 // Create Google mapInstance object in Mapview and save in Explore state
                 apiHasLoaded={(map, maps) => this.apiHasLoaded(map, maps)}
                 // Pass on other stuff
                 handleOnChange={newBounds => {
-                  this.setState({ mapBounds: newBounds, showSearchHere: true })
+                  if (this.state.isLoading) {
+                    this.setState({ mapBounds: newBounds })
+                  } else {
+                    this.setState({
+                      mapBounds: newBounds,
+                      showSearchHere: true,
+                    })
+                  }
                 }}
                 places={placesWithImages.slice(0, nResults)}
                 toggleLike={id => this.toggleLike(id)}
@@ -468,6 +526,7 @@ class Explore extends React.Component {
                           0,
                           bounds,
                           country,
+                          this.props.profilesQuery,
                         ),
                     )
                     // make sure scroll is positioned on top
@@ -483,7 +542,17 @@ class Explore extends React.Component {
                   (maxPlaces === 1 ? ' place' : ' places') +
                   ' to explore'
                 }
-              />
+              >
+                <FilterChip
+                  color="secondary"
+                  variant={filtersOn ? 'default' : 'outlined'}
+                  onClick={() =>
+                    this.setState({
+                      filtersOpen: true,
+                    })
+                  }
+                />
+              </ResultsBar>
             )}
             <Album>
               {placesWithImages.map(place => (
@@ -502,7 +571,7 @@ class Explore extends React.Component {
               ))}
               {this.state.maxPlacesText === 0 && <NothingFoundCard />}
             </Album>
-            {this.state.isLoading && <Loader />}
+            {this.state.isLoading && <Loader shadow={0} />}
             <br />
             <br />
             <br />
@@ -512,6 +581,46 @@ class Explore extends React.Component {
             />
           </React.Fragment>
         )}
+        <FilterDialog
+          open={this.state.filtersOpen}
+          handleClose={() => {
+            this.setState({
+              filtersOpen: false,
+              profilesFilter: this.props.profilesQuery,
+            })
+          }}
+          handleSubmit={event => {
+            event.preventDefault()
+            // fire new query
+            const newSeed = setNewSeed()
+            setRootState('profilesQuery', this.state.profilesFilter)
+            this.setState(
+              {
+                filtersOpen: false,
+                // for query
+                offset: 0,
+                destinationList: [],
+              },
+              () =>
+                this.fetchDestinations(
+                  newSeed,
+                  nResults,
+                  0,
+                  this.state.mapBounds,
+                  this.state.country,
+                  this.state.profilesFilter,
+                ),
+            )
+          }}
+          // disable submit button if no query changes
+          submitDisabled={
+            this.props.profilesQuery.sort() === this.state.profilesFilter.sort()
+              ? true
+              : false
+          }
+        >
+          <CheckboxGroup>{this.createCheckboxes()}</CheckboxGroup>
+        </FilterDialog>
       </div>
     )
   }

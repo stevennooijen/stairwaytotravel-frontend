@@ -23,6 +23,7 @@ import ConsecutiveSnackbars from 'components/ConsecutiveSnackbars'
 import fetchWikivoyageInfo from 'components/fetching/thirdParties/FetchWikivoyageInfo'
 import fetchWikivoyageLinks from 'components/fetching/thirdParties/FetchWikivoyageLinks'
 import { updateListItem } from 'components/utils'
+import ChipContainer from 'components/destinationCard/ChipContainer'
 
 const styles = theme => ({
   toolbar: {
@@ -62,7 +63,10 @@ class DestinationPage extends Component {
 
     // Fetch place data
     this.setState({ isLoading: true }, () => {
-      fetchSingleDestination(this.state.destination_id)
+      fetchSingleDestination(
+        this.state.destination_id,
+        this.props.profilesQuery,
+      )
         .then(response => response.json())
         .then(item => {
           // if no place fetched, redirect to /explore
@@ -232,19 +236,18 @@ class DestinationPage extends Component {
         <Toolbar />
         {/* Actual page */}
         {this.state.isLoading ? (
-          <Loader />
+          <Loader shadow={0} />
         ) : (
           <Container maxWidth="sm">
             {/* Place title */}
             <div className={classes.ContainerItem} align="center">
-              <Typography color="textSecondary" variant="h6" component="h2">
+              <Typography color="secondary" variant="h6" component="h2">
                 {placeData.name}
               </Typography>
               <Typography color="textSecondary" variant="body1" component="p">
                 {placeData.country}
               </Typography>
             </div>
-
             {/* Place photos */}
             <div align="center">
               <PhotoCarousel
@@ -252,9 +255,16 @@ class DestinationPage extends Component {
                 showAttribution={true}
               />
             </div>
+            {/* Features */}
+            {/* <Divider variant="middle" light={true} /> */}
+            <ChipContainer
+              features={placeData.features}
+              color="default"
+              size="medium"
+            />
 
             {/* Place description */}
-            {/* <Divider variant="middle" /> */}
+            {/* <Divider variant="middle" light={true} /> */}
             <div className={classes.ContainerItem}>
               {placeData.info &&
                 // split description in multiple alineas
@@ -289,7 +299,6 @@ class DestinationPage extends Component {
                 </Typography>
               )}
             </div>
-
             <br />
             <br />
             <br />

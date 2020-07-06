@@ -13,7 +13,7 @@ const styles = theme => ({
 
 class ResultsBar extends Component {
   render() {
-    const { classes, text } = this.props
+    const { classes, text, children } = this.props
 
     return (
       <Container maxWidth="lg">
@@ -25,6 +25,7 @@ class ResultsBar extends Component {
         >
           {text}
         </Typography>
+        {children}
         <Divider variant="middle" />
       </Container>
     )

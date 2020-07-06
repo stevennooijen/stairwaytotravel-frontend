@@ -7,10 +7,12 @@ const forbiddenWords = [
   'car',
   'truck',
   'bus',
+  'transport',
   'transportation',
   'metro',
   'train',
   'localtrain',
+  'trein',
   'rail',
   'railroad',
   'railway',
@@ -30,9 +32,12 @@ const forbiddenWords = [
   'vessel',
   'ship',
   'fleet',
+  'freight',
   'marine',
   'pano',
   'panorama',
+  'product',
+  'investment',
   'affairs',
   'embassy',
   'minister',
@@ -50,7 +55,11 @@ const forbiddenWords = [
   'military',
   'fighter',
   'gun',
+  'attack',
   'emergency',
+  'fire',
+  'burning',
+  'smoke',
   'brigade',
   'map',
   'selfie',
@@ -69,6 +78,12 @@ const forbiddenWords = [
   'galaxy',
   'astronomy',
   'stars',
+  'cat',
+  'katzen',
+  'dog',
+  'labrador',
+  'buddies',
+  'christmas',
 ]
 
 // assemble image URL from fetched photos.search result
@@ -127,11 +142,12 @@ const GetFlickrImages = text => {
         })
       } else {
         return [
-          // {
-          //   label: 'No images found for this destination',
-          //   imgPath:
-          //     'https://i5.walmartimages.com/asr/149cba03-f389-471b-bf4e-a00235d08b58_1.08ec992f931fa4be05c41bc664fdc6b1.jpeg',
-          // },
+          {
+            label: 'No images found for this destination',
+            imgPath:
+              'https://i5.walmartimages.com/asr/149cba03-f389-471b-bf4e-a00235d08b58_1.08ec992f931fa4be05c41bc664fdc6b1.jpeg',
+            // owner not defined so that carousel caption isn't displayed
+          },
         ]
       }
     })

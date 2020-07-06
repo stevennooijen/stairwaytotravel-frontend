@@ -98,7 +98,7 @@ class Bucketlist extends React.Component {
             .then(response => response.json())
             .then(item => {
               // 2. retrieve flickr Images
-              GetFlickrImages(item.name)
+              GetFlickrImages(item.name + ' ' + item.country)
                 .then(imageUrls => {
                   return {
                     ...item,
@@ -315,7 +315,7 @@ class Bucketlist extends React.Component {
               {DestinationListLikes.length === 0 &&
                 this.state.isLoading === false && <WarningCard />}
             </Album>
-            {this.state.isLoading && <Loader />}
+            {this.state.isLoading && <Loader shadow={0} />}
             <br />
             <br />
             <br />

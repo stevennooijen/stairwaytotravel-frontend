@@ -11,7 +11,7 @@ import Footer from '../../components/Footer'
 import HeroUnit from './HeroUnit'
 import SearchBox from '../../components/SearchBox'
 import GoogleMap from '../../components/mapview/components/GoogleMap'
-import FetchExploreDestinations from 'components/fetching/FetchExploreDestinations'
+// import FetchExploreDestinations from 'components/fetching/FetchExploreDestinations'
 
 const styles = theme => ({
   stepper: {
@@ -48,7 +48,7 @@ class Home extends React.Component {
     window.scrollTo(0, 0)
 
     // Do a dummy fetch to warm up the backend when someone lands on the home page
-    FetchExploreDestinations(1234, 1, 0)
+    // FetchExploreDestinations(1234, 1, 0)
   }
 
   apiHasLoaded = (map, maps) => {
@@ -99,7 +99,7 @@ class Home extends React.Component {
             variant="h5"
             className={classes.heroText}
           >
-            Compose your ultimate travel adventure
+            Discover unique places to travel to
           </Typography>
           <Paper>
             {mapsApiLoaded && (

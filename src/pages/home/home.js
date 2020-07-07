@@ -110,6 +110,7 @@ class Home extends React.Component {
                 searchInput={null}
                 handlePlaceChange={place => {
                   setRootState('placeQuery', place)
+                  setRootState('profilesQuery', [])
                   setRootState('mapQuery', null)
                   setNewSeed()
                   this.props.history.push('/explore')
@@ -128,6 +129,7 @@ class Home extends React.Component {
             onClick={() => {
               sessionStorage.clear()
               setRootState('placeQuery', '')
+              setRootState('profilesQuery', [])
               setRootState('mapQuery', null)
               setNewSeed()
 

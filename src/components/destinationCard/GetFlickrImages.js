@@ -110,16 +110,16 @@ const getFlickrAttributionLink = item => {
 const GetFlickrImages = text => {
   return fetch(
     api_base +
-      '&api_key=' +
-      process.env.REACT_APP_FLICKR_API_KEY +
-      '&format=json&nojsoncallback=1' +
-      '&per_page=' +
-      IMAGES_PER_PAGE +
-      '&page=1' +
-      '&sort=interestingness-desc' +
-      '&safe_search=1' +
-      // '&license=4,5,6,7,8,9,10' + // use commercial licenses only
-      // '&license=1,2,3,4,5,6,7,8,9,10' + // adding non-commercial licenses
+    '&api_key=' +
+    process.env.REACT_APP_FLICKR_API_KEY +
+    '&format=json&nojsoncallback=1' +
+    '&per_page=' +
+    IMAGES_PER_PAGE +
+    '&page=1' +
+    '&sort=interestingness-desc' +
+    '&safe_search=1' +
+    // '&license=4,5,6,7,8,9,10' + // use commercial licenses only
+    '&license=1,2,3,4,5,6,7,8,9,10' + // adding non-commercial licenses
       '&content_type=1' +
       '&media=photos' +
       '&extras=owner_name' +

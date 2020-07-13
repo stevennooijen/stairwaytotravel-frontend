@@ -34,9 +34,7 @@ class CheckoutDialog extends Component {
         <Divider variant="middle" />
         <form onSubmit={handleSubmit}>
           <DialogContent>
-            <DialogContentText>
-              What type of places are you looking for?
-            </DialogContentText>
+            <DialogContentText>What do you like?</DialogContentText>
             {children}
           </DialogContent>
           <Divider variant="middle" />

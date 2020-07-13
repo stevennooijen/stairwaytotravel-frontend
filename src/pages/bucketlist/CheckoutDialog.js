@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -11,6 +12,12 @@ import Divider from '@material-ui/core/Divider'
 
 import CheckboxGroup from './CheckboxGroup'
 
+const styles = theme => ({
+  divider: {
+    margin: theme.spacing(1),
+  },
+})
+
 class CheckoutDialog extends Component {
   constructor(props) {
     super(props)
@@ -20,6 +27,7 @@ class CheckoutDialog extends Component {
 
   render() {
     const {
+      classes,
       open,
       handleClose,
       handleSubmit,
@@ -36,13 +44,13 @@ class CheckoutDialog extends Component {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Save your bucket list</DialogTitle>
+        <DialogTitle id="form-dialog-title">Checkout</DialogTitle>
         <Divider variant="middle" />
         <form onSubmit={handleSubmit}>
           <DialogContent>
             <DialogContentText>
-              Fill in your email address to receive a copy of your bucket list.
-              Don't worry, it will not be used for email marketing.
+              Fill in your email address to receive a free copy of your bucket
+              list.
             </DialogContentText>
             <TextField
               autoFocus
@@ -54,10 +62,11 @@ class CheckoutDialog extends Component {
               onChange={handleTextFieldChange}
             />
           </DialogContent>
-          <Divider variant="middle" />
+          <Divider variant="middle" className={classes.divider} />
           <DialogContent>
             <DialogContentText>
-              Do you need help with booking this trip? Check all that apply.
+              Can we help you book this trip? Check the boxes you are interested
+              in.
             </DialogContentText>
             <CheckboxGroup
               // pass on props for the checkboxes in the dialog
@@ -85,4 +94,4 @@ class CheckoutDialog extends Component {
   }
 }
 
-export default CheckoutDialog
+export default withStyles(styles)(CheckoutDialog)

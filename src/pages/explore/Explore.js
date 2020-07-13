@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import queryString from 'query-string'
 import debounce from 'lodash.debounce'
+import ReactGA from 'react-ga'
 
 import { withStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -458,6 +459,12 @@ class Explore extends React.Component {
                           this.props.profilesQuery,
                         ),
                     )
+                    // GA event
+                    ReactGA.event({
+                      category: 'Explore',
+                      action: 'Map search',
+                      value: 20,
+                    })
                   }}
                 />
               )}
@@ -611,6 +618,12 @@ class Explore extends React.Component {
                   this.state.profilesFilter,
                 ),
             )
+            // GA event
+            ReactGA.event({
+              category: 'Explore',
+              action: 'Set filters',
+              value: 15,
+            })
           }}
           // disable submit button if no query changes
           submitDisabled={

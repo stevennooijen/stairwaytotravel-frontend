@@ -3,7 +3,7 @@ import ReactGA from 'react-ga'
 import { Redirect } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
-// import Divider from '@material-ui/core/Divider'
+import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
 import Container from '@material-ui/core/Container'
@@ -24,15 +24,24 @@ import fetchWikivoyageInfo from 'components/fetching/thirdParties/FetchWikivoyag
 import fetchWikivoyageLinks from 'components/fetching/thirdParties/FetchWikivoyageLinks'
 import { updateListItem } from 'components/utils'
 import ChipContainer from 'components/destinationCard/ChipContainer'
+import GoogleMap from 'components/mapview/components/GoogleMap'
+import DestinationPin from 'components/mapview/components/DestinationPin'
 
 const styles = theme => ({
   toolbar: {
     flexGrow: 1,
     justifyContent: 'space-between',
   },
+  divider: {
+    margin: theme.spacing(1.5),
+  },
   ContainerItem: {
-    paddingTop: theme.spacing(1.5),
-    paddingBottom: theme.spacing(1.5),
+    marginTop: theme.spacing(1.5),
+    marginBottom: theme.spacing(1.5),
+  },
+  mapContainer: {
+    height: '50vh',
+    width: '100%',
   },
 })
 
@@ -256,7 +265,8 @@ class DestinationPage extends Component {
               />
             </div>
             {/* Features */}
-            {/* <Divider variant="middle" light={true} /> */}
+            <Divider variant="middle" className={classes.divider} />
+            <Typography variant="h6">Known for</Typography>
             <ChipContainer
               features={placeData.features}
               color="default"
@@ -264,7 +274,8 @@ class DestinationPage extends Component {
             />
 
             {/* Place description */}
-            {/* <Divider variant="middle" light={true} /> */}
+            <Divider variant="middle" className={classes.divider} />
+            <Typography variant="h6">Description</Typography>
             <div className={classes.ContainerItem}>
               {placeData.info &&
                 // split description in multiple alineas
@@ -299,8 +310,33 @@ class DestinationPage extends Component {
                 </Typography>
               )}
             </div>
-            <br />
-            <br />
+
+            {/* Map */}
+            <Divider variant="middle" className={classes.divider} />
+            <Typography variant="h6">Location</Typography>
+            <div className={`${classes.mapContainer} ${classes.ContainerItem}`}>
+              <GoogleMap
+                options={{
+                  // Will capture all touch events on the map towards map panning
+                  gestureHandling: 'greedy',
+                }}
+                center={[placeData.lat, placeData.lng]}
+                zoom={6}
+              >
+                <DestinationPin
+                  // this is required to handle clicks
+                  key={placeData.id}
+                  // these are required by google map to plot
+                  lat={placeData.lat}
+                  lng={placeData.lng}
+                  // these are passed along to destinationPin
+                  show={false}
+                  isLiked={true}
+                  placeType={placeData.type}
+                  placeStatus={placeData.status}
+                />
+              </GoogleMap>
+            </div>
             <br />
             <br />
             <br />

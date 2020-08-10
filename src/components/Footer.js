@@ -4,6 +4,9 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import Container from '@material-ui/core/Container'
 import Link from '@material-ui/core/Link'
+import InstagramIcon from '@material-ui/icons/Instagram'
+import LinkedInIcon from '@material-ui/icons/LinkedIn'
+import FacebookIcon from '@material-ui/icons/Facebook'
 
 const styles = theme => ({
   '@global': {
@@ -31,6 +34,11 @@ const styles = theme => ({
     borderTop: `1px solid ${theme.palette.divider}`,
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
+    // For aligning the SM icons
+    [theme.breakpoints.up('sm')]: {
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
   },
 })
 
@@ -41,38 +49,72 @@ class Footer extends React.Component {
     return (
       // maxWidth false needed to span entire screen
       <Container component="footer" maxWidth={false} className={classes.footer}>
-        <ul>
-          <li>
-            <Link
-              component={RouterLink}
-              to="/"
-              variant="subtitle1"
-              color="textSecondary"
-              onClick={() => window.scrollTo(0, 0)}
-            >
-              © 2020 Stairway to Travel
-            </Link>
-          </li>
-          <li>
-            <Link
-              component={RouterLink}
-              to="/about"
-              variant="subtitle1"
-              color="secondary"
-            >
-              About
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="mailto:steven@stairwaytotravel.com?subject=Question about Stairway to Travel: ..."
-              variant="subtitle1"
-              color="secondary"
-            >
-              Contact
-            </Link>
-          </li>
-        </ul>
+        <div>
+          <ul>
+            <li>
+              <Link
+                component={RouterLink}
+                to="/"
+                variant="subtitle1"
+                color="textSecondary"
+                onClick={() => window.scrollTo(0, 0)}
+              >
+                © 2020 Stairway to Travel
+              </Link>
+            </li>
+            <li>
+              <Link
+                component={RouterLink}
+                to="/about"
+                variant="subtitle1"
+                color="secondary"
+              >
+                About
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="mailto:steven@stairwaytotravel.com?subject=Question about Stairway to Travel: ..."
+                variant="subtitle1"
+                color="secondary"
+              >
+                Contact
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <ul>
+            <li>
+              <Link
+                href="https://www.instagram.com/stairwaytotravel/"
+                target="_blank"
+                rel="noopener"
+              >
+                <InstagramIcon color="secondary" />
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://www.facebook.com/stairwaytotravel"
+                target="_blank"
+                rel="noopener"
+              >
+                <FacebookIcon color="secondary" />
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://www.linkedin.com/company/stairwaytotravel"
+                target="_blank"
+                rel="noopener"
+              >
+                <LinkedInIcon color="secondary" />
+              </Link>
+            </li>
+          </ul>
+        </div>
       </Container>
     )
   }

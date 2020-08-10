@@ -118,6 +118,7 @@ const GetFlickrImages = text => {
     '&page=1' +
     '&sort=interestingness-desc' +
     '&safe_search=1' +
+    // '&license=4,5,7,8,9,10' + // commercial use & mods allowed
     // '&license=4,5,6,7,8,9,10' + // use commercial licenses only
     '&license=1,2,3,4,5,6,7,8,9,10' + // adding non-commercial licenses
       '&content_type=1' +

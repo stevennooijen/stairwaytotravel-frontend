@@ -70,19 +70,23 @@ export default function ConsecutiveSnackbars(props) {
           horizontal: 'left',
         }}
         open={open}
-        autoHideDuration={3000}
+        autoHideDuration={
+          props.autoHideDuration ? props.autoHideDuration : 3000
+        }
         onClose={handleClose}
         onExited={handleExited}
         message={messageInfo ? messageInfo.message : undefined}
         TransitionComponent={TransitionUp}
         action={
-          <Button
-            color="inherit"
-            size="small"
-            onClick={() => props.handleUndo()}
-          >
-            UNDO
-          </Button>
+          props.undoButton && (
+            <Button
+              color="inherit"
+              size="small"
+              onClick={() => props.handleUndo()}
+            >
+              UNDO
+            </Button>
+          )
         }
       />
     </div>

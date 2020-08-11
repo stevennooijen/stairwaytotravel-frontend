@@ -316,10 +316,12 @@ class DestinationPage extends Component {
             <Typography variant="h6">Location</Typography>
             <div className={`${classes.mapContainer} ${classes.ContainerItem}`}>
               <GoogleMap
-                options={{
-                  // Will capture all touch events on the map towards map panning
-                  gestureHandling: 'greedy',
-                }}
+                // options={
+                //   {
+                // Will capture all touch events on the map towards map panning
+                // gestureHandling: 'greedy',
+                //   }
+                // }
                 center={[placeData.lat, placeData.lng]}
                 zoom={6}
               >

@@ -14,6 +14,7 @@ import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 // import ShareIcon from '@material-ui/icons/Share'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
+import Button from '@material-ui/core/Button'
 
 import { fetchSingleDestination } from 'components/fetching'
 import PhotoCarousel from 'components/destinationCard/Carousel'
@@ -38,6 +39,10 @@ const styles = theme => ({
   ContainerItem: {
     marginTop: theme.spacing(1.5),
     marginBottom: theme.spacing(1.5),
+  },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   mapContainer: {
     height: '50vh',
@@ -264,6 +269,23 @@ class DestinationPage extends Component {
                 showAttribution={true}
               />
             </div>
+
+            {/* Call 2 Action like button */}
+            {/* <Divider variant="middle" className={classes.divider} /> */}
+            <Container className={classes.ContainerItem} align="center">
+              <Button
+                variant="contained"
+                onClick={() => this.toggleLike(placeData.id)}
+                color={placeData.liked ? 'default' : 'primary'}
+                fullWidth={true}
+                startIcon={
+                  placeData.liked ? <FavoriteIcon /> : <FavoriteBorder />
+                }
+              >
+                {placeData.liked ? 'Saved in' : 'Add to'} bucket list
+              </Button>
+            </Container>
+
             {/* Features */}
             <Divider variant="middle" className={classes.divider} />
             <Typography variant="h6">Known for</Typography>
@@ -333,7 +355,7 @@ class DestinationPage extends Component {
                   lng={placeData.lng}
                   // these are passed along to destinationPin
                   show={false}
-                  isLiked={true}
+                  isLiked={false}
                   placeType={placeData.type}
                   placeStatus={placeData.status}
                 />
@@ -346,6 +368,7 @@ class DestinationPage extends Component {
         )}
         <ConsecutiveSnackbars
           snackbarMessage={this.state.snackbarMessage}
+          undoButton={true}
           handleUndo={() => this.toggleLike(this.state.snackbarPlaceId)}
         />
       </div>

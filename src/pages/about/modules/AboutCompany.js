@@ -94,6 +94,8 @@ class AboutCompany extends React.Component {
                 <Link
                   href="https://www.linkedin.com/in/stevennooijen/"
                   color="secondary"
+                  target="_blank"
+                  rel="noopener"
                 >
                   Linkedin
                 </Link>

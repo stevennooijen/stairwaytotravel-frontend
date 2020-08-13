@@ -23,12 +23,11 @@ class WarningCard extends Component {
       <Card className={classes.card} align="center">
         <CardContent>
           <Typography gutterBottom variant="h6" component="h2">
-            No wishes?
+            No likes?
           </Typography>
           <Typography color="textSecondary" variant="body1" component="p">
-            Looks like you haven't added any destinations to your bucketlist
-            yet. Like your favorite destinations in the Explore tab to see them
-            here.
+            Looks like you haven't added any places to your bucket list yet.
+            Like your favorite places in the Explore tab to see them here.
           </Typography>
         </CardContent>
         <CardActions>
@@ -37,7 +36,7 @@ class WarningCard extends Component {
             text="Explore"
             variant="contained"
           />
-          <RedirectButton to_url="/" text="Search" />
+          <RedirectButton to_url="/" text="Home" />
         </CardActions>
       </Card>
     )

@@ -11,16 +11,21 @@ const forbiddenWords = [
   'transportation',
   'metro',
   'train',
+  'trains',
   'localtrain',
   'trein',
+  'keteltrein',
   'rail',
   'railroad',
   'railway',
+  'railways',
   'railogix',
   'railrunner',
   'captrain',
   'CSXT',
+  'HSL',
   'GNWR',
+  'goederen',
   'locomotive',
   'plane',
   'air',
@@ -36,6 +41,7 @@ const forbiddenWords = [
   'marine',
   'pano',
   'panorama',
+  'microphotography',
   'product',
   'investment',
   'affairs',
@@ -44,6 +50,7 @@ const forbiddenWords = [
   'candidate',
   'president',
   'meeting',
+  'conference',
   'manager',
   'defense',
   'defence',
@@ -67,8 +74,10 @@ const forbiddenWords = [
   'insect',
   'bird',
   'model',
+  'sexy',
   'shirtless',
   'fashion',
+  'archeon',
   'anime',
   'design',
   'store',
@@ -84,6 +93,8 @@ const forbiddenWords = [
   'labrador',
   'buddies',
   'christmas',
+  'eneq',
+  'EVS',
 ]
 
 // assemble image URL from fetched photos.search result
@@ -118,6 +129,7 @@ const GetFlickrImages = text => {
     '&page=1' +
     '&sort=interestingness-desc' +
     '&safe_search=1' +
+    // '&license=4,5,7,8,9,10' + // commercial use & mods allowed
     // '&license=4,5,6,7,8,9,10' + // use commercial licenses only
     '&license=1,2,3,4,5,6,7,8,9,10' + // adding non-commercial licenses
       '&content_type=1' +

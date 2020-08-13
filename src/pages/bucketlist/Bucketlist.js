@@ -5,7 +5,6 @@ import ReactGA from 'react-ga'
 
 import { withStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
-import Snackbar from '@material-ui/core/Snackbar'
 import ExploreIcon from '@material-ui/icons/Explore'
 
 import Album from 'components/Album'
@@ -55,7 +54,6 @@ class Bucketlist extends React.Component {
       queryParams: queryString.parse(this.props.location.search),
       showMap: false,
       dialogOpen: false,
-      thanksBarOpen: false,
       isLoading: false,
 
       // Google mapInstance object
@@ -71,9 +69,11 @@ class Bucketlist extends React.Component {
       activities: false,
       none: false,
 
-      // state for like/dislike snackbar message
+      // state for like/dislike en thank you snackbar messages
       snackbarMessage: null,
       snackbarPlaceId: null,
+      snackbarUndoButton: true,
+      snackbarAutoHideDuration: 3000,
     }
   }
 
@@ -187,6 +187,8 @@ class Bucketlist extends React.Component {
           ? 'Removed from your bucket list'
           : 'Saved to your bucket list',
         snackbarPlaceId: id,
+        snackbarUndoButton: true,
+        snackbarAutoHideDuration: 3000,
       },
       () => this.setState({ snackbarMessage: null }),
     )
@@ -371,7 +373,20 @@ class Bucketlist extends React.Component {
                     )
                   })
                 this.toggleDialog()
-                this.setState({ thanksBarOpen: true })
+
+                // Show thank you snackbar message
+                this.setState(
+                  {
+                    snackbarMessage:
+                      'Great! Your bucket list has been sent to your email address. We hope to have inspired you. Happy travels!',
+                  },
+                  () =>
+                    this.setState({
+                      snackbarMessage: null,
+                      snackbarUndoButton: false,
+                      snackbarAutoHideDuration: 6000,
+                    }),
+                )
 
                 // send google analytics event
                 ReactGA.event({
@@ -389,16 +404,12 @@ class Bucketlist extends React.Component {
               checkboxError={checkboxError}
               handleCheckboxChange={this.handleCheckboxChange}
             />
-            <Snackbar
-              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-              open={this.state.thanksBarOpen}
-              onClose={() => this.setState({ thanksBarOpen: false })}
-              message="Thank you! Your bucket list has been sent."
-            />
           </React.Fragment>
         )}
         <ConsecutiveSnackbars
           snackbarMessage={this.state.snackbarMessage}
+          autoHideDuration={this.state.snackbarAutoHideDuration}
+          undoButton={this.state.snackbarUndoButton}
           handleUndo={() => this.toggleLike(this.state.snackbarPlaceId)}
         />
       </div>

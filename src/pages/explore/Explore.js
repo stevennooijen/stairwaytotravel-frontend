@@ -584,6 +584,7 @@ class Explore extends React.Component {
             <br />
             <ConsecutiveSnackbars
               snackbarMessage={this.state.snackbarMessage}
+              undoButton={true}
               handleUndo={() => this.toggleLike(this.state.snackbarPlaceId)}
             />
           </React.Fragment>

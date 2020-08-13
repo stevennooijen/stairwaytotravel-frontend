@@ -109,6 +109,7 @@ export default function TextMobileStepper(props) {
                 href={activeImage.attributionLink}
                 target="_blank"
                 rel="noopener"
+                color="secondary"
               >
                 {activeImage.owner}
               </Link>

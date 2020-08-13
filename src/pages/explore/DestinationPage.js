@@ -316,6 +316,7 @@ class DestinationPage extends Component {
                       href={placeData.wikiLinks.revisionUrl}
                       target="_blank"
                       rel="noopener"
+                      color="secondary"
                     >
                       contributors
                     </Link>{' '}
@@ -324,6 +325,7 @@ class DestinationPage extends Component {
                       href={placeData.wikiLinks.pageUrl}
                       target="_blank"
                       rel="noopener"
+                      color="secondary"
                     >
                       {placeData.name}
                     </Link>{' '}

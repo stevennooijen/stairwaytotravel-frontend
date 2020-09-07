@@ -6,6 +6,8 @@ import { Waypoint } from 'react-waypoint'
 import { withStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   root: {
@@ -60,6 +62,9 @@ class DemoVideo extends React.Component {
           onLeave={this.handlePlayingState}
         >
           <Card className={classes.card}>
+            <CardContent className={classes.cardContent} align="center">
+              <Typography variant="h3">Demo video</Typography>
+            </CardContent>
             <div className={classes.videoContainer}>
               <ReactPlayer
                 className={classes.reactPlayer}

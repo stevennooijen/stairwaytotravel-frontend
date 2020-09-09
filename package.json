@@ -17,11 +17,13 @@
     "react-emotion": "^9.2.10",
     "react-ga": "^2.6.0",
     "react-parallax": "^2.2.0",
+    "react-player": "^2.6.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^3.4.0",
     "react-select": "^3.0.3",
     "react-swipeable-views": "^0.13.9",
-    "react-swipeable-views-utils": "^0.13.9"
+    "react-swipeable-views-utils": "^0.13.9",
+    "react-waypoint": "^9.0.3"
   },
   "devDependencies": {
     "eslint-plugin-prettier": "^2.6.2",

@@ -62,16 +62,18 @@ class Footer extends React.Component {
                 © 2020 Stairway to Travel
               </Link>
             </li>
-            <li>
-              <Link
-                component={RouterLink}
-                to="/about"
-                variant="subtitle1"
-                color="secondary"
-              >
-                About
-              </Link>
-            </li>
+            {window.location.pathname !== '/about' && (
+              <li>
+                <Link
+                  component={RouterLink}
+                  to="/about"
+                  variant="subtitle1"
+                  color="secondary"
+                >
+                  About
+                </Link>
+              </li>
+            )}
             <li>
               <Link
                 href="mailto:steven@stairwaytotravel.com?subject=Question about Stairway to Travel: ..."

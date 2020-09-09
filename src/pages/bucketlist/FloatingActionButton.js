@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import { withStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import MailOutlineIcon from '@material-ui/icons/MailOutline'
 
 const styles = theme => ({
   fab: {
@@ -35,7 +35,7 @@ class FloatingActionButton extends Component {
         onClick={onClick}
         variant="extended"
       >
-        <ShoppingCartIcon className={classes.extendedIcon} />
+        <MailOutlineIcon className={classes.extendedIcon} />
         Checkout
       </Fab>
     )

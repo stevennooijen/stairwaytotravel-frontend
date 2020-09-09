@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button'
 import Footer from '../../components/Footer'
 import ProductValues from './modules/Values'
 import ProductHowItWorks from './modules/HowItWorks'
+import DemoVideo from './modules/DemoVideo'
 import AboutCompany from './modules/AboutCompany'
 import Jumbotron from './modules/Jumbotron'
 import ParralaxBlock from './modules/ParralaxBlock'
@@ -74,6 +75,7 @@ class About extends React.Component {
           </Button>
         </ParralaxBlock>
         <ProductHowItWorks />
+        <DemoVideo />
         <ParralaxBlock
           imageUrl={backgroundImageList[1]}
           imageAlt="A stairway going down into a city neighbourhood at sunset hour"

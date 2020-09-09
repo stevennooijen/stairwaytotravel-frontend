@@ -14,6 +14,10 @@ const useStyles = makeStyles(theme => ({
     height: 30,
     width: 30,
     padding: 5,
+    // position icon on top of geolocation
+    position: 'absolute',
+    left: -15,
+    top: -15,
     // Changes when liked
     backgroundColor: props.isLiked
       ? `${theme.palette.primary.main}`

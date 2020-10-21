@@ -19,6 +19,13 @@ const appStyles = {
 
 // Actual app component
 class App extends Component {
+  // keep track of previous in-site location
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location !== this.props.location) {
+      this.props.setRootState('prevPath', this.props.location)
+    }
+  }
+
   // Generate GA pageview when route changes
   componentDidMount = () => ReactGA.pageview(window.location.pathname) // + window.location.search)
   componentDidUpdate = () => ReactGA.pageview(window.location.pathname) // + window.location.search)

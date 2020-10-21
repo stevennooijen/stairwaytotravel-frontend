@@ -31,6 +31,7 @@ class Root extends React.Component {
       profilesQuery: [],
       likedPlaces: [],
       newLikes: [],
+      prevPath: '',
     }
   }
 
@@ -52,6 +53,7 @@ class Root extends React.Component {
       profilesQuery,
       likedPlaces,
       newLikes,
+      prevPath,
     } = this.state
     const newLikesNotificationDot = newLikes.length > 0
 
@@ -61,7 +63,8 @@ class Root extends React.Component {
         <Router>
           <div>
             {/* Start of actual app, App is the top level component */}
-            <App>
+            {/* In app, we keep track of the previous in-site location and give it back to root */}
+            <App prevPath={prevPath} setRootState={this.setRootState}>
               <Switch>
                 <Route
                   exact
@@ -101,6 +104,7 @@ class Root extends React.Component {
                       likedPlaces={likedPlaces}
                       newLikes={newLikes}
                       setRootState={this.setRootState}
+                      prevPath={prevPath}
                     />
                   )}
                 />

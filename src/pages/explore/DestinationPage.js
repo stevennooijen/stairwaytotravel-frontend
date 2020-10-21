@@ -223,7 +223,14 @@ class DestinationPage extends Component {
                 edge="start"
                 aria-label="Back to previous page"
                 color="secondary"
-                onClick={() => this.props.history.goBack()}
+                onClick={() => {
+                  // If there's no in-site history, go back to /explore
+                  if (this.props.prevPath === '') {
+                    this.props.history.push('/explore')
+                  } else {
+                    this.props.history.goBack()
+                  }
+                }}
               >
                 <ArrowBackIosOutlinedIcon />
               </IconButton>

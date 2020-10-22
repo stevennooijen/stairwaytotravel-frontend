@@ -27,6 +27,7 @@ import { updateListItem } from 'components/utils'
 import ChipContainer from 'components/destinationCard/ChipContainer'
 import GoogleMap from 'components/mapview/components/GoogleMap'
 import DestinationPin from 'components/mapview/components/DestinationPin'
+import SingleLineGridList from 'components/SingleLineGridList'
 
 const styles = theme => ({
   toolbar: {
@@ -370,6 +371,14 @@ class DestinationPage extends Component {
                 />
               </GoogleMap>
             </div>
+
+            {/* Map */}
+            <Divider variant="middle" className={classes.divider} />
+            <Typography variant="h6">Places nearby</Typography>
+            <div className={classes.ContainerItem}>
+              <SingleLineGridList />
+            </div>
+
             <br />
             <br />
             <br />

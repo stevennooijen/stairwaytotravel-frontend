@@ -5,6 +5,7 @@ import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton'
 import StarBorderIcon from '@material-ui/icons/StarBorder'
+import ExampleList from 'assets/Constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,51 +29,23 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const tileData = [
-  {
-    img: require('assets/img/used/city.jpg'),
-    title: 'City',
-    author: 'Steven',
-  },
-  {
-    img: require('assets/img/used/forest.jpg'),
-    title: 'forest',
-    author: 'Steven',
-  },
-  {
-    img: require('assets/img/used/mountain.jpg'),
-    title: 'mountain',
-    author: 'Steven',
-  },
-  {
-    img: require('assets/img/used/haiku-stairs.jpg'),
-    title: 'haiku-stairs',
-    author: 'Steven',
-  },
-  {
-    img: require('assets/img/used/beach-blur-boardwalk.jpg'),
-    title: 'beach-blur-boardwalk',
-    author: 'Steven',
-  },
-]
-
 export default function SingleLineGridList() {
   const classes = useStyles()
 
   return (
     <div className={classes.root}>
       <GridList className={classes.gridList} cols={2.2}>
-        {tileData.map(tile => (
-          <GridListTile key={tile.img}>
-            <img src={tile.img} alt={tile.title} />
+        {ExampleList.map(tile => (
+          <GridListTile key={tile.id}>
+            <img src={tile.images[0].imgPath} alt={tile.name} />
             <GridListTileBar
-              title={tile.title}
+              title={tile.name}
               classes={{
                 root: classes.titleBar,
                 title: classes.title,
               }}
               actionIcon={
-                <IconButton aria-label={`star ${tile.title}`}>
+                <IconButton aria-label={`star ${tile.name}`}>
                   <StarBorderIcon className={classes.title} />
                 </IconButton>
               }

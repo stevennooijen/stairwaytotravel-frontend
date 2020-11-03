@@ -274,6 +274,7 @@ class DestinationPage extends Component {
             <div align="center">
               <PhotoCarousel
                 imageList={placeData.images}
+                showCarousel={true}
                 showAttribution={true}
               />
             </div>
@@ -372,7 +373,7 @@ class DestinationPage extends Component {
               </GoogleMap>
             </div>
 
-            {/* Map */}
+            {/* Nearby places */}
             <Divider variant="middle" className={classes.divider} />
             <Typography variant="h6">Places nearby</Typography>
             <div className={classes.ContainerItem}>

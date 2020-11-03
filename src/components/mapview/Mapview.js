@@ -119,6 +119,8 @@ class Mapview extends Component {
                   mapGestureHandling={value =>
                     this.setState({ mapGestureHandling: value })
                   }
+                  showCarousel={true}
+                  showFeatures={true}
                 />
               </DestinationPin>
             ))}

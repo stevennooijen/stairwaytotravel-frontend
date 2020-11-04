@@ -15,6 +15,7 @@ import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 
 import { fetchSingleDestination } from 'components/fetching'
 import PhotoCarousel from 'components/destinationCard/Carousel'
@@ -28,6 +29,9 @@ import ChipContainer from 'components/destinationCard/ChipContainer'
 import GoogleMap from 'components/mapview/components/GoogleMap'
 import DestinationPin from 'components/mapview/components/DestinationPin'
 import SingleLineGridList from 'components/SingleLineGridList'
+import DestinationCard from 'components/destinationCard/DestinationCard'
+
+import ExampleList from 'assets/Constants'
 
 const styles = theme => ({
   toolbar: {
@@ -48,6 +52,9 @@ const styles = theme => ({
   mapContainer: {
     height: '50vh',
     width: '100%',
+  },
+  gridItem: {
+    padding: theme.spacing(1),
   },
 })
 
@@ -72,6 +79,22 @@ class DestinationPage extends Component {
   componentDidMount() {
     this._isMounted = true
 
+    this.fetchPlaces()
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      destination_id: newProps.match.params.name,
+    })
+
+    this.fetchPlaces()
+  }
+
+  fetchPlaces() {
     // If no already liked destinations, set to empty array
     if (this.state.likedDestinations === null)
       this.setState({ likedDestinations: [] })
@@ -143,10 +166,6 @@ class DestinationPage extends Component {
           window.console && console.log(err)
         })
     })
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false
   }
 
   toggleLike(id) {
@@ -377,7 +396,20 @@ class DestinationPage extends Component {
             <Divider variant="middle" className={classes.divider} />
             <Typography variant="h6">Places nearby</Typography>
             <div className={classes.ContainerItem}>
-              <SingleLineGridList />
+              <SingleLineGridList>
+                {ExampleList.map(place => (
+                  <Grid item key={place.id} className={classes.gridItem}>
+                    <DestinationCard
+                      style={{ minWidth: 200 }}
+                      place={place}
+                      // toggleLike={id => this.toggleLike(id)}
+                      onClick={() => {
+                        this.props.history.push('/explore/' + place.id)
+                      }}
+                    />
+                  </Grid>
+                ))}
+              </SingleLineGridList>
             </div>
 
             <br />

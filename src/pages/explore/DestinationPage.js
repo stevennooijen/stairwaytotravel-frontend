@@ -87,11 +87,13 @@ class DestinationPage extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({
-      destination_id: newProps.match.params.name,
-    })
+    if (newProps.location !== this.props.location) {
+      this.setState({
+        destination_id: newProps.match.params.name,
+      })
 
-    this.fetchPlaces()
+      this.fetchPlaces()
+    }
   }
 
   fetchPlaces() {

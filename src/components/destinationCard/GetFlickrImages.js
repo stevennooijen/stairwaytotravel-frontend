@@ -122,14 +122,14 @@ const getFlickrAttributionLink = item => {
 }
 
 // Create JavaScript Promise by returning the call to `fetch()`
-const GetFlickrImages = text => {
+const GetFlickrImages = (text, images_per_page = IMAGES_PER_PAGE) => {
   return fetch(
     api_base +
     '&api_key=' +
     process.env.REACT_APP_FLICKR_API_KEY +
     '&format=json&nojsoncallback=1' +
     '&per_page=' +
-    IMAGES_PER_PAGE +
+    images_per_page +
     '&page=1' +
     '&sort=interestingness-desc' +
     '&safe_search=1' +

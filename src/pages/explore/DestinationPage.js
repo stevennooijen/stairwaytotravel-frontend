@@ -180,8 +180,8 @@ class DestinationPage extends Component {
         .then(data => {
           // for each of the fetched destinations in the list do:
           data.destinations.forEach(item => {
-            // 1. retrieve flickr Images
-            GetFlickrImages(item.name + ' ' + item.country)
+            // 1. retrieve flickr Images (only 1 is shown, so no need to fetch 25)
+            GetFlickrImages(item.name + ' ' + item.country, 3)
               .then(imageUrls => {
                 return {
                   ...item,

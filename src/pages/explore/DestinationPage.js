@@ -464,7 +464,8 @@ class DestinationPage extends Component {
                 {this.state.nearbyPlacesList.map(
                   place =>
                     // Avoid rendering destination page place itself in the nearby places list
-                    place.id !== Number(this.state.destination_id) && (
+                    place.id !== Number(this.state.destination_id) &&
+                    place.images.length > 1 && (
                       <Grid item key={place.id} className={classes.gridItem}>
                         <DestinationCard
                           style={{ minWidth: 200 }}

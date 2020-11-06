@@ -5,6 +5,10 @@ const api_base =
 const forbiddenWords = [
   'police',
   'car',
+  'automotive',
+  'vehicle',
+  'honda',
+  'mazda',
   'truck',
   'bus',
   'transport',

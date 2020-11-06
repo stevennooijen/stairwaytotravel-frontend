@@ -17,7 +17,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 
-import { fetchSingleDestination } from 'components/fetching'
+import { fetchSingleDestination, fetchNearbyPlaces } from 'components/fetching'
 import PhotoCarousel from 'components/destinationCard/Carousel'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import Loader from 'components/fetching/Loader'
@@ -30,8 +30,6 @@ import GoogleMap from 'components/mapview/components/GoogleMap'
 import DestinationPin from 'components/mapview/components/DestinationPin'
 import SingleLineGridList from 'components/SingleLineGridList'
 import DestinationCard from 'components/destinationCard/DestinationCard'
-
-import ExampleList from 'assets/Constants'
 
 const styles = theme => ({
   toolbar: {
@@ -73,13 +71,17 @@ class DestinationPage extends Component {
       // state for like/dislike snackbar message
       snackbarMessage: null,
       snackbarPlaceId: null,
+
+      // state for nearby places recommendations
+      nearbyPlacesList: [],
     }
   }
 
   componentDidMount() {
     this._isMounted = true
 
-    this.fetchPlaces()
+    this.getPlaceData()
+    this.getNearbyPlacesData()
   }
 
   componentWillUnmount() {
@@ -92,11 +94,12 @@ class DestinationPage extends Component {
         destination_id: newProps.match.params.name,
       })
 
-      this.fetchPlaces()
+      this.getPlaceData()
+      this.getNearbyPlacesData()
     }
   }
 
-  fetchPlaces() {
+  getPlaceData() {
     // If no already liked destinations, set to empty array
     if (this.state.likedDestinations === null)
       this.setState({ likedDestinations: [] })
@@ -170,14 +173,55 @@ class DestinationPage extends Component {
     })
   }
 
+  getNearbyPlacesData() {
+    this.setState({ nearbyPlacesList: [] }, () => {
+      fetchNearbyPlaces()
+        .then(response => response.json())
+        .then(data => {
+          // for each of the fetched destinations in the list do:
+          data.destinations.forEach(item => {
+            // 1. retrieve flickr Images
+            GetFlickrImages(item.name + ' ' + item.country)
+              .then(imageUrls => {
+                return {
+                  ...item,
+                  images: imageUrls,
+                }
+              })
+              // 2. set liked to true if destination already in likedList
+              .then(item => {
+                if (this.props.likedPlaces.includes(item.id)) {
+                  return {
+                    ...item,
+                    liked: true,
+                  }
+                } else {
+                  return item
+                }
+              })
+              // 3. save fetched destination to state
+              .then(item => {
+                this.setState({
+                  nearbyPlacesList: [...this.state.nearbyPlacesList, item],
+                })
+              })
+          })
+        })
+    })
+  }
+
   toggleLike(id) {
-    // update state
-    this.setState(prevState => ({
-      placeData: {
-        ...this.state.placeData,
-        liked: !prevState.placeData.liked,
-      },
-    }))
+    // update liked boolean in top bar for the destination page
+    if (id === Number(this.state.destination_id)) {
+      this.setState(prevState => ({
+        placeData: {
+          ...this.state.placeData,
+          liked: !prevState.placeData.liked,
+        },
+      }))
+    }
+    // Update recommended nearby places list
+    this.updateNearbyPlacesList(id)
     // update root level state
     this.updateLikedPlaces(id)
     this.updateNewLikes(id)
@@ -187,6 +231,24 @@ class DestinationPage extends Component {
       category: 'Explore',
       action: 'Place like',
       value: 20,
+    })
+  }
+
+  updateNearbyPlacesList(id) {
+    // https://www.robinwieruch.de/react-state-array-add-update-remove/
+    const newList = this.state.nearbyPlacesList.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          liked: !item.liked,
+        }
+      } else {
+        return item
+      }
+    })
+
+    this.setState({
+      nearbyPlacesList: newList,
     })
   }
 
@@ -399,18 +461,22 @@ class DestinationPage extends Component {
             <Typography variant="h6">Places nearby</Typography>
             <div className={classes.ContainerItem}>
               <SingleLineGridList>
-                {ExampleList.map(place => (
-                  <Grid item key={place.id} className={classes.gridItem}>
-                    <DestinationCard
-                      style={{ minWidth: 200 }}
-                      place={place}
-                      // toggleLike={id => this.toggleLike(id)}
-                      onClick={() => {
-                        this.props.history.push('/explore/' + place.id)
-                      }}
-                    />
-                  </Grid>
-                ))}
+                {this.state.nearbyPlacesList.map(
+                  place =>
+                    // Avoid rendering destination page place itself in the nearby places list
+                    place.id !== Number(this.state.destination_id) && (
+                      <Grid item key={place.id} className={classes.gridItem}>
+                        <DestinationCard
+                          style={{ minWidth: 200 }}
+                          place={place}
+                          toggleLike={id => this.toggleLike(id)}
+                          onClick={() => {
+                            this.props.history.push('/explore/' + place.id)
+                          }}
+                        />
+                      </Grid>
+                    ),
+                )}
               </SingleLineGridList>
             </div>
 

@@ -175,7 +175,7 @@ class DestinationPage extends Component {
 
   getNearbyPlacesData() {
     this.setState({ nearbyPlacesList: [] }, () => {
-      fetchNearbyPlaces()
+      fetchNearbyPlaces(this.state.destination_id)
         .then(response => response.json())
         .then(data => {
           // for each of the fetched destinations in the list do:

@@ -1,8 +1,11 @@
-import { FetchExploreDestinations } from 'components/fetching'
+const fetchNearbyPlaces = (id, nResults = 12) => {
+  let query = process.env.REACT_APP_API_URL + '/api/nearby/' + id
 
-const fetchNearbyPlaces = () => {
-  // TODO: replace with backend nearby places api call
-  return FetchExploreDestinations(4567, 5, 0)
+  if (nResults) {
+    query = query + '?n_results=' + nResults
+  }
+
+  return fetch(query)
 }
 
 export default fetchNearbyPlaces

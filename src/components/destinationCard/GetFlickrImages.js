@@ -30,6 +30,7 @@ const forbiddenWords = [
   'metro',
   'train',
   'trains',
+  'classictrains',
   'localtrain',
   'trein',
   'keteltrein',

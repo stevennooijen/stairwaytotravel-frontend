@@ -31,6 +31,7 @@ const forbiddenWords = [
   'train',
   'trains',
   'classictrains',
+  'caltrain',
   'localtrain',
   'trein',
   'keteltrein',

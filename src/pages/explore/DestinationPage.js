@@ -15,8 +15,9 @@ import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 
-import { fetchSingleDestination } from 'components/fetching'
+import { fetchSingleDestination, fetchNearbyPlaces } from 'components/fetching'
 import PhotoCarousel from 'components/destinationCard/Carousel'
 import GetFlickrImages from 'components/destinationCard/GetFlickrImages'
 import Loader from 'components/fetching/Loader'
@@ -27,6 +28,8 @@ import { updateListItem } from 'components/utils'
 import ChipContainer from 'components/destinationCard/ChipContainer'
 import GoogleMap from 'components/mapview/components/GoogleMap'
 import DestinationPin from 'components/mapview/components/DestinationPin'
+import SingleLineGridList from 'components/SingleLineGridList'
+import DestinationCard from 'components/destinationCard/DestinationCard'
 
 const styles = theme => ({
   toolbar: {
@@ -48,6 +51,9 @@ const styles = theme => ({
     height: '50vh',
     width: '100%',
   },
+  gridItem: {
+    padding: theme.spacing(1),
+  },
 })
 
 class DestinationPage extends Component {
@@ -65,12 +71,35 @@ class DestinationPage extends Component {
       // state for like/dislike snackbar message
       snackbarMessage: null,
       snackbarPlaceId: null,
+
+      // state for nearby places recommendations
+      nearbyPlacesList: [],
     }
   }
 
   componentDidMount() {
     this._isMounted = true
 
+    this.getPlaceData()
+    this.getNearbyPlacesData()
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.location !== this.props.location) {
+      this.setState({
+        destination_id: newProps.match.params.name,
+      })
+
+      this.getPlaceData()
+      this.getNearbyPlacesData()
+    }
+  }
+
+  getPlaceData() {
     // If no already liked destinations, set to empty array
     if (this.state.likedDestinations === null)
       this.setState({ likedDestinations: [] })
@@ -144,18 +173,55 @@ class DestinationPage extends Component {
     })
   }
 
-  componentWillUnmount() {
-    this._isMounted = false
+  getNearbyPlacesData() {
+    this.setState({ nearbyPlacesList: [] }, () => {
+      fetchNearbyPlaces(this.state.destination_id)
+        .then(response => response.json())
+        .then(data => {
+          // for each of the fetched destinations in the list do:
+          data.destinations.forEach(item => {
+            // 1. retrieve flickr Images (only 1 is shown, so no need to fetch 25)
+            GetFlickrImages(item.name + ' ' + item.country, 3)
+              .then(imageUrls => {
+                return {
+                  ...item,
+                  images: imageUrls,
+                }
+              })
+              // 2. set liked to true if destination already in likedList
+              .then(item => {
+                if (this.props.likedPlaces.includes(item.id)) {
+                  return {
+                    ...item,
+                    liked: true,
+                  }
+                } else {
+                  return item
+                }
+              })
+              // 3. save fetched destination to state
+              .then(item => {
+                this.setState({
+                  nearbyPlacesList: [...this.state.nearbyPlacesList, item],
+                })
+              })
+          })
+        })
+    })
   }
 
   toggleLike(id) {
-    // update state
-    this.setState(prevState => ({
-      placeData: {
-        ...this.state.placeData,
-        liked: !prevState.placeData.liked,
-      },
-    }))
+    // update liked boolean in top bar for the destination page
+    if (id === Number(this.state.destination_id)) {
+      this.setState(prevState => ({
+        placeData: {
+          ...this.state.placeData,
+          liked: !prevState.placeData.liked,
+        },
+      }))
+    }
+    // Update recommended nearby places list
+    this.updateNearbyPlacesList(id)
     // update root level state
     this.updateLikedPlaces(id)
     this.updateNewLikes(id)
@@ -165,6 +231,24 @@ class DestinationPage extends Component {
       category: 'Explore',
       action: 'Place like',
       value: 20,
+    })
+  }
+
+  updateNearbyPlacesList(id) {
+    // https://www.robinwieruch.de/react-state-array-add-update-remove/
+    const newList = this.state.nearbyPlacesList.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          liked: !item.liked,
+        }
+      } else {
+        return item
+      }
+    })
+
+    this.setState({
+      nearbyPlacesList: newList,
     })
   }
 
@@ -273,6 +357,7 @@ class DestinationPage extends Component {
             <div align="center">
               <PhotoCarousel
                 imageList={placeData.images}
+                showCarousel={true}
                 showAttribution={true}
               />
             </div>
@@ -370,6 +455,32 @@ class DestinationPage extends Component {
                 />
               </GoogleMap>
             </div>
+
+            {/* Nearby places */}
+            <Divider variant="middle" className={classes.divider} />
+            <Typography variant="h6">Places nearby</Typography>
+            <div className={classes.ContainerItem}>
+              <SingleLineGridList>
+                {this.state.nearbyPlacesList.map(
+                  place =>
+                    // Avoid rendering destination page place itself in the nearby places list
+                    place.id !== Number(this.state.destination_id) &&
+                    place.images.length > 1 && (
+                      <Grid item key={place.id} className={classes.gridItem}>
+                        <DestinationCard
+                          style={{ minWidth: 200 }}
+                          place={place}
+                          toggleLike={id => this.toggleLike(id)}
+                          onClick={() => {
+                            this.props.history.push('/explore/' + place.id)
+                          }}
+                        />
+                      </Grid>
+                    ),
+                )}
+              </SingleLineGridList>
+            </div>
+
             <br />
             <br />
             <br />

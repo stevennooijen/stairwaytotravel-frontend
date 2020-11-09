@@ -1,105 +1,9 @@
+import forbiddenWords from 'assets/constants/ForbiddenFlickrWords'
+
 const IMAGES_PER_PAGE = 25
 
 const api_base =
   'https://api.flickr.com/services/rest/?method=flickr.photos.search'
-const forbiddenWords = [
-  'police',
-  'car',
-  'truck',
-  'bus',
-  'transport',
-  'transportation',
-  'metro',
-  'train',
-  'trains',
-  'localtrain',
-  'trein',
-  'keteltrein',
-  'rail',
-  'railroad',
-  'railway',
-  'railways',
-  'railogix',
-  'railrunner',
-  'captrain',
-  'CSXT',
-  'HSL',
-  'GNWR',
-  'goederen',
-  'locomotive',
-  'plane',
-  'air',
-  'airplane',
-  'airline',
-  'airways',
-  'aircraft',
-  'airport',
-  'vessel',
-  'ship',
-  'fleet',
-  'freight',
-  'marine',
-  'pano',
-  'panorama',
-  'abstract',
-  'minimal',
-  'repetition',
-  'repeat',
-  'microphotography',
-  'product',
-  'investment',
-  'affairs',
-  'embassy',
-  'minister',
-  'candidate',
-  'president',
-  'meeting',
-  'conference',
-  'manager',
-  'defense',
-  'defence',
-  'force',
-  'department',
-  'guard',
-  'navy',
-  'naval',
-  'military',
-  'fighter',
-  'gun',
-  'attack',
-  'emergency',
-  'fire',
-  'burning',
-  'smoke',
-  'brigade',
-  'map',
-  'selfie',
-  'selfportrait',
-  'insect',
-  'bird',
-  'model',
-  'sexy',
-  'shirtless',
-  'fashion',
-  'archeon',
-  'anime',
-  'design',
-  'store',
-  'singer',
-  'flower',
-  'plant',
-  'galaxy',
-  'astronomy',
-  'stars',
-  'cat',
-  'katzen',
-  'dog',
-  'labrador',
-  'buddies',
-  'christmas',
-  'eneq',
-  'EVS',
-]
 
 // assemble image URL from fetched photos.search result
 const getFlickrImageURL = item => {
@@ -122,14 +26,14 @@ const getFlickrAttributionLink = item => {
 }
 
 // Create JavaScript Promise by returning the call to `fetch()`
-const GetFlickrImages = text => {
+const GetFlickrImages = (text, images_per_page = IMAGES_PER_PAGE) => {
   return fetch(
     api_base +
     '&api_key=' +
     process.env.REACT_APP_FLICKR_API_KEY +
     '&format=json&nojsoncallback=1' +
     '&per_page=' +
-    IMAGES_PER_PAGE +
+    images_per_page +
     '&page=1' +
     '&sort=interestingness-desc' +
     '&safe_search=1' +

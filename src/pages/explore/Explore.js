@@ -573,6 +573,8 @@ class Explore extends React.Component {
                       // send to destination page
                       this.props.history.push('/explore/' + place.id)
                     }}
+                    showCarousel={true}
+                    showFeatures={true}
                   />
                 </AlbumItem>
               ))}

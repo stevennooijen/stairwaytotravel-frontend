@@ -47,10 +47,18 @@ const styles = theme => ({
 class DestinationCard extends Component {
   render() {
     // Properties and actions to do with DestinationCard are provided through props
-    const { classes, place, toggleLike, onClick, ...props } = this.props
+    const {
+      classes,
+      place,
+      toggleLike,
+      onClick,
+      showFeatures,
+      ...props
+    } = this.props
 
     return (
       <Card
+        style={this.props.style}
         className={classes.card}
         // TODO: Remove, temporarily disabled link to destinationPage
         onClick={e => {
@@ -95,11 +103,13 @@ class DestinationCard extends Component {
             {place.country}
           </Typography>
           {/* Features */}
-          <ChipContainer
-            features={place.features}
-            color="default"
-            size="small"
-          />
+          {showFeatures && (
+            <ChipContainer
+              features={place.features}
+              color="default"
+              size="small"
+            />
+          )}
         </CardContent>
       </Card>
     )

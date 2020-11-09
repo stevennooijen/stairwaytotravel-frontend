@@ -63,40 +63,53 @@ export default function TextMobileStepper(props) {
 
   return (
     <div className={classes.root}>
-      <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={activeStep}
-        onChangeIndex={handleStepChange}
-        enableMouseEvents
-        // Make sure to 'freeze' the map upon swiping the carousel for mobile (touch) and web (mouse)
-        onTouchStart={event => {
-          props.mapGestureHandling && props.mapGestureHandling('none')
-        }}
-        onTouchEnd={event => {
-          props.mapGestureHandling && props.mapGestureHandling('greedy')
-        }}
-        onMouseDown={event => {
-          props.mapGestureHandling && props.mapGestureHandling('none')
-        }}
-        onMouseUp={event => {
-          props.mapGestureHandling && props.mapGestureHandling('greedy')
-        }}
-      >
-        {props.imageList.map((step, index) => (
-          <div
-            key={step.label + step.imgPath}
-            className={classes.imageContainer}
-          >
-            {Math.abs(activeStep - index) <= 2 ? (
-              <img
-                className={classes.img}
-                src={step.imgPath}
-                alt={step.label}
-              />
-            ) : null}
-          </div>
-        ))}
-      </SwipeableViews>
+      {props.showCarousel ? (
+        <SwipeableViews
+          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          index={activeStep}
+          onChangeIndex={handleStepChange}
+          enableMouseEvents
+          // Make sure to 'freeze' the map upon swiping the carousel for mobile (touch) and web (mouse)
+          onTouchStart={event => {
+            props.mapGestureHandling && props.mapGestureHandling('none')
+          }}
+          onTouchEnd={event => {
+            props.mapGestureHandling && props.mapGestureHandling('greedy')
+          }}
+          onMouseDown={event => {
+            props.mapGestureHandling && props.mapGestureHandling('none')
+          }}
+          onMouseUp={event => {
+            props.mapGestureHandling && props.mapGestureHandling('greedy')
+          }}
+        >
+          {props.imageList.map((step, index) => (
+            <div
+              key={step.label + step.imgPath}
+              className={classes.imageContainer}
+            >
+              {Math.abs(activeStep - index) <= 2 ? (
+                <img
+                  className={classes.img}
+                  src={step.imgPath}
+                  alt={step.label}
+                />
+              ) : null}
+            </div>
+          ))}
+        </SwipeableViews>
+      ) : (
+        <div
+          key={props.imageList[0].label + props.imageList[0].imgPath}
+          className={classes.imageContainer}
+        >
+          <img
+            className={classes.img}
+            src={props.imageList[0].imgPath}
+            alt={props.imageList[0].label}
+          />
+        </div>
+      )}
       {props.children}
       {props.showAttribution &&
         // in case of no owner, don't display caption
@@ -116,47 +129,49 @@ export default function TextMobileStepper(props) {
             </i>
           </Typography>
         )}
-      <MobileStepper
-        variant="text"
-        steps={maxSteps}
-        position="static"
-        activeStep={activeStep}
-        className={classes.root}
-        nextButton={
-          <Button
-            size="small"
-            onClick={e => {
-              e.stopPropagation()
-              handleNext()
-            }}
-            disabled={activeStep === maxSteps - 1}
-          >
-            Next
-            {theme.direction === 'rtl' ? (
-              <KeyboardArrowLeft />
-            ) : (
-              <KeyboardArrowRight />
-            )}
-          </Button>
-        }
-        backButton={
-          <Button
-            size="small"
-            onClick={e => {
-              e.stopPropagation()
-              handleBack()
-            }}
-            disabled={activeStep === 0}
-          >
-            {theme.direction === 'rtl' ? (
-              <KeyboardArrowRight />
-            ) : (
-              <KeyboardArrowLeft />
-            )}
-            Back
-          </Button>
-        }
-      />
+      {props.showCarousel && (
+        <MobileStepper
+          variant="text"
+          steps={maxSteps}
+          position="static"
+          activeStep={activeStep}
+          className={classes.root}
+          nextButton={
+            <Button
+              size="small"
+              onClick={e => {
+                e.stopPropagation()
+                handleNext()
+              }}
+              disabled={activeStep === maxSteps - 1}
+            >
+              Next
+              {theme.direction === 'rtl' ? (
+                <KeyboardArrowLeft />
+              ) : (
+                <KeyboardArrowRight />
+              )}
+            </Button>
+          }
+          backButton={
+            <Button
+              size="small"
+              onClick={e => {
+                e.stopPropagation()
+                handleBack()
+              }}
+              disabled={activeStep === 0}
+            >
+              {theme.direction === 'rtl' ? (
+                <KeyboardArrowRight />
+              ) : (
+                <KeyboardArrowLeft />
+              )}
+              Back
+            </Button>
+          }
+        />
+      )}
     </div>
   )
 }

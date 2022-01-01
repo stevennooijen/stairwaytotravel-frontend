@@ -207,7 +207,9 @@ Call these variables using `process.env`:
 
 ## TODO
 
-- [ ] Clean up files (e.g. Firestore?)
+- [ ] Clean up files
 - [ ] Add LICENSE?
 - [ ] Link intro text in this README to blog post.
 - [ ] Add reference to issues with possible next steps?
+- [ ] Explain folder structure
+- [ ] check credentials and paths

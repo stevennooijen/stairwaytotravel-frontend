@@ -61,6 +61,20 @@ You can delete or rename the other files.
 
 Only files inside `public` can be used from `public/index.html`.
 
+### Preparing your working environment
+
+For this project I used [nvm](https://github.com/nvm-sh/nvm) as node version
+manager and npm as the package manager. Set yourself up using:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+nvm install node
+```
+
+Then go the the project folder and run `npm install`. This command will read all
+the dependencies that are defined in the `package.json` file and automatically 
+installs them for you.
+
 ### Code formatting and linting
 
 ESLint and Prettier are applied to the project.
@@ -92,7 +106,13 @@ included empty examples in the project root.
 
 ## Developing
 
-In the project directory, you can run:
+Before running the frontend locally for development, make sure the Python 
+backend server is running on localhost as well. See instructions for this in
+the
+[README](https://github.com/stevennooijen/stairwaytotravel-backend/tree/master/api#1-about-flask)
+of the backend's `api/` folder.
+
+To run the frontend, execute the following command in the project directory:
 
 ```bash
 npm start

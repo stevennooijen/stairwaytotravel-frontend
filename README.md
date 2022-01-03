@@ -233,3 +233,4 @@ Call these variables using `process.env`:
 - [ ] Add reference to issues with possible next steps?
 - [ ] Explain folder structure
 - [ ] check credentials and paths
+- [ ] Add blog

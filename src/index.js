@@ -19,6 +19,7 @@ import { Home } from './pages/home'
 import { Explore, DestinationPage } from './pages/explore'
 import { Bucketlist } from './pages/bucketlist'
 import { About } from './pages/about'
+import { Blog } from './pages/blog'
 
 class Root extends React.Component {
   constructor(props) {
@@ -120,6 +121,7 @@ class Root extends React.Component {
                   )}
                 />
                 <Route path="/about" render={() => <About />} />
+                <Route path="/blog" render={() => <Blog />} />
                 <Route render={() => <Redirect to="/" />} />
               </Switch>
               <SimpleBottomNavigation

@@ -70,7 +70,7 @@ function ProductHero(props) {
         variant="h5"
         className={classes.h5}
       >
-        Empowering you to discover and experience the beauty of the world
+        {props.children}
       </Typography>
     </HeroUnitLayout>
   )

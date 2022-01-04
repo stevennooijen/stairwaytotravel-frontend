@@ -16,9 +16,12 @@ import CallToAction from './modules/CallToAction'
 
 // Require() only takes static url variables, so a dynamic (!) imageFolder variable is not allowed
 // https://stackoverflow.com/questions/44991669/react-native-require-with-dynamic-string
-const backgroundImageList = ['forest.jpg', 'city.jpg', 'mountain.jpg'].map(
-  img => require('../../assets/img/used/' + img),
-)
+const backgroundImageList = [
+  'haiku-stairs.jpg',
+  'forest.jpg',
+  'city.jpg',
+  'mountain.jpg',
+].map(img => require('../../assets/img/used/' + img))
 
 const styles = theme => ({
   call2ActionRoot: {
@@ -57,7 +60,10 @@ class About extends React.Component {
     return (
       // Inspired from https://material-ui.com/premium-themes/onepirate/
       <React.Fragment>
-        <Jumbotron scrollTo={this.scrollToStepper}>
+        <Jumbotron
+          backgroundImage={backgroundImageList[0]}
+          scrollTo={this.scrollToStepper}
+        >
           Empowering you to discover and experience the beauty of the world
         </Jumbotron>
         <Container ref={this.stepperRef} id="values">

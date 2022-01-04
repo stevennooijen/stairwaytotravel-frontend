@@ -6,13 +6,11 @@ import Typography from '@material-ui/core/Typography'
 
 import HeroUnitLayout from './HeroUnitLayout'
 
-const backgroundImage = require('../../../assets/img/used/haiku-stairs.jpg')
-
 const logoImage = require('../../../assets/logos/logo-white.png')
 
 const styles = theme => ({
   background: {
-    backgroundImage: `url(${backgroundImage})`,
+    backgroundImage: props => `url(${props.backgroundImage})`,
     backgroundColor: '#7fc7d9', // Average color of the background image.
     backgroundPosition: 'center',
   },
@@ -42,7 +40,7 @@ const styles = theme => ({
 })
 
 function ProductHero(props) {
-  const { classes, scrollTo } = props
+  const { classes, backgroundImage, scrollTo } = props
 
   return (
     <HeroUnitLayout

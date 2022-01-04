@@ -14,8 +14,8 @@ import MarkdownFile from './posts/why-open-source.md'
 
 // Require() only takes static url variables, so a dynamic (!) imageFolder variable is not allowed
 // https://stackoverflow.com/questions/44991669/react-native-require-with-dynamic-string
-const backgroundImageList = ['forest.jpg', 'city.jpg', 'mountain.jpg'].map(
-  img => require('../../assets/img/used/' + img),
+const backgroundImageList = ['city.jpg', 'mountain.jpg'].map(img =>
+  require('../../assets/img/used/' + img),
 )
 
 const styles = theme => ({
@@ -109,7 +109,12 @@ class Blog extends React.Component {
 
     return (
       <React.Fragment>
-        <Jumbotron scrollTo={this.scrollToStepper}>{markdownTitle}</Jumbotron>
+        <Jumbotron
+          scrollTo={this.scrollToStepper}
+          backgroundImage={backgroundImageList[0]}
+        >
+          {markdownTitle}
+        </Jumbotron>
 
         <Container
           ref={this.stepperRef}
@@ -127,7 +132,7 @@ class Blog extends React.Component {
         </Container>
 
         <ParralaxBlock
-          imageUrl={backgroundImageList[2]}
+          imageUrl={backgroundImageList[1]}
           imageAlt="A snowy stairway leading up a mountain"
         >
           <Button

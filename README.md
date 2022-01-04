@@ -11,9 +11,9 @@ of questions or remarks!
 
 ## About this repo
 
-This is the code repository containing the frontend code for Stairway to 
+This is the code repository containing the frontend code for Stairway to
 Travel's website. The user interface is created using the
-[React](https://reactjs.org/) JavaScript library and the app is deployed on 
+[React](https://reactjs.org/) JavaScript library and the app is deployed on
 [Google Firebase](https://firebase.google.com/).
 
 Code for the backend web-service API and data preparation can be found in the
@@ -22,7 +22,7 @@ related
 repository.
 
 **Warning:** as a Data Scientist / Python coder, this was my first serious
-JavaScript project. Hence, the folder structure and code will definitely be 
+JavaScript project. Hence, the folder structure and code will definitely be
 considered messy and inefficient by experienced frontend developers. Please
 keep this in mind when using my code as example for your own purposes.
 
@@ -34,21 +34,21 @@ This project was bootstrapped with
 The project looks as follows:
 
     .
-    ├── public              
+    ├── public
     │   ├── index.html      # I want a blank page with a `div` called 'root'
     │   └── ...             # Files required in `public/index.html`
-    ├── src                 
-    │   ├── assets          # 
-    │   ├── components      # 
-    │   ├── pages           # 
-    │   ├── ui              # 
+    ├── src
+    │   ├── assets          #
+    │   ├── components      #
+    │   ├── pages           #
+    │   ├── ui              #
     │   ├── App.js          # root component of the react app with `<App />` being the top component in the hierarchy
-    │   ├── index.css       # 
+    │   ├── index.css       #
     │   ├── index.js        # traditional entry point for node apps
-    │   ├── theme.js        # 
+    │   ├── theme.js        #
     │   └── ...
     ├── firebase.json       # installation specifics for Firebase
-    ├── package-lock.json   # 
+    ├── package-lock.json   #
     ├── package.json        # contains proxy for dev API server
     └── README.md
 
@@ -72,7 +72,7 @@ nvm install node
 ```
 
 Then go the the project folder and run `npm install`. This command will read all
-the dependencies that are defined in the `package.json` file and automatically 
+the dependencies that are defined in the `package.json` file and automatically
 installs them for you.
 
 ### Code formatting and linting
@@ -81,10 +81,10 @@ ESLint and Prettier are applied to the project.
 
 ### Git
 
-We stick to the branching model as 
+We stick to the branching model as
 [outlined here](https://nvie.com/posts/a-successful-git-branching-model/).
 This means we have the two major branches of `master` and `develop`, and can
-have additional branches for features or hotfixes. To keep track of branch 
+have additional branches for features or hotfixes. To keep track of branch
 history, we use the `--no-ff` flag when merging between the two:
 
 ```bash
@@ -96,17 +96,17 @@ git merge --no-ff develop
 
 ### Credentials
 
-This app requires credentials to access third party APIs like Flickr, 
-Google Maps, Google Analytics and Google App Engine. These keys have not 
+This app requires credentials to access third party APIs like Flickr,
+Google Maps, Google Analytics and Google App Engine. These keys have not
 been uploaded to Git and you will have to get your own keys if you want
 to run the project yourself.
 
 Keys are accessed through the `.env` and `.env.production` files. I have
-included empty examples in the project root. 
+included empty examples in the project root.
 
 ## Developing
 
-Before running the frontend locally for development, make sure the Python 
+Before running the frontend locally for development, make sure the Python
 backend server is running on localhost as well. See instructions for this in
 the
 [README](https://github.com/stevennooijen/stairwaytotravel-backend/tree/master/api#1-about-flask)
@@ -147,17 +147,17 @@ npm run build
 ### Deploying to Google Firebase
 
 To host on Firebase, configure as a single-page app when initializing in the
-project root directory with `firebase init`. This will create a 
+project root directory with `firebase init`. This will create a
 `firebase.json` file that contains installation specifics for Firebase, like
 which directory to deploy (in our case the `build` folder)
 
-We have set up two projects to deploy to, which are defined in `.firebaserc`. 
+We have set up two projects to deploy to, which are defined in `.firebaserc`.
 Their project aliases are:
 
 - `staging`: releases to Firebase project
-[`stairwaytotravel-release`](https://stairwaytotravel-release.web.app/)
+  [`stairwaytotravel-release`](https://stairwaytotravel-release.web.app/)
 - `production`: releases to Firebase project
-[`stairwaytotravel`](https://stairwaytotravel.com/)
+  [`stairwaytotravel`](https://stairwaytotravel.com/)
 
 Before deploying make sure the right usage profile is set up using:
 
@@ -171,15 +171,15 @@ Having activated the right project, you can deploy the build with:
 firebase deploy
 ```
 
-Check out the 
-[getting started guide](https://firebase.google.com/docs/hosting/quickstart) 
-for more info. Or this 
+Check out the
+[getting started guide](https://firebase.google.com/docs/hosting/quickstart)
+for more info. Or this
 [blog](https://www.robinwieruch.de/firebase-deploy-react-js/) with a bit
- more details.
+more details.
 
 ### Connecting a custom domain
 
-Check out the 
+Check out the
 [Firebase instructions](https://firebase.google.com/docs/hosting/custom-domain)
 
 ### Connecting React with back-end Flask API server
@@ -224,7 +224,6 @@ Call these variables using `process.env`:
 </div>
 ```
 
-
 ## TODO
 
 - [ ] Clean up files
@@ -233,4 +232,3 @@ Call these variables using `process.env`:
 - [ ] Add reference to issues with possible next steps?
 - [ ] Explain folder structure
 - [ ] check credentials and paths
-- [ ] Add blog

@@ -1,4 +1,4 @@
-# Why I am open sourcing 2,500 hours of work & what to learn from my adventure?
+# Why I am open sourcing 2,500 hours of work & what to learn from my startup adventure?
 
 Once upon a time, I had an entrepreneurial dream. I chased the dream, recruited others and spent over 2,500 hours of spare time to make it become reality. Now, after 6+ years of passion, I have decided to let the project go and open source it all. This blog documents my journey and key takeaways. It serves as a ceremonial farewell that hopefully inspires other aspiring entrepreneurs. Keep reading if you are curious and want to learn from my experience in starting a technology start-up.
 

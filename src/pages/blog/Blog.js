@@ -79,6 +79,15 @@ class Blog extends React.Component {
 
     const mapping = {
       p: props => <Typography paragraph={true} {...props} />,
+      // need a named function to avoid ESLint error
+      li: function LeftAlignedListItem({ ordered, ...props }) {
+        return (
+          <li
+            style={{ textAlign: 'left', marginTop: 0, marginBottom: 0 }}
+            {...props}
+          />
+        )
+      },
       h1: props => (
         <Typography
           variant="h2"

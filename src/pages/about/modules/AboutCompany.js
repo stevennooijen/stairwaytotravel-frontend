@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
@@ -61,11 +63,23 @@ class AboutCompany extends React.Component {
               </Typography>
               <Typography paragraph>
                 We believe that travel research should be inspiring, fun and
-                easy. We do this by giving you highly personalized,
-                uncommercial, and trustworthy advice. We aim to surprise you
-                with unique destinations that you would otherwise never have
-                thought of. All recommendations are based on machine learning
-                and natural language processing techniques.
+                easy. We do this by giving you personalized, uncommercial, and
+                trustworthy advice. We aim to surprise you with unique
+                destinations that you would otherwise never have thought of. All
+                recommendations are based on machine learning and natural
+                language processing techniques. Read about our startup journey
+                in{' '}
+                <Link
+                  component={RouterLink}
+                  to="/blog/why-open-source-and-lessons-learned"
+                  variant="subtitle1"
+                  color="secondary"
+                  onClick={() => window.scrollTo(0, 0)}
+                  underline="always"
+                >
+                  our blog
+                </Link>
+                .
               </Typography>
               <Typography paragraph>
                 If you have any questions, suggestions or feedback, feel free to{' '}
@@ -73,10 +87,11 @@ class AboutCompany extends React.Component {
                   href="mailto:steven@stairwaytotravel.com?subject=Question about Stairway to Travel: ..."
                   variant="subtitle1"
                   color="secondary"
+                  underline="always"
                 >
-                  contact
-                </Link>{' '}
-                us!
+                  contact us
+                </Link>
+                !
               </Typography>
             </Card>
           </Grid>
@@ -96,6 +111,7 @@ class AboutCompany extends React.Component {
                   color="secondary"
                   target="_blank"
                   rel="noopener"
+                  underline="always"
                 >
                   Linkedin
                 </Link>

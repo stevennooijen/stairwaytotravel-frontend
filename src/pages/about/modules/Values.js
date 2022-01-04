@@ -1,13 +1,15 @@
 import React from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
-
 import PersonalizedIcon from '@material-ui/icons/SentimentSatisfiedAlt'
 import UniqueIcon from '@material-ui/icons/TouchApp'
 import UnbiasedIcon from '@material-ui/icons/Visibility'
+import Link from '@material-ui/core/Link'
 
 const styles = theme => ({
   root: {
@@ -77,7 +79,18 @@ function ProductValues(props) {
             <UnbiasedIcon fontSize="large" className={classes.image} />
             <Typography>
               We believe in transparancy and want to provide unbiased advice.
-              There is no hidden agenda.
+              There is no hidden agenda and all source code is{' '}
+              <Link
+                component={RouterLink}
+                to="/blog/why-open-source-and-lessons-learned"
+                variant="subtitle1"
+                color="secondary"
+                onClick={() => window.scrollTo(0, 0)}
+                underline="always"
+              >
+                open source
+              </Link>
+              .
             </Typography>
           </div>
         </Grid>

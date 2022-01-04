@@ -16,7 +16,8 @@ Read the full story about why I am open sourcing everything in
 
 This is the code repository containing the frontend code for Stairway to
 Travel's website. The user interface is created using the
-[React](https://reactjs.org/) JavaScript library and the app is deployed on
+[React](https://reactjs.org/) JavaScript library with many standard
+[Material-UI](https://mui.com/) components. The app is deployed on
 [Google Firebase](https://firebase.google.com/).
 
 Code for the backend web-service API and data preparation can be found in the
@@ -38,21 +39,20 @@ The project looks as follows:
 
     .
     ├── public
-    │   ├── index.html      # I want a blank page with a `div` called 'root'
+    │   ├── index.html      # Page template with a `div` called 'root'
     │   └── ...             # Files required in `public/index.html`
     ├── src
-    │   ├── assets          #
-    │   ├── components      #
-    │   ├── pages           #
-    │   ├── ui              #
-    │   ├── App.js          # root component of the react app with `<App />` being the top component in the hierarchy
-    │   ├── index.css       #
-    │   ├── index.js        # traditional entry point for node apps
-    │   ├── theme.js        #
+    │   ├── assets          # Static files like images, lists and logos
+    │   ├── components      # Re-usable components with specific functionality
+    │   ├── pages           # Components that map to a specific url
+    │   ├── App.js          # Root component of the react app with `<App />`
+    │   ├── index.css       # Top-level container DOM element CSS style rules
+    │   ├── index.js        # Traditional entry point for node apps
+    │   ├── theme.js        # Material-UI theme object
     │   └── ...
-    ├── firebase.json       # installation specifics for Firebase
-    ├── package-lock.json   #
-    ├── package.json        # contains proxy for dev API server
+    ├── firebase.json       # Installation specifics for Firebase
+    ├── package-lock.json   # Tracks the exact version of every installed package
+    ├── package.json        # Records important metadata for the project
     └── README.md
 
 For the project to build, these files must exist with exact filenames:
@@ -232,5 +232,4 @@ Call these variables using `process.env`:
 - [ ] Clean up files
 - [ ] Add LICENSE?
 - [ ] Add reference to issues with possible next steps?
-- [ ] Explain folder structure
 - [ ] check credentials and paths

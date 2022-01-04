@@ -9,6 +9,9 @@ that I have benefitted of so much in the creation of this website. I hope you
 will learn or benefit from what I did. Please feel free to reach out in case
 of questions or remarks!
 
+Read the full story about why I am open sourcing everything in
+[my blog](https://stairwaytotravel.com/blog/why-open-source-and-lessons-learned).
+
 ## About this repo
 
 This is the code repository containing the frontend code for Stairway to
@@ -228,7 +231,6 @@ Call these variables using `process.env`:
 
 - [ ] Clean up files
 - [ ] Add LICENSE?
-- [ ] Link intro text in this README to blog post.
 - [ ] Add reference to issues with possible next steps?
 - [ ] Explain folder structure
 - [ ] check credentials and paths

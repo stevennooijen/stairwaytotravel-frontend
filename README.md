@@ -229,7 +229,4 @@ Call these variables using `process.env`:
 
 ## TODO
 
-- [ ] Clean up files
-- [ ] Add LICENSE?
 - [ ] Add reference to issues with possible next steps?
-- [ ] check credentials and paths

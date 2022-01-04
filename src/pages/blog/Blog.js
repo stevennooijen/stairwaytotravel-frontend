@@ -84,11 +84,18 @@ class Blog extends React.Component {
           variant="h2"
           component="h1"
           gutterBottom={true}
-          // className={classes.title}
           {...props}
         />
       ),
       h3: props => <Typography variant="h4" gutterBottom={true} {...props} />,
+      img: ({ alt, src, title }) => (
+        <img
+          alt={alt}
+          src={src}
+          title={title}
+          style={{ maxWidth: '700px', width: '100%' }}
+        />
+      ),
     }
 
     return (
@@ -101,7 +108,13 @@ class Blog extends React.Component {
           component="section"
           className={classes.root}
         >
-          <ReactMarkdown children={markdownBody} components={mapping} />
+          <ReactMarkdown
+            children={markdownBody}
+            components={mapping}
+            transformImageUri={uri =>
+              uri.startsWith('http') ? uri : require(`../../assets/img/${uri}`)
+            }
+          />
         </Container>
 
         <ParralaxBlock

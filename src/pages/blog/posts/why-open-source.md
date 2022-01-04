@@ -30,6 +30,8 @@ To become big, there was a lot of work to be done. But with the five of us, we u
 
 With this team we upgraded our product to a second MVP and we perfected our pitch for the finals of the ACE startup program... which [we won](https://siliconcanals.com/news/startups/stairway-travel-wins-amsterdam-startup-challenge/)! The price was five thousand euro in funds to invest. Things were looking pretty good now: we got a team of three people, a nice demo product and we got confirmation from an incubator that believed in us. Time to boom?
 
+![Stairway to Travel winning the ACE startup competition!](startup-price.jpeg)
+
 ### The bust
 
 Winning the startup competition led to a reality-check moment. We came to the conclusion that if we really want this, we should significantly spend more time and cannot continue with a full-time job or study. Each of us had to make a choice between the risky entrepreneurial path and the security of a master’s degree and job, which unfortunately meant stopping for my two partners. And who can blame them? I already obtained a university degree and was therefore taking less risk in that regard. We said goodbye and I was riding solo again...
@@ -54,11 +56,11 @@ It would definitely have helped if I still had a business partner at this point 
 
 Entrepreneurship takes (a lot of!) time and perseverance. I believe that it’s a process of ups and downs with key make-or-break moments in which you have to take a leap of faith. I didn’t make it, but I have three main learnings that will hopefully help others make the leap:
 
-1. _Align your ambitions_. It’s one thing to work together in an informal setting, but when a key make-or-break moment arrives: is everyone prepared to put in the same amount of time and energy and pull out all the stops? If you don’t intend to turn your dream into a full-time profession, what more is it than just a… hobby?
+- (1) _Align your ambitions_. It’s one thing to work together in an informal setting, but when a key make-or-break moment arrives: is everyone prepared to put in the same amount of time and energy and pull out all the stops? If you don’t intend to turn your dream into a full-time profession, what more is it than just a… hobby?
 
-2. _Don’t go solo_. If you want and have the energy, I believe that you can teach yourself anything. The advantage is that you can work independently and that you can adhere to your own quality standards. The downside is that it takes too much time and you lose yourself in details. This is where my entrepreneurial dream slowly became a hobby: I was okay with learning both frontend and backend engineering and slowly drifted away from the commercial aspect of the project.
+- (2) _Don’t go solo_. If you want and have the energy, I believe that you can teach yourself anything. The advantage is that you can work independently and that you can adhere to your own quality standards. The downside is that it takes too much time and you lose yourself in details. This is where my entrepreneurial dream slowly became a hobby: I was okay with learning both frontend and backend engineering and slowly drifted away from the commercial aspect of the project.
 
-3. _Focus on earning money_. Paying customers have demands which help you to align internal ambitions and make deliverables and timelines concrete. Reflecting on this, I read this [great blog](https://tjcx.me/p/i-wasted-40k-on-a-fantastic-startup-idea) of a fellow failed entrepreneur who explains well that you can’t just create value for a user; that’s a charity. To succeed, you must create value for all entities involved, including your own company…
+- (3) _Focus on earning money_. Paying customers have demands which help you to align internal ambitions and make deliverables and timelines concrete. Reflecting on this, I read this [great blog](https://tjcx.me/p/i-wasted-40k-on-a-fantastic-startup-idea) of a fellow failed entrepreneur who explains well that you can’t just create value for a user; that’s a charity. To succeed, you must create value for all entities involved, including your own company…
 
 With a technology product as ours, it is tempting to spend too much time on unimportant details. Especially when you are working solo. The most progress was made when we were still a team and when there were deadlines for coaches, partners or startup competitions.
 

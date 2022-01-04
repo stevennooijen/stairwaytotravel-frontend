@@ -121,7 +121,14 @@ class Root extends React.Component {
                   )}
                 />
                 <Route path="/about" render={() => <About />} />
-                <Route path="/blog" render={() => <Blog />} />
+                <Route
+                  path="/blog/why-open-source-and-lessons-learned"
+                  render={() => <Blog />}
+                />
+                <Redirect
+                  from="/blog"
+                  to="/blog/why-open-source-and-lessons-learned"
+                />
                 <Route render={() => <Redirect to="/" />} />
               </Switch>
               <SimpleBottomNavigation

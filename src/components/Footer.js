@@ -69,8 +69,22 @@ class Footer extends React.Component {
                   to="/about"
                   variant="subtitle1"
                   color="secondary"
+                  onClick={() => window.scrollTo(0, 0)}
                 >
                   About
+                </Link>
+              </li>
+            )}
+            {!window.location.pathname.startsWith('/blog') && (
+              <li>
+                <Link
+                  component={RouterLink}
+                  to="/blog/why-open-source-and-lessons-learned"
+                  variant="subtitle1"
+                  color="secondary"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
+                  Blog
                 </Link>
               </li>
             )}

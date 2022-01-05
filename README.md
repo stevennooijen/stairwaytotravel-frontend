@@ -229,7 +229,7 @@ Call these variables using `process.env`:
 
 ## TODO
 
-Wnen I was still actively working on this project I kept a huge list of tasks
+When I was still actively working on this project I kept a huge list of tasks
 with new and improved functionality in Trello. In case you are curious or are
 considering to continue this project, feel free to have a look at the repository's
 [issues](https://github.com/stevennooijen/stairwaytotravel-frontend/issues). I

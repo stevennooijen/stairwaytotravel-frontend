@@ -84,7 +84,7 @@ class AboutCompany extends React.Component {
               <Typography paragraph>
                 If you have any questions, suggestions or feedback, feel free to{' '}
                 <Link
-                  href="mailto:steven@stairwaytotravel.com?subject=Question about Stairway to Travel: ..."
+                  href="mailto:info.stairwaytotravel@gmail.com?subject=Question about Stairway to Travel: ..."
                   variant="subtitle1"
                   color="secondary"
                   underline="always"
